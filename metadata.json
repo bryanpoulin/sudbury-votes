@@ -1,0 +1,6 @@
+{
+  "name": "Sudbury Election Results Dashboard",
+  "description": "Historical election results, interactive ward maps, candidate breakdowns, and voter turnout trends for Greater Sudbury municipal elections from 2003 onwards.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
