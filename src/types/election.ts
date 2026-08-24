@@ -71,4 +71,4 @@ export interface WardGeometry {
 }
 
 export type MapColorMode = 'winners' | 'mayoral' | 'turnout' | 'margin' | 'turnover';
-export type ViewTab = 'overview' | 'map' | 'mayoral' | 'wards' | 'trends' | 'candidates' | 'compare' | 'data';
+export type ViewTab = 'overview' | 'map' | 'mayoral' | 'wards' | 'trends' | 'candidates' | 'compare' | 'data' | 'election2026';

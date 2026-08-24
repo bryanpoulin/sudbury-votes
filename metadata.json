@@ -1,6 +1,6 @@
 {
   "name": "Sudbury Election Results Dashboard",
-  "description": "Historical election results, interactive ward maps, candidate breakdowns, and voter turnout trends for Greater Sudbury municipal elections from 2003 onwards.",
+  "description": "Interactive municipal election portal and historical archive for Greater Sudbury (2003–2022 certified records) featuring the 2026 Municipal Election Hub, candidate registry, news, voter readiness tool, and live results tracker.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

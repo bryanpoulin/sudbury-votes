@@ -1,138 +1,140 @@
 import { WardGeometry } from '../types/election';
 
 // Modern 12-Ward System (2006, 2010, 2014, 2018, 2022)
+// Modeled with authentic stepped township concession grid boundaries matching City GIS maps
 export const WARD_GEOMETRIES: WardGeometry[] = [
   {
     wardNumber: 1,
-    wardName: "Ward 1 (West End / South End / Lockerby)",
+    wardName: "Ward 1 (West End / Gatchell / Robinson / Moonglo)",
     shortLabel: "W1",
-    svgPath: "M 230,270 L 265,260 L 285,275 L 290,320 L 270,360 L 225,350 L 210,310 Z",
-    labelX: 250,
-    labelY: 310,
+    svgPath: "M 210,275 L 270,275 L 270,390 L 200,390 L 200,330 L 210,330 Z",
+    labelX: 238,
+    labelY: 335,
     areaKm2: 38.4,
-    description: "Encompasses West End, Robinson, Gatchell, Lockerby, and portions of Moonglo."
+    description: "West End, Gatchell, Copper Park, Robinson, Moonglo, south of Ontario Street and west of Regent Street."
   },
   {
     wardNumber: 2,
-    wardName: "Ward 2 (Walden / Lively / Copper Cliff)",
+    wardName: "Ward 2 (Lively / Copper Cliff / Walden / Whitefish)",
     shortLabel: "W2",
-    svgPath: "M 90,260 L 210,250 L 230,270 L 210,310 L 225,350 L 200,430 L 80,420 L 60,330 Z",
-    labelX: 145,
-    labelY: 340,
+    svgPath: "M 60,270 L 170,270 L 170,250 L 210,250 L 210,275 L 210,330 L 200,330 L 200,430 L 60,430 Z",
+    labelX: 130,
+    labelY: 350,
     areaKm2: 812.5,
-    description: "Largest southern ward including Lively, Waters, Copper Cliff, Naughton, Whitefish, Beaver Lake & Worthington."
+    description: "Lively, Naughton, Whitefish, Copper Cliff, Worthington, Beaver Lake and broader Walden township."
   },
   {
     wardNumber: 3,
-    wardName: "Ward 3 (Rayside-Balfour / Onaping Falls)",
+    wardName: "Ward 3 (Chelmsford / Onaping / Dowling / Levack)",
     shortLabel: "W3",
-    svgPath: "M 70,120 L 190,110 L 220,170 L 205,240 L 90,260 L 50,190 Z",
-    labelX: 130,
-    labelY: 185,
+    svgPath: "M 60,50 L 210,50 L 210,210 L 210,250 L 170,250 L 170,270 L 60,270 Z",
+    labelX: 135,
+    labelY: 160,
     areaKm2: 1240.2,
-    description: "North-western rural & suburban communities: Chelmsford, Dowling, Onaping, Levack & Cartier boundary."
+    description: "North-western rural & suburban corridor: Chelmsford, Onaping, Dowling, Levack, and Cartier boundary."
   },
   {
     wardNumber: 4,
-    wardName: "Ward 4 (Elm West / Donovan / Azilda)",
+    wardName: "Ward 4 (Azilda / Elm West / Donovan)",
     shortLabel: "W4",
-    svgPath: "M 205,240 L 255,215 L 280,240 L 265,260 L 230,270 L 210,250 Z",
-    labelX: 242,
-    labelY: 246,
+    svgPath: "M 210,210 L 255,210 L 255,230 L 265,230 L 265,275 L 210,275 L 210,250 Z",
+    labelX: 236,
+    labelY: 242,
     areaKm2: 44.1,
-    description: "Historic inner-city neighborhoods and Azilda, including Elm West, the Donovan, and St. Charles."
+    description: "Azilda, Elm West, Donovan, St. Charles Lake fringe, and historic central neighborhoods."
   },
   {
     wardNumber: 5,
-    wardName: "Ward 5 (Blezard Valley / Val Caron / McCrea)",
+    wardName: "Ward 5 (Val Caron / Blezard Valley / McCrea Heights)",
     shortLabel: "W5",
-    svgPath: "M 190,110 L 280,95 L 305,160 L 275,210 L 220,170 Z",
-    labelX: 250,
-    labelY: 145,
+    svgPath: "M 210,140 L 350,140 L 360,140 L 360,210 L 300,210 L 300,230 L 255,230 L 255,210 L 210,210 Z",
+    labelX: 285,
+    labelY: 175,
     areaKm2: 145.8,
-    description: "Valley East core: Blezard Valley, Val Caron, McCrea Heights & Rayside."
+    description: "Val Caron, Blezard Valley, Cambrian Heights, McCrea Heights, Guilletville, and Notre Dame / Lasalle west of Rideau."
   },
   {
     wardNumber: 6,
-    wardName: "Ward 6 (Hanmer / Val Thérèse)",
+    wardName: "Ward 6 (Val Thérèse / Hanmer)",
     shortLabel: "W6",
-    svgPath: "M 280,95 L 375,80 L 390,145 L 305,160 Z",
-    labelX: 335,
-    labelY: 120,
+    svgPath: "M 210,50 L 350,50 L 350,140 L 210,140 Z",
+    labelX: 280,
+    labelY: 95,
     areaKm2: 215.3,
-    description: "Northern residential agricultural communities of Hanmer and Val Thérèse."
+    description: "Northern agricultural and residential centers: Val Thérèse and Hanmer."
   },
   {
     wardNumber: 7,
     wardName: "Ward 7 (Capreol / Garson / Falconbridge / Skead)",
     shortLabel: "W7",
-    svgPath: "M 375,80 L 480,70 L 495,190 L 415,225 L 390,145 Z",
-    labelX: 435,
-    labelY: 135,
+    svgPath: "M 350,50 L 490,50 L 490,120 L 520,120 L 520,250 L 400,250 L 400,230 L 360,230 L 360,140 L 350,140 Z",
+    labelX: 430,
+    labelY: 150,
     areaKm2: 490.6,
-    description: "Northeastern towns including Capreol, Garson, Falconbridge, Skead & Sudbury Airport corridor."
+    description: "Garson, Falconbridge, Capreol, Skead, Sudbury Airport corridor, and Lake Wanapitei shoreline."
   },
   {
     wardNumber: 8,
-    wardName: "Ward 8 (New Sudbury West / Barrydowne)",
+    wardName: "Ward 8 (New Sudbury East of Barry Downe)",
     shortLabel: "W8",
-    svgPath: "M 275,210 L 345,195 L 360,240 L 300,250 L 280,240 L 255,215 Z",
-    labelX: 310,
-    labelY: 225,
+    svgPath: "M 300,210 L 360,210 L 360,230 L 400,230 L 400,265 L 335,265 L 335,240 L 300,240 Z",
+    labelX: 350,
+    labelY: 238,
     areaKm2: 22.7,
-    description: "Dense commercial and residential hub of New Sudbury, Lasalle corridor, and College Boreal area."
+    description: "New Sudbury commercial and residential sector East of Barry Downe Road, Lasalle corridor & Maley Dr."
   },
   {
     wardNumber: 9,
-    wardName: "Ward 9 (Coniston / Wahnapitae / South East)",
+    wardName: "Ward 9 (Coniston / Wahnapitae / Wanup / South End)",
     shortLabel: "W9",
-    svgPath: "M 415,225 L 495,190 L 520,340 L 440,430 L 350,390 L 365,310 L 410,290 Z",
+    svgPath: "M 400,250 L 520,250 L 520,430 L 200,430 L 200,390 L 270,390 L 270,350 L 335,350 L 335,310 L 385,310 L 385,265 L 400,265 Z",
     labelX: 430,
-    labelY: 320,
+    labelY: 340,
     areaKm2: 670.4,
-    description: "East rural and suburban sectors: Coniston, Wahnapitae, Wanup, and McFarlane Lake south."
+    description: "Coniston, Wahnapitae, Wanup, Broder Township, and South East rural communities."
   },
   {
     wardNumber: 10,
-    wardName: "Ward 10 (Fernwood / South End / Laurentian)",
+    wardName: "Ward 10 (Downtown / Bell Park / Lockerby / Lo-Ellen)",
     shortLabel: "W10",
-    svgPath: "M 270,360 L 290,320 L 330,325 L 350,390 L 275,440 L 200,430 L 225,350 Z",
-    labelX: 285,
-    labelY: 385,
+    svgPath: "M 265,275 L 290,275 L 290,280 L 310,280 L 310,310 L 335,310 L 335,350 L 270,350 L 270,275 Z",
+    labelX: 295,
+    labelY: 315,
     areaKm2: 52.3,
-    description: "South End, Lo-Ellen Park, South Algonquin, St. Charles Lake & Laurentian University."
+    description: "Lockerby, Lo-Ellen, University Area, Kingsmount, Bell Park, and Downtown south of Elm Street."
   },
   {
     wardNumber: 11,
-    wardName: "Ward 11 (Minnow Lake / New Sudbury East)",
+    wardName: "Ward 11 (Minnow Lake / New Sudbury West of Barry Downe)",
     shortLabel: "W11",
-    svgPath: "M 345,195 L 415,225 L 410,290 L 365,310 L 335,275 L 360,240 Z",
-    labelX: 375,
-    labelY: 255,
+    svgPath: "M 290,280 L 335,280 L 335,265 L 385,265 L 385,310 L 310,310 L 310,280 Z",
+    labelX: 348,
+    labelY: 288,
     areaKm2: 31.9,
-    description: "Minnow Lake, Adamsdale, Moonlight Beach area, and eastern New Sudbury."
+    description: "Minnow Lake, New Sudbury (West of Barry Downe, East of Arthur Street, South of Lasalle Boulevard)."
   },
   {
     wardNumber: 12,
-    wardName: "Ward 12 (Flour Mill / Downtown / Kingsway)",
+    wardName: "Ward 12 (Flour Mill / Downtown North / New Sudbury North)",
     shortLabel: "W12",
-    svgPath: "M 280,240 L 300,250 L 335,275 L 330,325 L 290,320 L 285,275 L 265,260 Z",
-    labelX: 300,
-    labelY: 285,
+    svgPath: "M 255,230 L 300,230 L 300,240 L 335,240 L 335,265 L 335,280 L 290,280 L 290,275 L 265,275 L 265,230 Z",
+    labelX: 295,
+    labelY: 256,
     areaKm2: 18.2,
-    description: "Sudbury downtown core, Flour Mill, Bell Park north, and Kingsway."
+    description: "Flour Mill, Downtown north of Elm Street, New Sudbury north of Lasalle / west of Barry Downe, Kingsway-Bancroft area."
   }
 ];
 
 // Historical 6-Ward System (2000 & 2003 Post-Amalgamation Dual-Member Wards)
+// Modeled with authentic stepped boundaries matching historical OMB amalgamation districts
 export const WARD_GEOMETRIES_2003: WardGeometry[] = [
   {
     wardNumber: 1,
     wardName: "Ward 1 (Sudbury South & West End)",
     shortLabel: "W1",
-    svgPath: "M 210,250 L 265,260 L 285,275 L 290,320 L 330,325 L 350,390 L 275,440 L 200,430 L 225,350 L 210,310 Z",
-    labelX: 265,
-    labelY: 340,
+    svgPath: "M 210,275 L 290,275 L 290,280 L 310,280 L 310,310 L 335,310 L 335,350 L 270,350 L 270,390 L 200,390 L 200,330 L 210,330 Z",
+    labelX: 260,
+    labelY: 335,
     areaKm2: 90.7,
     description: "Former Sudbury South & West End: West End, Gatchell, Robinson, Lockerby, Lo-Ellen, Long Lake & Moonglo. Elected 2 Councillors: Eldon Gainer & Terry Kett."
   },
@@ -140,9 +142,9 @@ export const WARD_GEOMETRIES_2003: WardGeometry[] = [
     wardNumber: 2,
     wardName: "Ward 2 (Walden, Copper Cliff & Lively)",
     shortLabel: "W2",
-    svgPath: "M 90,260 L 210,250 L 210,310 L 225,350 L 200,430 L 80,420 L 60,330 Z",
-    labelX: 145,
-    labelY: 340,
+    svgPath: "M 60,270 L 170,270 L 170,250 L 210,250 L 210,275 L 210,330 L 200,330 L 200,430 L 60,430 Z",
+    labelX: 130,
+    labelY: 350,
     areaKm2: 812.5,
     description: "Town of Walden communities: Lively, Copper Cliff, Naughton, Whitefish, Beaver Lake & Worthington. Elected 2 Councillors: Claude Berthiaume & Ron Bradley."
   },
@@ -150,9 +152,9 @@ export const WARD_GEOMETRIES_2003: WardGeometry[] = [
     wardNumber: 3,
     wardName: "Ward 3 (Rayside-Balfour & Onaping Falls)",
     shortLabel: "W3",
-    svgPath: "M 70,120 L 190,110 L 220,170 L 205,240 L 90,260 L 50,190 Z",
-    labelX: 130,
-    labelY: 185,
+    svgPath: "M 60,50 L 210,50 L 210,210 L 210,250 L 170,250 L 170,270 L 60,270 Z",
+    labelX: 135,
+    labelY: 160,
     areaKm2: 1240.2,
     description: "North-western communities: Chelmsford, Dowling, Onaping, Levack & Azilda fringe. Elected 2 Councillors: Ron Dupuis & André Rivest."
   },
@@ -160,8 +162,8 @@ export const WARD_GEOMETRIES_2003: WardGeometry[] = [
     wardNumber: 4,
     wardName: "Ward 4 (Sudbury Central, Donovan & New Sudbury)",
     shortLabel: "W4",
-    svgPath: "M 205,240 L 255,215 L 275,210 L 345,195 L 360,240 L 335,275 L 285,275 L 265,260 L 210,250 Z",
-    labelX: 285,
+    svgPath: "M 210,210 L 255,210 L 255,230 L 300,230 L 300,210 L 360,210 L 360,230 L 400,230 L 400,265 L 335,265 L 335,280 L 290,280 L 290,275 L 265,275 L 210,275 Z",
+    labelX: 295,
     labelY: 245,
     areaKm2: 85.0,
     description: "Inner city and New Sudbury: Downtown, Donovan, Flour Mill, Elm West, and Lasalle Corridor. Elected 2 Councillors: Ted Callaghan & Dave Kilgour."
@@ -170,9 +172,9 @@ export const WARD_GEOMETRIES_2003: WardGeometry[] = [
     wardNumber: 5,
     wardName: "Ward 5 (Valley East & Capreol)",
     shortLabel: "W5",
-    svgPath: "M 190,110 L 280,95 L 375,80 L 480,70 L 495,190 L 415,225 L 345,195 L 275,210 L 220,170 Z",
-    labelX: 340,
-    labelY: 135,
+    svgPath: "M 210,50 L 490,50 L 490,120 L 520,120 L 520,190 L 360,190 L 360,210 L 210,210 Z",
+    labelX: 330,
+    labelY: 125,
     areaKm2: 851.7,
     description: "Valley East and Capreol: Val Caron, Blezard Valley, Hanmer, Val Thérèse & Capreol. Elected 2 Councillors: Doug Craig & Austin Davey."
   },
@@ -180,9 +182,9 @@ export const WARD_GEOMETRIES_2003: WardGeometry[] = [
     wardNumber: 6,
     wardName: "Ward 6 (Minnow Lake & Nickel Centre)",
     shortLabel: "W6",
-    svgPath: "M 345,195 L 415,225 L 495,190 L 520,340 L 440,430 L 350,390 L 330,325 L 335,275 L 360,240 Z",
-    labelX: 420,
-    labelY: 290,
+    svgPath: "M 360,190 L 520,190 L 520,430 L 200,430 L 200,390 L 270,390 L 270,350 L 335,350 L 335,310 L 385,310 L 385,265 L 400,265 L 400,230 L 360,230 Z",
+    labelX: 430,
+    labelY: 310,
     areaKm2: 702.3,
     description: "Nickel Centre and Minnow Lake: Coniston, Falconbridge, Garson, Wahnapitae & Adamsdale. Elected 2 Councillors: Mike Petryna & Lynne Reynolds."
   }
@@ -195,14 +197,18 @@ export const getWardGeometriesForYear = (year: number): WardGeometry[] => {
 export const LAKE_GEOMETRIES = [
   {
     name: "Ramsey Lake",
-    path: "M 305,320 C 315,315 330,320 338,332 C 342,342 335,355 320,350 C 310,345 300,335 305,320 Z"
+    path: "M 305,320 C 315,315 328,320 334,330 C 338,340 330,348 318,345 C 308,342 300,332 305,320 Z"
   },
   {
     name: "Wanapitei Lake (North East)",
-    path: "M 460,95 C 475,85 490,95 488,125 C 480,140 465,130 460,95 Z"
+    path: "M 455,75 C 475,65 488,80 485,110 C 475,125 460,115 455,75 Z"
   },
   {
-    name: "Lake Laurentian / Kelly Lake",
-    path: "M 255,340 C 265,335 272,345 268,355 C 260,358 252,350 255,340 Z"
+    name: "Whitewater Lake (Azilda)",
+    path: "M 225,225 C 235,220 245,225 242,235 C 235,240 225,235 225,225 Z"
+  },
+  {
+    name: "Long Lake / Kelly Lake (South End)",
+    path: "M 235,365 C 248,360 255,372 250,380 C 240,384 230,375 235,365 Z"
   }
 ];

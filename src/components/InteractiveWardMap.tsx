@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ElectionYearData, MapColorMode } from '../types/election';
-import { getWardGeometriesForYear, LAKE_GEOMETRIES } from '../data/wardGeometries';
+import { getWardGeometriesForYear } from '../data/wardGeometries';
 import { 
   Layers, 
   ZoomIn, 
@@ -209,17 +209,17 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
           <div className="absolute top-3 left-3 z-10 bg-slate-900/90 backdrop-blur px-3 py-1.5 rounded-xl border border-slate-800 text-[11px] text-slate-300 shadow">
             <div className="font-bold text-white flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-              <span>{is2003 ? "2003 6-Ward Boundary Model" : "Sudbury Geographic District"}</span>
+              <span>{is2003 ? "Sudbury Geographic District" : "Sudbury Geographic District"}</span>
             </div>
             <div className="text-[10px] font-mono text-slate-400">
-              {is2003 ? "6 Dual-Member Wards (12 Councillors)" : "Scale: 3,228 km² Geographic Extent"}
+              {is2003 ? "6 Dual-Member Wards • Scale: 3,228 km² Geographic Extent" : "Scale: 3,228 km² Geographic Extent"}
             </div>
           </div>
 
           {/* SVG Map */}
           <div className="w-full h-full flex items-center justify-center p-2">
             <svg
-              viewBox="40 50 500 420"
+              viewBox="45 35 490 410"
               className="w-full max-w-[620px] h-auto drop-shadow-[0_0_30px_rgba(16,185,129,0.12)] transition-transform duration-300"
               style={{
                 transform: `scale(${zoomLevel}) translate(${panOffset.x}px, ${panOffset.y}px)`
@@ -236,22 +236,6 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
                 </filter>
               </defs>
               <rect width="600" height="500" fill="url(#sleek-grid)" />
-
-              {/* Geographic Landmarks (Lakes) */}
-              <g className="opacity-40">
-                {LAKE_GEOMETRIES.map((lake, idx) => (
-                  <path
-                    key={idx}
-                    d={lake.path}
-                    fill="#0284c7"
-                    stroke="#38bdf8"
-                    strokeWidth="0.8"
-                    strokeDasharray="2 2"
-                  >
-                    <title>{lake.name}</title>
-                  </path>
-                ))}
-              </g>
 
               {/* Ward Polygons */}
               <g>
@@ -284,7 +268,7 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
                         textAnchor="middle"
                         dominantBaseline="central"
                         fill="#ffffff"
-                        fontSize={is2003 ? '13' : isSelected ? '12' : '10'}
+                        fontSize={is2003 ? '13' : isSelected ? '12' : '10.5'}
                         fontWeight="bold"
                         className="pointer-events-none drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]"
                       >
@@ -299,7 +283,7 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
                           textAnchor="middle"
                           dominantBaseline="central"
                           fill="#e2e8f0"
-                          fontSize={is2003 ? '7.5' : '7.5'}
+                          fontSize={is2003 ? '8' : '7.5'}
                           fontWeight="600"
                           className="pointer-events-none drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)]"
                         >
@@ -311,6 +295,46 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
                     </g>
                   );
                 })}
+              </g>
+
+              {/* Clean Cartographic Community Reference Markers */}
+              <g className="pointer-events-none">
+                {[
+                  { name: "Chelmsford", x: 135, y: 215, ward: 3 },
+                  { name: "Levack", x: 110, y: 90, ward: 3 },
+                  { name: "Onaping", x: 95, y: 120, ward: 3 },
+                  { name: "Dowling", x: 115, y: 155, ward: 3 },
+                  { name: "Hanmer", x: 285, y: 72, ward: 6 },
+                  { name: "Val Thérèse", x: 265, y: 118, ward: 6 },
+                  { name: "Capreol", x: 420, y: 80, ward: 7 },
+                  { name: "Skead", x: 470, y: 135, ward: 7 },
+                  { name: "Garson", x: 415, y: 215, ward: 7 },
+                  { name: "Falconbridge", x: 465, y: 210, ward: 7 },
+                  { name: "Val Caron", x: 285, y: 155, ward: 5 },
+                  { name: "Blezard Valley", x: 245, y: 175, ward: 5 },
+                  { name: "Azilda", x: 235, y: 220, ward: 4 },
+                  { name: "Lively", x: 130, y: 320, ward: 2 },
+                  { name: "Copper Cliff", x: 175, y: 295, ward: 2 },
+                  { name: "Whitefish", x: 110, y: 390, ward: 2 },
+                  { name: "Coniston", x: 440, y: 285, ward: 9 },
+                  { name: "Wahnapitae", x: 470, y: 310, ward: 9 },
+                  { name: "Wanup", x: 440, y: 395, ward: 9 },
+                ].map((com, i) => (
+                  <g key={i} className="opacity-75">
+                    <circle cx={com.x} cy={com.y} r="1.8" fill="#e2e8f0" className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
+                    <text
+                      x={com.x}
+                      y={com.y - 4}
+                      textAnchor="middle"
+                      fill="#cbd5e1"
+                      fontSize="6"
+                      fontWeight="600"
+                      className="tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]"
+                    >
+                      {com.name}
+                    </text>
+                  </g>
+                ))}
               </g>
             </svg>
           </div>
