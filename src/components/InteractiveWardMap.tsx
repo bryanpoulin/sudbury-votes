@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { ElectionYearData, MapColorMode } from '../types/election';
+import { ElectionYearData } from '../types/election';
 import { getWardGeometriesForYear } from '../data/wardGeometries';
 import { 
-  Layers, 
   ZoomIn, 
   ZoomOut, 
   RotateCcw, 
   Award, 
   Compass, 
   MapPin, 
-  Users,
   ChevronRight,
   ShieldCheck
 } from 'lucide-react';
@@ -25,7 +23,6 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
   selectedWardNumber,
   onSelectWard
 }) => {
-  const [colorMode, setColorMode] = useState<MapColorMode>('winners');
   const [hoveredWardNumber, setHoveredWardNumber] = useState<number | null>(null);
   const [zoomLevel, setZoomLevel] = useState<number>(1);
   const [panOffset, setPanOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -33,44 +30,12 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
   const is2003 = election.year === 2003;
   const wardGeometries = getWardGeometriesForYear(election.year);
 
-  const activeWardNumber = hoveredWardNumber ?? selectedWardNumber;
+  const activeWardNumber = hoveredWardNumber ?? selectedWardNumber ?? 1;
   const activeWardData = election.wards.find((w) => w.wardNumber === activeWardNumber);
   const activeWardGeo = wardGeometries.find((g) => g.wardNumber === activeWardNumber);
 
-  // Helper color functions for choropleth modes with sleek palette
+  // Clean color palette for wards
   const getWardFillColor = (wardNumber: number): string => {
-    const ward = election.wards.find((w) => w.wardNumber === wardNumber);
-    if (!ward) return '#1e293b';
-
-    if (colorMode === 'turnout') {
-      const turnout = ward.turnoutPercentage;
-      if (turnout >= 55) return '#10b981'; // vibrant emerald
-      if (turnout >= 50) return '#059669'; // emerald
-      if (turnout >= 45) return '#0d9488'; // teal
-      if (turnout >= 40) return '#0284c7'; // sky
-      return '#475569'; // slate
-    }
-
-    if (colorMode === 'margin') {
-      const margin = ward.marginOfVictoryPct;
-      if (margin < 5) return '#ef4444'; // Red (<5% Razor close)
-      if (margin < 15) return '#f97316'; // Orange
-      if (margin < 25) return '#eab308'; // Amber
-      return '#10b981'; // Emerald (>25% Safe)
-    }
-
-    if (colorMode === 'turnover') {
-      return ward.isIncumbentRetained ? '#0ea5e9' : '#10b981';
-    }
-
-    if (colorMode === 'mayoral') {
-      const mayoralLead = election.mayoralRace.wardWinners?.[wardNumber] || election.mayoralRace.winner.name;
-      if (mayoralLead === election.mayoralRace.winner.name) return '#10b981';
-      if (mayoralLead === election.mayoralRace.runnerUp.name) return '#f97316';
-      return '#6366f1';
-    }
-
-    // Default 'winners' mode palette with refined sleek colors
     const palette = [
       '#10b981', '#06b6d4', '#3b82f6', '#6366f1',
       '#8b5cf6', '#ec4899', '#f59e0b', '#14b8a6',
@@ -90,8 +55,8 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
 
   return (
     <div className="bg-slate-900/60 backdrop-blur-md border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-5">
-      {/* Header & Mode Selector */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
         <div>
           <div className="flex items-center gap-2">
             <Compass className="w-5 h-5 text-emerald-400" />
@@ -106,72 +71,14 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
           </div>
           <p className="text-xs text-slate-400 mt-0.5">
             {is2003 
-              ? "Click on any of the 6 post-amalgamation wards to inspect the two elected councillors and full candidate returns"
-              : "Click on any of the 12 municipal wards to view detailed candidate returns, margins, and turnout"}
+              ? "Click on any of the 6 post-amalgamation wards to inspect the elected councillors and returns"
+              : "Click on any of the 12 municipal wards to view councillor returns, victory margins, and turnout"}
           </p>
         </div>
 
-        {/* Map Layers Switcher */}
-        <div className="flex items-center gap-1.5 overflow-x-auto bg-slate-800/40 p-1 rounded-full border border-slate-700/70">
-          <div className="px-2 text-[10px] font-mono uppercase tracking-widest text-slate-400 flex items-center gap-1">
-            <Layers className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="hidden sm:inline">Layer:</span>
-          </div>
-
-          <button
-            onClick={() => setColorMode('winners')}
-            className={`px-3 py-1 text-xs font-semibold rounded-full transition-all ${
-              colorMode === 'winners'
-                ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            Council Winners
-          </button>
-
-          <button
-            onClick={() => setColorMode('mayoral')}
-            className={`px-3 py-1 text-xs font-semibold rounded-full transition-all ${
-              colorMode === 'mayoral'
-                ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            Mayoral Lead
-          </button>
-
-          <button
-            onClick={() => setColorMode('turnout')}
-            className={`px-3 py-1 text-xs font-semibold rounded-full transition-all ${
-              colorMode === 'turnout'
-                ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            Turnout %
-          </button>
-
-          <button
-            onClick={() => setColorMode('margin')}
-            className={`px-3 py-1 text-xs font-semibold rounded-full transition-all ${
-              colorMode === 'margin'
-                ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            Margin & Closeness
-          </button>
-
-          <button
-            onClick={() => setColorMode('turnover')}
-            className={`px-3 py-1 text-xs font-semibold rounded-full transition-all ${
-              colorMode === 'turnover'
-                ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            Turnover
-          </button>
+        <div className="text-xs text-slate-400 font-mono flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>Click any ward to inspect</span>
         </div>
       </div>
 
@@ -339,61 +246,15 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
             </svg>
           </div>
 
-          {/* Dynamic Map Legend Footer */}
+          {/* Clean Map Legend Footer */}
           <div className="w-full bg-slate-900/80 backdrop-blur border-t border-slate-800/80 p-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300 rounded-b-2xl">
-            {colorMode === 'turnout' && (
-              <div className="flex items-center gap-3">
-                <span className="text-slate-400 font-mono text-[11px] uppercase">Turnout:</span>
-                <div className="flex items-center gap-2.5">
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#475569]"></span> &lt;40%</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#0284c7]"></span> 40-45%</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#0d9488]"></span> 45-50%</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#059669]"></span> 50-55%</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#10b981] shadow-[0_0_6px_rgba(16,185,129,0.5)]"></span> 55%+</span>
-                </div>
-              </div>
-            )}
-
-            {colorMode === 'margin' && (
-              <div className="flex items-center gap-3">
-                <span className="text-slate-400 font-mono text-[11px] uppercase">Margin:</span>
-                <div className="flex items-center gap-2.5">
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#ef4444]"></span> &lt;5% (Toss-up)</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#f97316]"></span> 5-15% (Competitive)</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#eab308]"></span> 15-25%</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span> 25%+ (Safe)</span>
-                </div>
-              </div>
-            )}
-
-            {colorMode === 'turnover' && (
-              <div className="flex items-center gap-3">
-                <span className="text-slate-400 font-mono text-[11px] uppercase">Status:</span>
-                <div className="flex items-center gap-2.5">
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#0ea5e9]"></span> Incumbent Retained</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span> New Councillor / Flipped</span>
-                </div>
-              </div>
-            )}
-
-            {colorMode === 'mayoral' && (
-              <div className="flex items-center gap-3">
-                <span className="text-slate-400 font-mono text-[11px] uppercase">Plurality:</span>
-                <div className="flex items-center gap-2.5">
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span> {election.mayoralRace.winner.name}</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#f97316]"></span> {election.mayoralRace.runnerUp.name}</span>
-                </div>
-              </div>
-            )}
-
-            {colorMode === 'winners' && (
-              <div className="flex items-center gap-2 text-slate-400 text-xs">
-                <span>{is2003 ? "Color-coded across 6 dual-member wards (12 councillors total)." : "Color-coded across Greater Sudbury's 12 council districts."}</span>
-              </div>
-            )}
+            <div className="flex items-center gap-2 text-slate-400 text-xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>{is2003 ? "Color-coded across 6 dual-member wards (12 councillors total)." : "Color-coded across Greater Sudbury's 12 council wards."}</span>
+            </div>
 
             <div className="text-[11px] font-mono text-slate-400 ml-auto">
-              Selected: <strong className="text-emerald-400">{selectedWardNumber ? `Ward ${selectedWardNumber}` : 'None'}</strong>
+              Active: <strong className="text-emerald-400">Ward {activeWardNumber}</strong>
             </div>
           </div>
         </div>
@@ -484,38 +345,36 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
               )}
 
               {/* Full Candidate Breakdown */}
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">
                   Full Candidate Breakdown
                 </div>
-                <div className="space-y-1.5 max-h-44 overflow-y-auto pr-1">
+                <div className="space-y-1">
                   {activeWardData.candidates.map((cand, idx) => (
                     <div 
                       key={cand.id}
-                      className={`p-2.5 rounded-xl text-xs flex items-center justify-between transition-colors ${
+                      className={`py-1.5 px-2.5 rounded-xl text-xs flex items-center justify-between transition-colors ${
                         cand.isWinner 
                           ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 font-semibold' 
                           : 'bg-slate-800/40 border border-slate-700/40 text-slate-300'
                       }`}
                     >
-                      <div className="flex items-center gap-2 truncate">
-                        <span className="text-slate-500 font-mono text-[10px] w-3.5">
+                      <div className="flex items-center gap-1.5 truncate">
+                        <span className="text-slate-500 font-mono text-[10px] w-4">
                           #{idx + 1}
                         </span>
-                        <div className="truncate">
-                          <div className="truncate font-medium">{cand.name}</div>
-                          {cand.notes && (
-                            <div className="text-[9px] text-slate-400 font-mono">{cand.notes}</div>
-                          )}
-                        </div>
+                        <span className="truncate font-medium">{cand.name}</span>
+                        {cand.notes && (
+                          <span className="text-[9px] text-slate-400 font-mono hidden sm:inline">({cand.notes})</span>
+                        )}
                       </div>
-                      <div className="text-right shrink-0 ml-2">
-                        <div className="font-bold text-white font-mono">
+                      <div className="flex items-center gap-2 shrink-0 ml-2 font-mono">
+                        <span className="text-[11px] text-slate-400">
+                          {cand.votes.toLocaleString()}
+                        </span>
+                        <span className="font-bold text-white text-xs min-w-[42px] text-right">
                           {cand.votePercentage.toFixed(1)}%
-                        </div>
-                        <div className="text-[10px] text-slate-400 font-mono">
-                          {cand.votes.toLocaleString()} votes
-                        </div>
+                        </span>
                       </div>
                     </div>
                   ))}

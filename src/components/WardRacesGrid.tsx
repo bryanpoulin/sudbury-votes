@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
-import { ElectionYearData, WardRace } from '../types/election';
+import React from 'react';
+import { ElectionYearData } from '../types/election';
 import { 
   LayoutGrid, 
-  Search, 
   Award, 
-  Users, 
-  TrendingUp, 
   Flame, 
   ChevronRight,
   ShieldCheck
@@ -20,32 +17,13 @@ export const WardRacesGrid: React.FC<WardRacesGridProps> = ({
   election,
   onSelectWard
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState<'all' | 'close' | 'flipped' | 'high_turnout'>('all');
-
   const is2003 = election.year === 2003;
   const wardCount = election.wards.length;
 
-  const filteredWards = election.wards.filter((ward) => {
-    // Search filter
-    const matchesSearch = 
-      ward.wardName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ward.neighborhoods.some((n) => n.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      ward.candidates.some((c) => c.name.toLowerCase().includes(searchTerm.toLowerCase()));
-
-    if (!matchesSearch) return false;
-
-    // Category filter
-    if (filterType === 'close') return ward.marginOfVictoryPct < 10;
-    if (filterType === 'flipped') return !ward.isIncumbentRetained;
-    if (filterType === 'high_turnout') return ward.turnoutPercentage >= 50;
-    return true;
-  });
-
   return (
     <div className="space-y-6">
-      {/* Controls & Filter Bar */}
-      <div className="bg-slate-900/60 backdrop-blur-md border border-slate-800 rounded-3xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+      {/* Ward Races Header */}
+      <div className="bg-slate-900/60 backdrop-blur-md border border-slate-800 rounded-3xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xl">
         <div>
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
             <LayoutGrid className="w-5 h-5 text-emerald-400" />
@@ -58,61 +36,14 @@ export const WardRacesGrid: React.FC<WardRacesGridProps> = ({
           </p>
         </div>
 
-        {/* Search & Filters */}
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Search Box */}
-          <div className="relative min-w-[220px]">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search candidate, ward, area..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3.5 py-1.5 bg-slate-800/60 border border-slate-700/70 rounded-full text-xs text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition-colors"
-            />
-          </div>
-
-          {/* Filter Pills */}
-          <div className="flex items-center gap-1 bg-slate-800/40 p-1 rounded-full border border-slate-700/70">
-            <button
-              onClick={() => setFilterType('all')}
-              className={`px-3 py-1 text-xs font-semibold rounded-full transition-all ${
-                filterType === 'all' ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              All ({wardCount})
-            </button>
-            <button
-              onClick={() => setFilterType('close')}
-              className={`px-3 py-1 text-xs font-semibold rounded-full transition-all ${
-                filterType === 'close' ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              Close (&lt;10%)
-            </button>
-            <button
-              onClick={() => setFilterType('flipped')}
-              className={`px-3 py-1 text-xs font-semibold rounded-full transition-all ${
-                filterType === 'flipped' ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              New Reps
-            </button>
-            <button
-              onClick={() => setFilterType('high_turnout')}
-              className={`px-3 py-1 text-xs font-semibold rounded-full transition-all ${
-                filterType === 'high_turnout' ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              Turnout &gt;50%
-            </button>
-          </div>
+        <div className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-xs font-mono font-bold self-start sm:self-auto">
+          {wardCount} Wards
         </div>
       </div>
 
       {/* Grid of Wards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filteredWards.map((ward) => {
+        {election.wards.map((ward) => {
           const isClose = ward.marginOfVictoryPct < 10;
           return (
             <div
@@ -215,23 +146,23 @@ export const WardRacesGrid: React.FC<WardRacesGridProps> = ({
                 )}
 
                 {/* All Candidates in Race */}
-                <div className="mt-3 space-y-1">
+                <div className="mt-3 space-y-1.5">
                   <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">
                     Candidates ({ward.candidates.length})
                   </div>
-                  <div className="space-y-1 max-h-32 overflow-y-auto pr-1">
-                    {ward.candidates.map((cand, idx) => (
+                  <div className="space-y-1">
+                    {ward.candidates.map((cand) => (
                       <div
                         key={cand.id}
-                        className={`p-1.5 px-2 rounded-xl text-xs flex items-center justify-between transition-colors ${
+                        className={`py-1 px-2.5 rounded-xl text-xs flex items-center justify-between transition-colors ${
                           cand.isWinner
-                            ? 'bg-emerald-500/10 text-emerald-300 font-semibold'
+                            ? 'bg-emerald-500/10 text-emerald-300 font-semibold border border-emerald-500/20'
                             : 'bg-slate-800/30 text-slate-300'
                         }`}
                       >
                         <span className="truncate">{cand.name}</span>
-                        <span className="font-bold shrink-0 ml-2 font-mono">
-                          {cand.votePercentage.toFixed(1)}% <span className="text-[10px] text-slate-500 font-normal">({cand.votes})</span>
+                        <span className="font-bold shrink-0 ml-2 font-mono text-right">
+                          {cand.votePercentage.toFixed(1)}% <span className="text-[10px] text-slate-500 font-normal">({cand.votes.toLocaleString()})</span>
                         </span>
                       </div>
                     ))}
@@ -251,13 +182,6 @@ export const WardRacesGrid: React.FC<WardRacesGridProps> = ({
           );
         })}
       </div>
-
-      {filteredWards.length === 0 && (
-        <div className="bg-slate-900/60 backdrop-blur-md border border-slate-800 rounded-3xl p-12 text-center text-slate-400">
-          <p className="text-sm font-bold text-slate-300">No wards match your search filter</p>
-          <p className="text-xs text-slate-500 mt-1">Try changing your search query or reset the filter.</p>
-        </div>
-      )}
     </div>
   );
 };

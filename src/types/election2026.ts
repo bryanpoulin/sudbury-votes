@@ -45,4 +45,4 @@ export interface WardLookupEntry {
   registeredVotersEst: number;
 }
 
-export type Election2026HubTab = 'candidates' | 'ward-locator' | 'debates' | 'live-results';
+export type Election2026HubTab = 'candidates' | 'debates' | 'live-results';

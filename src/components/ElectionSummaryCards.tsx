@@ -2,14 +2,12 @@ import React from 'react';
 import { ElectionYearData } from '../types/election';
 import { 
   Users, 
-  CheckCircle2, 
+  CheckCircle2,
   TrendingUp, 
   Award, 
   RotateCcw, 
   Flame, 
-  Info,
-  Calendar,
-  Vote
+  Info
 } from 'lucide-react';
 
 interface ElectionSummaryCardsProps {
@@ -28,14 +26,6 @@ export const ElectionSummaryCards: React.FC<ElectionSummaryCardsProps> = ({
   // Incumbents retained vs turned over
   const incumbentsRetainedCount = election.wards.filter((w) => w.isIncumbentRetained).length;
   const turnoverPct = Math.round((election.councilTurnoverCount / election.totalCouncilSeats) * 100);
-
-  // Compact balloting mode label mapping
-  const getShortVotingMethod = (method: string) => {
-    const lower = method.toLowerCase();
-    if (lower.includes('electronic') || lower.includes('online') || lower.includes('web')) return 'Online';
-    if (lower.includes('advance polls') || lower.includes('paper')) return 'Paper Ballots';
-    return 'Online';
-  };
 
   return (
     <div className="space-y-4">
@@ -56,12 +46,6 @@ export const ElectionSummaryCards: React.FC<ElectionSummaryCardsProps> = ({
               {election.notes}
             </p>
           </div>
-        </div>
-        <div className="shrink-0 flex items-center gap-2 text-xs bg-slate-800/60 px-3.5 py-1.5 rounded-xl border border-slate-700/60 text-slate-300">
-          <span className="text-slate-500 font-medium">Balloting Mode:</span>
-          <span className="font-semibold text-emerald-300 font-mono">
-            {getShortVotingMethod(election.votingMethod)}
-          </span>
         </div>
       </div>
 

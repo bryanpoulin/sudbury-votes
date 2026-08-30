@@ -2,19 +2,10 @@ import React from 'react';
 import { ViewTab } from '../types/election';
 import { AVAILABLE_YEARS } from '../data/electionData';
 import { 
-  Vote, 
   Map, 
-  UserCheck, 
-  LayoutGrid, 
   TrendingUp, 
-  Users, 
   GitCompare, 
-  Table, 
-  Calendar,
-  Layers,
-  BarChart2,
-  Radio,
-  Sparkles
+  Radio
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -31,13 +22,9 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectTab
 }) => {
   const navItems: { id: ViewTab; label: string; icon: React.ReactNode }[] = [
-    { id: 'overview', label: 'Results & Map', icon: <Map className="w-4 h-4" /> },
-    { id: 'wards', label: 'Ward Results', icon: <LayoutGrid className="w-4 h-4" /> },
-    { id: 'mayoral', label: 'Mayoral Race', icon: <UserCheck className="w-4 h-4" /> },
+    { id: 'overview', label: 'Results & Ward Map', icon: <Map className="w-4 h-4" /> },
     { id: 'trends', label: 'Historical Trends', icon: <TrendingUp className="w-4 h-4" /> },
-    { id: 'candidates', label: 'Candidate Lookup', icon: <Users className="w-4 h-4" /> },
-    { id: 'compare', label: 'Compare Elections', icon: <GitCompare className="w-4 h-4" /> },
-    { id: 'data', label: 'Data & Export', icon: <Table className="w-4 h-4" /> }
+    { id: 'compare', label: 'Compare Elections', icon: <GitCompare className="w-4 h-4" /> }
   ];
 
   const handleYearClick = (year: number) => {

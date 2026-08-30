@@ -3,59 +3,33 @@ import { Candidate2026 } from '../../types/election2026';
 import { CANDIDATES_2026, WARD_LOOKUP_ENTRIES } from '../../data/electionData2026';
 import { 
   UserCheck, 
-  Search, 
   ExternalLink, 
-  ShieldCheck, 
   Briefcase, 
   CheckCircle2, 
   Award, 
-  MapPin, 
   Sparkles,
-  Layers,
-  Globe,
-  Filter
+  Globe
 } from 'lucide-react';
 
 interface CandidateRegistry2026Props {
-  onSelectWardForDetail?: (wardNumber: number) => void;
   initialWardFilter?: number | null;
 }
 
 export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
-  onSelectWardForDetail,
   initialWardFilter
 }) => {
   const [selectedRaceFilter, setSelectedRaceFilter] = useState<string>(
     initialWardFilter ? `ward-${initialWardFilter}` : 'all'
   );
-  const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCandidateForModal, setSelectedCandidateForModal] = useState<Candidate2026 | null>(null);
 
-  // Filter candidates
+  // Filter candidates purely by race filter
   const filteredCandidates = CANDIDATES_2026.filter((c) => {
-    // Race filter
     if (selectedRaceFilter === 'mayoral' && c.race !== 'Mayoral') return false;
     if (selectedRaceFilter.startsWith('ward-')) {
       const wardNum = parseInt(selectedRaceFilter.replace('ward-', ''), 10);
       if (c.race !== wardNum) return false;
     }
-
-    // Status filter
-    if (selectedStatusFilter === 'incumbent' && c.status !== 'Incumbent') return false;
-    if (selectedStatusFilter === 'challenger' && c.status !== 'Challenger' && c.status !== 'New Candidate') return false;
-
-    // Search query
-    if (searchQuery.trim() !== '') {
-      const query = searchQuery.toLowerCase();
-      const matchName = c.name.toLowerCase().includes(query);
-      const matchBio = c.bio.toLowerCase().includes(query);
-      const matchPillars = c.keyPillars.some((p) => p.toLowerCase().includes(query));
-      const matchOccupation = c.occupation.toLowerCase().includes(query);
-      const matchRace = (c.race === 'Mayoral' ? 'mayor mayoral' : `ward ${c.race}`).includes(query);
-      if (!matchName && !matchBio && !matchPillars && !matchOccupation && !matchRace) return false;
-    }
-
     return true;
   });
 
@@ -72,62 +46,42 @@ export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
 
   return (
     <div className="space-y-6">
-      {/* Filter & Search Bar */}
-      <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Streamlined Race Filter Bar */}
+      <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
               <UserCheck className="w-5 h-5 text-emerald-400" />
-              Candidate Lookup
+              Certified Candidates
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
-              Browse candidates running for Mayor and Wards 1–12
+              Select a contest to view certified candidates and platform priorities
             </p>
           </div>
 
-          {/* Quick Search */}
-          <div className="relative w-full md:w-72">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search candidate, ward, or issue..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-950/80 border border-slate-700/80 rounded-2xl pl-10 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs"
-              >
-                ✕
-              </button>
-            )}
+          <div className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-xs font-mono font-bold self-start sm:self-auto">
+            {CANDIDATES_2026.length} Certified Candidates
           </div>
         </div>
 
-        {/* Filter Badges Row */}
-        <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-800/80">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 flex items-center gap-1 mr-1">
-            <Filter className="w-3 h-3" /> Race:
-          </span>
-
+        {/* Race Selector Row */}
+        <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-800/80">
           <button
             onClick={() => setSelectedRaceFilter('all')}
-            className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               selectedRaceFilter === 'all'
-                ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
+                ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 font-bold'
                 : 'bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
-            All Races ({CANDIDATES_2026.length})
+            All Races
           </button>
 
           <button
             onClick={() => setSelectedRaceFilter('mayoral')}
-            className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               selectedRaceFilter === 'mayoral'
-                ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
+                ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 font-bold'
                 : 'bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
@@ -142,41 +96,15 @@ export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
               <button
                 key={ward}
                 onClick={() => setSelectedRaceFilter(`ward-${ward}`)}
-                className={`px-2.5 py-1 rounded-xl text-[11px] font-medium transition-all ${
+                className={`px-2.5 py-1.5 rounded-xl text-xs font-medium transition-all ${
                   selectedRaceFilter === `ward-${ward}`
                     ? 'bg-emerald-500 text-slate-950 font-bold shadow-sm'
                     : 'bg-slate-800/40 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
                 }`}
               >
-                W{ward}
+                Ward {ward}
               </button>
             ))}
-          </div>
-
-          <div className="h-4 w-px bg-slate-800 mx-1 hidden md:block"></div>
-
-          {/* Status filters */}
-          <div className="flex items-center gap-1 ml-auto">
-            <button
-              onClick={() => setSelectedStatusFilter(selectedStatusFilter === 'incumbent' ? 'all' : 'incumbent')}
-              className={`px-2.5 py-1 rounded-xl text-[11px] font-medium transition-all ${
-                selectedStatusFilter === 'incumbent'
-                  ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40 font-semibold'
-                  : 'text-slate-400 hover:text-slate-200 bg-slate-800/30'
-              }`}
-            >
-              Incumbents Only
-            </button>
-            <button
-              onClick={() => setSelectedStatusFilter(selectedStatusFilter === 'challenger' ? 'all' : 'challenger')}
-              className={`px-2.5 py-1 rounded-xl text-[11px] font-medium transition-all ${
-                selectedStatusFilter === 'challenger'
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold'
-                  : 'text-slate-400 hover:text-slate-200 bg-slate-800/30'
-              }`}
-            >
-              Challengers Only
-            </button>
           </div>
         </div>
       </div>
@@ -227,17 +155,14 @@ export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
                 <div>
                   <h4 className="text-sm font-bold text-white">Ward {wardNum}: {wardInfo?.wardName}</h4>
                   <div className="text-[11px] text-slate-400">
-                    Key Areas: {wardInfo?.neighborhoods.slice(0, 3).join(', ')}
+                    Areas: {wardInfo?.neighborhoods.slice(0, 3).join(', ')}
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 text-xs">
-                <div className="text-slate-400 font-mono text-[11px] hidden sm:block">
-                  Avg Turnout: <span className="text-emerald-400 font-bold">{wardInfo?.historicalTurnoutAvg}%</span>
-                </div>
-                <span className="px-2.5 py-0.5 bg-slate-800/80 text-slate-300 rounded-full text-[11px] border border-slate-700">
-                  {candidates.length} Registered
+                <span className="px-2.5 py-0.5 bg-slate-800/80 text-slate-300 rounded-full text-[11px] border border-slate-700 font-mono">
+                  {candidates.length} Registered Candidates
                 </span>
               </div>
             </div>
@@ -354,7 +279,7 @@ const CandidateCard: React.FC<{
           </span>
           <span className="flex items-center gap-1 text-[10px] font-mono text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded-full border border-slate-700/60">
             <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-            Nomination Certified
+            Certified
           </span>
         </div>
 
@@ -407,3 +332,4 @@ const CandidateCard: React.FC<{
     </div>
   );
 };
+
