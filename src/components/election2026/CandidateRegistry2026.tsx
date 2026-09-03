@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Candidate2026 } from '../../types/election2026';
-import { CANDIDATES_2026, WARD_LOOKUP_ENTRIES } from '../../data/electionData2026';
+import { ExternalLinkModal } from './ExternalLinkModal';
+import { 
+  CANDIDATES_2026, 
+  WARD_LOOKUP_ENTRIES 
+} from '../../data/electionData2026';
 import { 
   UserCheck, 
   ExternalLink, 
@@ -8,7 +12,8 @@ import {
   CheckCircle2, 
   Award, 
   Sparkles,
-  Globe
+  Globe,
+  FileText
 } from 'lucide-react';
 
 interface CandidateRegistry2026Props {
@@ -22,6 +27,7 @@ export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
     initialWardFilter ? `ward-${initialWardFilter}` : 'all'
   );
   const [selectedCandidateForModal, setSelectedCandidateForModal] = useState<Candidate2026 | null>(null);
+  const [pendingExternal, setPendingExternal] = useState<{ url: string; title: string; category?: string; description?: string } | null>(null);
 
   // Filter candidates purely by race filter
   const filteredCandidates = CANDIDATES_2026.filter((c) => {
@@ -46,6 +52,30 @@ export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
 
   return (
     <div className="space-y-6">
+      {/* Official City Clerk Certification Banner with Clerk PDF Link */}
+      <div className="p-4 bg-emerald-950/40 border border-emerald-500/30 rounded-3xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-emerald-200/90 shadow-xl">
+        <div className="flex items-center gap-2.5">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <div>
+            <span className="font-bold text-white">Clerk Certified:</span> Certified pursuant to the <em>Municipal Elections Act, 1996</em> by City Solicitor and Clerk Eric Labelle on August 24, 2026.
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setPendingExternal({
+            url: 'https://www.greatersudbury.ca/sites/sudburyen/assets/List-of-Certified-Candidates.pdf',
+            title: 'City of Greater Sudbury - List of Certified Candidates',
+            category: 'Official Municipal Document',
+            description: 'You are viewing the official statutory PDF certified by the City Solicitor and Clerk under the Municipal Elections Act, 1996.'
+          })}
+          className="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 rounded-xl transition-colors flex items-center gap-1.5 font-mono text-[11px] shrink-0 font-medium self-start sm:self-auto cursor-pointer"
+        >
+          <FileText className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Certified List ↗</span>
+        </button>
+      </div>
+
       {/* Streamlined Race Filter Bar */}
       <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -119,7 +149,7 @@ export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
               </span>
               <div>
                 <h3 className="text-base font-bold text-white">Mayoral Race</h3>
-                <p className="text-xs text-slate-400">Head of Council • 1 Seat to be Elected</p>
+                <p className="text-xs text-slate-400">Head of Council • 1 Seat to be Elected (City-Wide)</p>
               </div>
             </div>
             <span className="px-3 py-1 bg-slate-800 text-slate-300 text-xs font-mono rounded-full border border-slate-700">
@@ -127,12 +157,13 @@ export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {mayoralCandidates.map((cand) => (
               <CandidateCard
                 key={cand.id}
                 candidate={cand}
                 onViewProfile={() => setSelectedCandidateForModal(cand)}
+                onOpenExternal={(info) => setPendingExternal(info)}
               />
             ))}
           </div>
@@ -162,23 +193,36 @@ export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
 
               <div className="flex items-center gap-3 text-xs">
                 <span className="px-2.5 py-0.5 bg-slate-800/80 text-slate-300 rounded-full text-[11px] border border-slate-700 font-mono">
-                  {candidates.length} Registered Candidates
+                  {candidates.length} Certified Candidates
                 </span>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {candidates.map((cand) => (
                 <CandidateCard
                   key={cand.id}
                   candidate={cand}
                   onViewProfile={() => setSelectedCandidateForModal(cand)}
+                onOpenExternal={(info) => setPendingExternal(info)}
                 />
               ))}
             </div>
           </div>
         );
       })}
+
+      {/* External Link Confirmation Modal */}
+      {pendingExternal && (
+        <ExternalLinkModal
+          isOpen={!!pendingExternal}
+          onClose={() => setPendingExternal(null)}
+          url={pendingExternal.url}
+          title={pendingExternal.title}
+          category={pendingExternal.category}
+          description={pendingExternal.description}
+        />
+      )}
 
       {/* Candidate Detailed Modal */}
       {selectedCandidateForModal && (
@@ -239,15 +283,19 @@ export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
 
               {selectedCandidateForModal.websiteUrl && (
                 <div className="pt-2">
-                  <a
-                    href={selectedCandidateForModal.websiteUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="w-full flex items-center justify-center gap-2 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-2xl text-xs transition-colors shadow-lg shadow-emerald-500/20"
+                  <button
+                    type="button"
+                    onClick={() => setPendingExternal({
+                      url: selectedCandidateForModal.websiteUrl!,
+                      title: `${selectedCandidateForModal.name} - Campaign Website`,
+                      category: 'Candidate Campaign Website',
+                      description: `You are navigating to the external campaign website for ${selectedCandidateForModal.name}.`
+                    })}
+                    className="w-full flex items-center justify-center gap-2 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-2xl text-xs transition-colors shadow-lg shadow-emerald-500/20 cursor-pointer"
                   >
                     <span>Visit Official Campaign Website</span>
                     <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
+                  </button>
                 </div>
               )}
             </div>
@@ -262,7 +310,8 @@ export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
 const CandidateCard: React.FC<{
   candidate: Candidate2026;
   onViewProfile: () => void;
-}> = ({ candidate, onViewProfile }) => {
+  onOpenExternal: (info: { url: string; title: string; category?: string; description?: string }) => void;
+}> = ({ candidate, onViewProfile, onOpenExternal }) => {
   const isIncumbent = candidate.status === 'Incumbent';
 
   return (
@@ -318,15 +367,19 @@ const CandidateCard: React.FC<{
         </button>
 
         {candidate.websiteUrl && (
-          <a
-            href={candidate.websiteUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="p-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors"
+          <button
+            type="button"
+            onClick={() => onOpenExternal({
+              url: candidate.websiteUrl!,
+              title: `${candidate.name} - Campaign Website`,
+              category: 'Candidate Campaign Website',
+              description: `You are navigating to the external campaign website for ${candidate.name}.`
+            })}
+            className="p-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
             title="Official Campaign Website"
           >
             <Globe className="w-3.5 h-3.5" />
-          </a>
+          </button>
         )}
       </div>
     </div>

@@ -12,9 +12,20 @@ Lead Civic Data Architect & Full-Stack TypeScript/React Engineer collaborating o
 2. **Complete Historical Archive**:
    - Every single election cycle in the modern amalgamated City of Greater Sudbury era (2003–2022) has completed its official certified verification pass.
 
-3. **Dual-Mode User Experience ("Basic" vs. "Detailed")**:
-   - **Basic Mode**: A clean, visually engaging gateway that highlights the core narrative (who won, key flips, turnout, and the interactive map) without overwhelming statistical clutter.
-   - **Detailed Mode**: Full granular analytics (complete candidate returns, multi-cycle career trajectories, turnout matrices, margin distributions, and CSV data exports).
-
-4. **Zero Fabrication on Certified Years**:
+3. **Zero Fabrication on Certified Years**:
    - Never guess or estimate data points for election years that have been formally marked as certified.
+
+4. **Direct Answers First / Zero Unsolicited Code Changes**:
+   - When the user asks a question, solely provide the direct answer and explanation first.
+   - NEVER assume the user wants something fixed or write, change, or update code without explicit instruction to do so.
+
+## Command Shortcuts
+
+1. **Context Status Command (`/context` or `!context`)**:
+   - When the user's prompt contains `/context` or `!context`, output a structured breakdown of the current session's context window status:
+     - Active Model & Maximum Context Window (e.g., Gemini 3.8 Flash, 1,048,576 tokens)
+     - Total turn count and conversation depth
+     - Estimated consumed tokens (system rules + skill definitions + message history + tool calls/diffs + uploaded media)
+     - Estimated remaining tokens and percentage available
+     - Session health indicator (Safe / Moderate / Approaching Compaction)
+   - Do not make any code changes or call tools when this command is triggered.

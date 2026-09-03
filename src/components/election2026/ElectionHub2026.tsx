@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Election2026HubTab } from '../../types/election2026';
 import { CandidateRegistry2026 } from './CandidateRegistry2026';
+import { SchoolBoardTrusteesView2026 } from './SchoolBoardTrusteesView2026';
 import { CandidateDebatesView2026 } from './CandidateDebatesView2026';
 import { LiveResultsView2026 } from './LiveResultsView2026';
 import { ExternalVoterGuideModal } from './ExternalVoterGuideModal';
@@ -12,7 +13,8 @@ import {
   ExternalLink,
   Building2,
   Calendar,
-  Vote
+  Vote,
+  GraduationCap
 } from 'lucide-react';
 
 export const ElectionHub2026: React.FC = () => {
@@ -140,6 +142,18 @@ export const ElectionHub2026: React.FC = () => {
         </button>
 
         <button
+          onClick={() => setHubTab('school-trustees')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+            hubTab === 'school-trustees'
+              ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/25 font-bold'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+          }`}
+        >
+          <GraduationCap className="w-4 h-4" />
+          <span>School Board Trustees</span>
+        </button>
+
+        <button
           onClick={() => setHubTab('debates')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
             hubTab === 'debates'
@@ -181,6 +195,9 @@ export const ElectionHub2026: React.FC = () => {
       {/* Active Sub-Tab View */}
       {hubTab === 'candidates' && (
         <CandidateRegistry2026 />
+      )}
+      {hubTab === 'school-trustees' && (
+        <SchoolBoardTrusteesView2026 />
       )}
       {hubTab === 'debates' && (
         <CandidateDebatesView2026 

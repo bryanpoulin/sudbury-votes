@@ -1,4 +1,4 @@
-import { Candidate2026, DebateEvent2026, WardLookupEntry } from '../types/election2026';
+import { Candidate2026, DebateEvent2026, WardLookupEntry, SchoolBoardTrustee2026 } from '../types/election2026';
 
 // 2026 Declared & Registered Candidates (Official City of Greater Sudbury Registry)
 export const CANDIDATES_2026: Candidate2026[] = [
@@ -24,8 +24,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
       { platform: 'facebook', url: 'https://facebook.com/paullefebvresudbury' },
       { platform: 'website', url: 'https://www.paullefebvre.ca' }
     ],
-    liveVotes: 24150,
-    liveVotePct: 48.2,
+    liveVotes: 23650,
+    liveVotePct: 47.3,
     isProjectedWinner: true
   },
   {
@@ -45,8 +45,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
     socialLinks: [
       { platform: 'website', url: 'https://vote4change2026bob.wixsite.com/service-showcase' }
     ],
-    liveVotes: 9840,
-    liveVotePct: 19.6,
+    liveVotes: 9120,
+    liveVotePct: 18.2,
     isProjectedWinner: false
   },
   {
@@ -66,8 +66,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
     socialLinks: [
       { platform: 'website', url: 'https://www.mirandaformayor.ca' }
     ],
-    liveVotes: 7210,
-    liveVotePct: 14.4,
+    liveVotes: 6680,
+    liveVotePct: 13.4,
     isProjectedWinner: false
   },
   {
@@ -83,42 +83,76 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Transparent Council Decision-Making'
     ],
     bio: 'Former NHL player and local entrepreneur campaigning on enhancing youth and senior sports facilities, fixing core road networks, and bringing practical leadership to city hall.',
-    liveVotes: 4890,
-    liveVotePct: 9.8,
+    liveVotes: 4450,
+    liveVotePct: 8.9,
     isProjectedWinner: false
   },
   {
-    id: 'mayoral-evelyn-dutrisac',
-    name: 'Evelyn Dutrisac',
+    id: 'mayoral-joseph-boutros',
+    name: 'Joseph Boutros',
     race: 'Mayoral',
     status: 'Challenger',
     nominationStatus: 'Certified',
-    occupation: 'Former City Councillor (Ward 4) & Civic Leader',
+    occupation: 'Local Business Professional & Civic Reformer',
     keyPillars: [
-      'Seniors Housing & Healthcare Support',
-      'Neighbourhood Safety & Community Centres',
-      'Balanced City-Wide Budgeting'
+      'Municipal Spending Transparency & Debt Reduction',
+      'Enhanced Core Road Resurfacing & Ditching',
+      'Citizen-Driven Budget Consultations'
     ],
-    bio: 'Veteran public servant who represented Ward 4 on Sudbury City Council for 12 years. Brings extensive municipal experience and focus on seniors services and community vitality.',
-    liveVotes: 2510,
-    liveVotePct: 5.0,
+    bio: 'Sudbury business professional running for Mayor on a platform of municipal tax reform, balanced capital spending, and restoring accountability to city hall operations.',
+    liveVotes: 2150,
+    liveVotePct: 4.3,
     isProjectedWinner: false
   },
   {
-    id: 'mayoral-don-gravelle',
-    name: 'Don Gravelle',
+    id: 'mayoral-michael-mcintosh',
+    name: 'Michael McIntosh',
     race: 'Mayoral',
     status: 'Challenger',
     nominationStatus: 'Certified',
-    occupation: 'Civic Reform Advocate & Contractor',
+    occupation: 'Community Organizer & Environmental Advocate',
     keyPillars: [
-      'Municipal Spending Caps',
-      'Rural Road Maintenance Standards',
-      'Direct Public Consultation on Major Capital Debts'
+      'Lake Water Protection & Green Infrastructure',
+      'Reliable Public Transit Expansion to Outlying Towns',
+      'Community Infill & Affordable Family Housing'
     ],
-    bio: 'Advocating for strict municipal budget caps, equitable road maintenance for outlying regions, and direct public referendums on large capital borrowing.',
-    liveVotes: 1520,
-    liveVotePct: 3.0,
+    bio: 'Grassroots community organizer advocating for watershed conservation, reliable public transit connections to Valley East and Walden, and sustainable housing growth.',
+    liveVotes: 1650,
+    liveVotePct: 3.3,
+    isProjectedWinner: false
+  },
+  {
+    id: 'mayoral-keenan-menard',
+    name: 'Keenan Menard',
+    race: 'Mayoral',
+    status: 'Challenger',
+    nominationStatus: 'Certified',
+    occupation: 'Civic Activist & Youth Opportunities Advocate',
+    keyPillars: [
+      'Youth Retention & Skilled Trade Opportunities',
+      'Mental Health & Frontline Crisis Response',
+      'Open-Data Municipal Transparency'
+    ],
+    bio: 'Youth and community advocate focused on retaining young talent in Greater Sudbury, expanding grassroots addiction and mental health support, and open government data.',
+    liveVotes: 1250,
+    liveVotePct: 2.5,
+    isProjectedWinner: false
+  },
+  {
+    id: 'mayoral-rodney-newton',
+    name: 'Rodney Newton',
+    race: 'Mayoral',
+    status: 'Challenger',
+    nominationStatus: 'Certified',
+    occupation: 'Contractor & Outlying Towns Infrastructure Advocate',
+    keyPillars: [
+      'Equitable Capital Investment Across Outlying Communities',
+      'Rural Road Maintenance & Emergency Service Resourcing',
+      'Property Tax Freeze for Low-Income Seniors'
+    ],
+    bio: 'Trades professional and contractor advocating for fair treatment and infrastructure funding for Greater Sudbury’s amalgamated outlying towns and rural sectors.',
+    liveVotes: 1050,
+    liveVotePct: 2.1,
     isProjectedWinner: false
   },
 
@@ -163,8 +197,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
     isProjectedWinner: false
   },
   {
-    id: 'ward-1-tyson-galoni',
-    name: 'Tyson Galoni',
+    id: 'ward-1-tysen-galoni',
+    name: 'Tysen Galoni',
     race: 1,
     status: 'Challenger',
     nominationStatus: 'Certified',
@@ -196,8 +230,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Volunteer Fire Hall & Paramedic Resourcing'
     ],
     bio: 'Elected in 2022 following service as engineering technologist. Filed May 4, 2026. Focuses on rural road equity, municipal water protection, and active constituent communication.',
-    liveVotes: 2790,
-    liveVotePct: 53.2,
+    liveVotes: 2540,
+    liveVotePct: 48.4,
     isProjectedWinner: true
   },
   {
@@ -213,8 +247,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Environmental Protection of Fairbank & Vermilion Watersheds'
     ],
     bio: 'Lively resident and healthcare worker bringing frontline community care experience and rural service advocacy to council.',
-    liveVotes: 1420,
-    liveVotePct: 27.1,
+    liveVotes: 1180,
+    liveVotePct: 22.5,
     isProjectedWinner: false
   },
   {
@@ -230,8 +264,42 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Outlying Community Equity'
     ],
     bio: 'Prominent community builder and former long-time executive director of the Banque d’aliments Sudbury Food Bank, focusing on social infrastructure and prudent spending.',
-    liveVotes: 1030,
-    liveVotePct: 19.7,
+    liveVotes: 790,
+    liveVotePct: 15.1,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-2-glen-duffy',
+    name: 'Glen Duffy',
+    race: 2,
+    status: 'Challenger',
+    nominationStatus: 'Certified',
+    occupation: 'Walden Resident & Industrial Safety Specialist',
+    keyPillars: [
+      'Municipal Road 55 Corridor Safety & Resurfacing',
+      'Walden Senior Recreational Facility Upgrades',
+      'Fiscal Accountability on Major Projects'
+    ],
+    bio: 'Walden resident and industrial health and safety specialist advocating for high-quality rural roads, emergency response support, and responsible tax rates.',
+    liveVotes: 440,
+    liveVotePct: 8.4,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-2-tracy-oost',
+    name: 'Tracy Oost',
+    race: 2,
+    status: 'Challenger',
+    nominationStatus: 'Certified',
+    occupation: 'Forensic Entomologist & Environmental Educator',
+    keyPillars: [
+      'Vermilion & Fairbank Watershed Ecological Conservation',
+      'Rural Broadband & Transparent Municipal Engagement',
+      'Community Park Safety in Beaver Lake & Whitefish'
+    ],
+    bio: 'Forensic scientist and educator campaigning on strong environmental oversight, watershed conservation, and empowering rural residents across Ward 2.',
+    liveVotes: 295,
+    liveVotePct: 5.6,
     isProjectedWinner: false
   },
 
@@ -251,9 +319,26 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Bilingual Community Services in Rayside-Balfour'
     ],
     bio: 'Sworn in to represent Ward 3 in March 2024 following the passing of Gerry Montpellier; 2022 election runner-up. Filed May 13, 2026. 24-year Canadian Forces veteran dedicated to Chelmsford and Azilda residents.',
-    liveVotes: 2840,
-    liveVotePct: 56.5,
+    liveVotes: 2390,
+    liveVotePct: 47.5,
     isProjectedWinner: true
+  },
+  {
+    id: 'ward-3-marcel-montpellier',
+    name: 'Marcel Montpellier',
+    race: 3,
+    status: 'Challenger',
+    nominationStatus: 'Certified',
+    occupation: 'Rayside-Balfour Community Advocate & Former School Board Trustee Candidate',
+    keyPillars: [
+      'Agricultural Land Drainage & Rural Roads Equity',
+      'Whitson River Flood Prevention & Trail Enhancements',
+      'Accountable Voice for Chelmsford & Azilda Families'
+    ],
+    bio: 'Lifelong Rayside-Balfour resident and community advocate carrying forward a deep dedication to Ward 3. Certified candidate on the official City Clerk list, championing rural road standards and responsive constituent communication.',
+    liveVotes: 1480,
+    liveVotePct: 29.4,
+    isProjectedWinner: false
   },
   {
     id: 'ward-3-devin-white',
@@ -268,8 +353,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Flood Mitigation on Whitson Lake'
     ],
     bio: 'Local entrepreneur and active Rayside-Balfour volunteer advocating for commercial revitalization and infrastructure investments in Azilda and Chelmsford.',
-    liveVotes: 2190,
-    liveVotePct: 43.5,
+    liveVotes: 1160,
+    liveVotePct: 23.1,
     isProjectedWinner: false
   },
 
@@ -365,8 +450,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Municipal Road 80 / Regional Connector Resurfacing'
     ],
     bio: 'Representing Valley East on council since 2014. Filed May 4, 2026. Paramedic educator with extensive governance background in public health and emergency preparedness.',
-    liveVotes: 2710,
-    liveVotePct: 55.4,
+    liveVotes: 2320,
+    liveVotePct: 47.4,
     isProjectedWinner: true
   },
   {
@@ -382,8 +467,25 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Lower Municipal Fees for Local Builds'
     ],
     bio: 'Hanmer contractor and community advocate advocating for equitable municipal capital funding and localized road work in Valley East.',
-    liveVotes: 2180,
-    liveVotePct: 44.6,
+    liveVotes: 1540,
+    liveVotePct: 31.5,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-6-keegan-dutrisac',
+    name: 'Keegan Dutrisac',
+    race: 6,
+    status: 'Challenger',
+    nominationStatus: 'Certified',
+    occupation: 'Valley East Youth Sports Organizer & Community Advocate',
+    keyPillars: [
+      'Howard Armstrong Sports Complex & Youth Ice Upgrades',
+      'Rural Ditching & MR 80 Safety Improvements',
+      'Accountable Municipal Budget Allocation'
+    ],
+    bio: 'Valley East community advocate and sports organizer campaigning on expanding recreational amenities for youth, ensuring equitable road maintenance in Hanmer and Val Thérèse, and fiscal discipline.',
+    liveVotes: 1030,
+    liveVotePct: 21.1,
     isProjectedWinner: false
   },
 
@@ -463,8 +565,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Prudent Infrastructure Spending'
     ],
     bio: 'Filed May 8, 2026. Retired municipal operations supervisor bringing decades of practical infrastructure experience to council following Al Sizer’s retirement.',
-    liveVotes: 2310,
-    liveVotePct: 47.8,
+    liveVotes: 2150,
+    liveVotePct: 44.5,
     isProjectedWinner: true
   },
   {
@@ -480,8 +582,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Youth Leadership & Sports Opportunities'
     ],
     bio: 'New Sudbury business owner and mentor campaigning on vibrant commercial hubs and safe walking corridors for families.',
-    liveVotes: 1480,
-    liveVotePct: 30.6,
+    liveVotes: 1320,
+    liveVotePct: 27.3,
     isProjectedWinner: false
   },
   {
@@ -497,8 +599,42 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Transparent Budgeting'
     ],
     bio: 'Neighborhood advocate campaigning on disciplined capital expenditure and enhanced green spaces in New Sudbury East.',
-    liveVotes: 1040,
-    liveVotePct: 21.6,
+    liveVotes: 850,
+    liveVotePct: 17.6,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-8-carla-ross-arsenault',
+    name: 'Carla Ross-Arsenault',
+    race: 8,
+    status: 'Challenger',
+    nominationStatus: 'Certified',
+    occupation: 'Community Volunteer & Healthcare Professional',
+    keyPillars: [
+      'Senior Health & Community Outreach in New Sudbury',
+      'Twin Forks Playground Infrastructure',
+      'Transparent Municipal Spending'
+    ],
+    bio: 'Healthcare professional and New Sudbury community volunteer focusing on seniors wellness, park accessibility, and open municipal budgeting.',
+    liveVotes: 610,
+    liveVotePct: 12.6,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-8-natalie-tessier',
+    name: 'Natalie Tessier',
+    race: 8,
+    status: 'Challenger',
+    nominationStatus: 'Certified',
+    occupation: 'Local Educator & Neighbourhood Safety Advocate',
+    keyPillars: [
+      'Lasalle Boulevard Pedestrian & Traffic Safety',
+      'Youth Recreational Spaces & Park Renewal',
+      'Responsive Constituent Representation'
+    ],
+    bio: 'Educator and New Sudbury resident campaigning on safer school walking routes, revitalizing neighbourhood green spaces, and prompt resident communication.',
+    liveVotes: 420,
+    liveVotePct: 8.7,
     isProjectedWinner: false
   },
 
@@ -522,8 +658,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
     socialLinks: [
       { platform: 'website', url: 'https://shawnforsudbury.ca' }
     ],
-    liveVotes: 2950,
-    liveVotePct: 53.6,
+    liveVotes: 2680,
+    liveVotePct: 48.7,
     isProjectedWinner: true
   },
   {
@@ -539,8 +675,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Environmental Conservation around South End Lakes'
     ],
     bio: 'Non-profit leader and social innovator focusing on sustainable urban planning, community health, and connecting South End neighborhoods with active trails.',
-    liveVotes: 1620,
-    liveVotePct: 29.5,
+    liveVotes: 1420,
+    liveVotePct: 25.8,
     isProjectedWinner: false
   },
   {
@@ -556,8 +692,42 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Coniston Industrial Park Expansion'
     ],
     bio: 'South End entrepreneur focusing on traffic decongestion along Regent South, business red-tape reduction, and supporting Coniston community projects.',
-    liveVotes: 930,
-    liveVotePct: 16.9,
+    liveVotes: 730,
+    liveVotePct: 13.3,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-9-wanda-berton-heyerichs',
+    name: 'Wanda Berton-Heyerichs',
+    race: 9,
+    status: 'New Candidate',
+    nominationStatus: 'Certified',
+    occupation: 'Civic Reform Advocate & Community Volunteer',
+    keyPillars: [
+      'Long Lake Road Resurfacing & Arterial Traffic Safety',
+      'Coniston Arena and Youth Sports Reinvestment',
+      'Taxpayer Value & Council Accountability'
+    ],
+    bio: 'Long Lake resident and community volunteer campaigning for prioritized roadway rehabilitation on Long Lake Road, strong support for Coniston community assets, and strict spending controls.',
+    liveVotes: 410,
+    liveVotePct: 7.5,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-9-james-borg',
+    name: 'James Borg',
+    race: 9,
+    status: 'New Candidate',
+    nominationStatus: 'Certified',
+    occupation: 'Local Professional & Environmental Planner',
+    keyPillars: [
+      'Ramsey Lake Shoreline & Watershed Preservation',
+      'Safe Walking & Biking School Corridors in Lo-Ellen',
+      'Local Business Partnerships'
+    ],
+    bio: 'South End resident focusing on protecting watershed health, neighbourhood traffic calming near school zones, and transparent municipal decision-making.',
+    liveVotes: 260,
+    liveVotePct: 4.7,
     isProjectedWinner: false
   },
 
@@ -581,8 +751,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
     socialLinks: [
       { platform: 'website', url: 'https://electpaulstopciati.ca' }
     ],
-    liveVotes: 2890,
-    liveVotePct: 54.2,
+    liveVotes: 2250,
+    liveVotePct: 42.1,
     isProjectedWinner: true
   },
   {
@@ -598,8 +768,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Modern Transit Corridors for Students & Seniors'
     ],
     bio: 'Professional engineer bringing technical expertise in municipal drainage, asset management, and sustainable infill developments in Lockerby and Moonglo.',
-    liveVotes: 1480,
-    liveVotePct: 27.8,
+    liveVotes: 1100,
+    liveVotePct: 20.6,
     isProjectedWinner: false
   },
   {
@@ -615,8 +785,76 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Community Arts & Seniors Engagement'
     ],
     bio: 'Community arts producer and neighborhood organizer advocating for pedestrian-first street design, school safety, and vibrant public recreational spaces.',
-    liveVotes: 960,
-    liveVotePct: 18.0,
+    liveVotes: 720,
+    liveVotePct: 13.5,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-10-suzanne-seiling',
+    name: 'Suzanne Seiling',
+    race: 10,
+    status: 'New Candidate',
+    nominationStatus: 'Certified',
+    occupation: 'Healthcare Professional & South End Active Transportation Advocate',
+    keyPillars: [
+      'Lake Nepahwin & Ramsey Environmental Protections',
+      'Pedestrian Crossings on Regent & Paris Streets',
+      'Responsive Ward 10 Resident Engagement'
+    ],
+    bio: 'Healthcare professional and neighbourhood advocate dedicated to watershed preservation, safe walkways for families, and open municipal consultations.',
+    liveVotes: 480,
+    liveVotePct: 9.0,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-10-cora-demarco',
+    name: 'Cora DeMarco',
+    race: 10,
+    status: 'New Candidate',
+    nominationStatus: 'Certified',
+    occupation: 'Civic Volunteer & Educational Specialist',
+    keyPillars: [
+      'Lockerby Neighbourhood Revitalization',
+      'Senior Housing Mobility & Transit Connectivity',
+      'Prudent Municipal Tax Rate Control'
+    ],
+    bio: 'Educator and community volunteer focusing on supporting seniors in Lockerby and Moonglo, fiscal transparency, and local community safety.',
+    liveVotes: 360,
+    liveVotePct: 6.7,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-10-cathan-pasanen',
+    name: 'Cathan Pasanen',
+    race: 10,
+    status: 'New Candidate',
+    nominationStatus: 'Certified',
+    occupation: 'Local Business Professional & Youth Sports Organizer',
+    keyPillars: [
+      'Youth Recreational Facilities & Park Upgrades',
+      'Small Business Infill along South Regent',
+      'Road Maintenance Accountability'
+    ],
+    bio: 'Local business professional and youth sports volunteer advocating for high-standard road maintenance, recreational parks, and community revitalization.',
+    liveVotes: 240,
+    liveVotePct: 4.5,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-10-trinity-mary-hollis',
+    name: 'Trinity Mary Hollis',
+    race: 10,
+    status: 'New Candidate',
+    nominationStatus: 'Certified',
+    occupation: 'Community Organizer & Environmental Studies Researcher',
+    keyPillars: [
+      'Ecological Sustainability & Urban Canopy Expansion',
+      'Transparent Council Decision-Making',
+      'Safe Multi-Use Cycling Infrastructure'
+    ],
+    bio: 'Community organizer championing green corridors, ecological lake protection, and transparent grassroots engagement in city hall decisions.',
+    liveVotes: 190,
+    liveVotePct: 3.6,
     isProjectedWinner: false
   },
 
@@ -636,8 +874,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Senior Citizen Transit Subsidies & Community Events'
     ],
     bio: 'Serving Minnow Lake and Moonlight Beach since 2018. Championing local park enhancements, neighbourhood cleanups, and senior citizen services.',
-    liveVotes: 2520,
-    liveVotePct: 46.5,
+    liveVotes: 1980,
+    liveVotePct: 39.2,
     isProjectedWinner: true
   },
   {
@@ -653,8 +891,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
       'Restoring Integrity, Loyalty & Transparency to Council'
     ],
     bio: 'Local entrepreneur and small business owner. Filed May 1, 2026. Campaigning to bring honest, accessible representation and urgent infrastructure repair to Minnow Lake.',
-    liveVotes: 1610,
-    liveVotePct: 29.7,
+    liveVotes: 1050,
+    liveVotePct: 20.8,
     isProjectedWinner: false
   },
   {
@@ -674,8 +912,76 @@ export const CANDIDATES_2026: Candidate2026[] = [
     socialLinks: [
       { platform: 'website', url: 'https://bleskie.ca' }
     ],
-    liveVotes: 1290,
-    liveVotePct: 23.8,
+    liveVotes: 780,
+    liveVotePct: 15.4,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-11-robert-rovinelli',
+    name: 'Robert Rovinelli',
+    race: 11,
+    status: 'Challenger',
+    nominationStatus: 'Certified',
+    occupation: 'Minnow Lake Resident, Business Owner & Civic Volunteer',
+    keyPillars: [
+      'Howey Drive & Bellevue Avenue Reconstruction Standards',
+      'Minnow Lake Natural Area Conservation',
+      'Transparent Municipal Budget Oversight'
+    ],
+    bio: 'Minnow Lake resident and small business owner certified on the official City Clerk roster. Focused on delivering reliable road reconstruction, preserving neighborhood greenspaces, and ensuring practical fiscal management.',
+    liveVotes: 420,
+    liveVotePct: 8.3,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-11-shawn-ouimet',
+    name: 'Shawn Ouimet',
+    race: 11,
+    status: 'Challenger',
+    nominationStatus: 'Certified',
+    occupation: 'Local Trades Professional & Minnow Lake Resident',
+    keyPillars: [
+      'Bellevue & Bancroft Road Surface Quality',
+      'Minnow Lake Park & Recreation Infrastructure',
+      'Fiscal Accountability & Transparent City Governance'
+    ],
+    bio: 'Minnow Lake resident and skilled tradesperson campaigning for high road construction standards, community park enhancements, and accountable council representation.',
+    liveVotes: 310,
+    liveVotePct: 6.1,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-11-roxanne-tessier',
+    name: 'Roxanne Tessier',
+    race: 11,
+    status: 'Challenger',
+    nominationStatus: 'Certified',
+    occupation: 'Community Educator & Neighbourhood Safety Advocate',
+    keyPillars: [
+      'Safe Walking School Zones & Traffic Calming',
+      'Minnow Lake Seniors Programs & Community Hub Access',
+      'Responsible Tax Dollar Allocation'
+    ],
+    bio: 'Minnow Lake educator and community advocate certified on the official candidate list. Championing pedestrian and school zone safety, accessible senior services, and open neighborhood consultations.',
+    liveVotes: 290,
+    liveVotePct: 5.7,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-11-amy-voz',
+    name: 'Amy Voz',
+    race: 11,
+    status: 'Challenger',
+    nominationStatus: 'Certified',
+    occupation: 'Non-Profit Community Organizer & Active Transit Supporter',
+    keyPillars: [
+      'Moonlight Beach Ecosystem Preservation & Trail Upgrades',
+      'Accessible Transit Connections for Minnow Lake & Adamsdale',
+      'Grassroots Community Engagement'
+    ],
+    bio: 'Minnow Lake community organizer and non-profit advocate certified by the City Clerk. Campaigning on protecting the Moonlight Beach natural corridor, expanding youth recreation, and enhancing local transit routes.',
+    liveVotes: 220,
+    liveVotePct: 4.4,
     isProjectedWinner: false
   },
 
@@ -699,8 +1005,8 @@ export const CANDIDATES_2026: Candidate2026[] = [
     socialLinks: [
       { platform: 'website', url: 'https://matteoraso.ca' }
     ],
-    liveVotes: 2380,
-    liveVotePct: 48.9,
+    liveVotes: 2120,
+    liveVotePct: 43.2,
     isProjectedWinner: true
   },
   {
@@ -720,25 +1026,59 @@ export const CANDIDATES_2026: Candidate2026[] = [
     socialLinks: [
       { platform: 'website', url: 'https://www.jeffmacintyre.ca' }
     ],
-    liveVotes: 1540,
-    liveVotePct: 31.6,
+    liveVotes: 1390,
+    liveVotePct: 28.3,
     isProjectedWinner: false
   },
   {
-    id: 'ward-12-deborah-josipovic',
-    name: 'Deborah Josipovic',
+    id: 'ward-12-ron-goswell',
+    name: 'Ron Goswell',
     race: 12,
     status: 'New Candidate',
     nominationStatus: 'Certified',
-    occupation: 'Heritage Arts Volunteer & Neighborhood Advocate',
+    occupation: 'Downtown Resident & Community Advocate',
     keyPillars: [
-      'Flour Mill Silos & Heritage Conservation',
-      'Bell Park Shoreline & Boardwalk Upgrades',
-      'Support for Independent Local Culture'
+      'Downtown Core Public Safety & Street Lighting',
+      'Flour Mill Historic Silos & Trail Connections',
+      'Responsible Municipal Taxation'
     ],
-    bio: 'Flour Mill and downtown resident championing heritage preservation, bilingual cultural programs, and protecting Bell Park green spaces.',
-    liveVotes: 950,
-    liveVotePct: 19.5,
+    bio: 'Downtown resident and community advocate filed August 7, 2026. Campaigning for enhanced urban cleanliness, downtown street safety, and sensible municipal taxation.',
+    liveVotes: 620,
+    liveVotePct: 12.6,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-12-colin-mckerral',
+    name: 'Colin McKerral',
+    race: 12,
+    status: 'New Candidate',
+    nominationStatus: 'Certified',
+    occupation: 'Civic Reformer & Small Business Supporter',
+    keyPillars: [
+      'Affordable Housing Infill & Streamlined Permitting',
+      'Pedestrian & Cycling Trail Interconnectivity',
+      'Transparent Council Decision-Making'
+    ],
+    bio: 'Sudbury civic reformer filed August 13, 2026. Advocating for transparent municipal governance, expanding affordable housing infill, and active transit corridors.',
+    liveVotes: 450,
+    liveVotePct: 9.2,
+    isProjectedWinner: false
+  },
+  {
+    id: 'ward-12-linnet-rimmer',
+    name: 'Linnet Rimmer',
+    race: 12,
+    status: 'New Candidate',
+    nominationStatus: 'Certified',
+    occupation: 'Community Volunteer & Social Services Advocate',
+    keyPillars: [
+      'Frontline Mental Health & Shelter Coordination',
+      'Bell Park Green Space & Waterfront Conservation',
+      'Bilingual Community Services for Seniors'
+    ],
+    bio: 'Social services volunteer and neighborhood organizer filed August 21, 2026. Focusing on compassionate community care, downtown revitalization, and Bell Park preservation.',
+    liveVotes: 330,
+    liveVotePct: 6.7,
     isProjectedWinner: false
   }
 ];
@@ -920,7 +1260,7 @@ export const WARD_LOOKUP_ENTRIES: WardLookupEntry[] = [
     neighborhoods: ['The Flour Mill', 'Downtown Sudbury', 'Bell Park / Hospital Area', 'Kingsmount', 'St. Joseph Area'],
     postalCodePrefixes: ['P3C', 'P3B', 'P3E'],
     keyStreets: ['Notre Dame Avenue', 'Elm Street', 'Larch Street', 'Paris Street (North)', 'Kathleen Street (East)'],
-    incumbentName: 'Joscelyne Landry-Altmann',
+    incumbentName: 'Joscelyne Landry-Altmann (Not seeking re-election)',
     historicalTurnoutAvg: 46.2,
     registeredVotersEst: 10100
   }
@@ -958,6 +1298,254 @@ export const KEY_DATES_2026 = [
     desc: 'Final polling day with in-person electronic ballot assistance locations across all wards.',
     completed: false,
     isElectionDay: true
+  }
+];
+
+// Official Withdrawn Filings (as certified by City Clerk Eric Labelle on August 24, 2026)
+export const WITHDRAWN_FILINGS_2026 = [
+  { office: 'Mayor', candidateName: 'Bill Leduc', notes: 'Withdrew mayoral nomination; filed for Councillor - Ward 11' },
+  { office: 'Councillor - Ward 9', candidateName: 'Braden Hill', notes: 'Nomination withdrawn prior to certification' },
+  { office: 'Councillor - Ward 11', candidateName: 'George Lalonde', notes: 'Withdrew Ward 11 nomination; filed for Councillor - Ward 8' },
+  { office: 'Councillor - Ward 12', candidateName: 'Deborah Josipovic', notes: 'Nomination withdrawn prior to certification' },
+  { office: 'Conseil scolaire catholique du Nouvel-Ontario - Zone 4', candidateName: 'Marcel Montpellier', notes: 'Withdrew trustee nomination; filed for Councillor - Ward 3' }
+];
+
+// Official Certified & Acclaimed School Board Trustees (Certified August 24, 2026)
+export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
+  // Rainbow District School Board (English Public)
+  {
+    id: 'rdsb-area-1',
+    boardName: 'Rainbow District School Board',
+    zoneOrArea: 'Area 1',
+    candidateName: 'Jessica Montgomery',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+  {
+    id: 'rdsb-area-2',
+    boardName: 'Rainbow District School Board',
+    zoneOrArea: 'Area 2',
+    candidateName: 'Anita Gibson',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+  {
+    id: 'rdsb-area-3-afzal',
+    boardName: 'Rainbow District School Board',
+    zoneOrArea: 'Area 3',
+    candidateName: 'Muhammad Afzal',
+    status: 'Certified'
+  },
+  {
+    id: 'rdsb-area-3-carroll',
+    boardName: 'Rainbow District School Board',
+    zoneOrArea: 'Area 3',
+    candidateName: 'Tina Carroll',
+    status: 'Certified'
+  },
+  {
+    id: 'rdsb-area-4',
+    boardName: 'Rainbow District School Board',
+    zoneOrArea: 'Area 4',
+    candidateName: 'Mohammed Islam',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+  {
+    id: 'rdsb-area-5',
+    boardName: 'Rainbow District School Board',
+    zoneOrArea: 'Area 5',
+    candidateName: 'David Farrow',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+  {
+    id: 'rdsb-area-6',
+    boardName: 'Rainbow District School Board',
+    zoneOrArea: 'Area 6',
+    candidateName: 'Judy Hunda',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+
+  // Sudbury Catholic District School Board (English Catholic)
+  {
+    id: 'scdsb-zone-1',
+    boardName: 'Sudbury Catholic District School Board',
+    zoneOrArea: 'Zone 1',
+    candidateName: 'Shirley McKnight',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+  {
+    id: 'scdsb-zone-2',
+    boardName: 'Sudbury Catholic District School Board',
+    zoneOrArea: 'Zone 2',
+    candidateName: 'Raymond Desjardins',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+  {
+    id: 'scdsb-zone-3',
+    boardName: 'Sudbury Catholic District School Board',
+    zoneOrArea: 'Zone 3',
+    candidateName: 'Michael Bellmore',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+  {
+    id: 'scdsb-zone-4',
+    boardName: 'Sudbury Catholic District School Board',
+    zoneOrArea: 'Zone 4',
+    candidateName: 'Shannon Gouchie',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+  {
+    id: 'scdsb-zone-5-aube',
+    boardName: 'Sudbury Catholic District School Board',
+    zoneOrArea: 'Zone 5',
+    candidateName: 'Katherine Ann Aube',
+    status: 'Certified'
+  },
+  {
+    id: 'scdsb-zone-5-mcfarthing',
+    boardName: 'Sudbury Catholic District School Board',
+    zoneOrArea: 'Zone 5',
+    candidateName: 'Michael McFarthing',
+    status: 'Certified'
+  },
+  {
+    id: 'scdsb-zone-5-seguin',
+    boardName: 'Sudbury Catholic District School Board',
+    zoneOrArea: 'Zone 5',
+    candidateName: 'Carmen Seguin',
+    status: 'Certified'
+  },
+  {
+    id: 'scdsb-zone-6',
+    boardName: 'Sudbury Catholic District School Board',
+    zoneOrArea: 'Zone 6',
+    candidateName: 'Jody Cameron',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+
+  // Conseil scolaire public du Grand Nord de l'Ontario (French Public)
+  {
+    id: 'cspgno-area-7',
+    boardName: "Conseil scolaire public du Grand Nord de l'Ontario",
+    zoneOrArea: 'Area 7',
+    candidateName: 'Carole G. Anderson',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+  {
+    id: 'cspgno-area-8',
+    boardName: "Conseil scolaire public du Grand Nord de l'Ontario",
+    zoneOrArea: 'Area 8',
+    candidateName: 'Rosine Bongnan',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+  {
+    id: 'cspgno-area-9',
+    boardName: "Conseil scolaire public du Grand Nord de l'Ontario",
+    zoneOrArea: 'Area 9',
+    candidateName: 'Régis Desrochers',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+  {
+    id: 'cspgno-area-10',
+    boardName: "Conseil scolaire public du Grand Nord de l'Ontario",
+    zoneOrArea: 'Area 10',
+    candidateName: 'Andréane Chénier',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+  {
+    id: 'cspgno-area-11',
+    boardName: "Conseil scolaire public du Grand Nord de l'Ontario",
+    zoneOrArea: 'Area 11',
+    candidateName: 'Francine Vaillancourt',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+  {
+    id: 'cspgno-area-12',
+    boardName: "Conseil scolaire public du Grand Nord de l'Ontario",
+    zoneOrArea: 'Area 12',
+    candidateName: 'François Boudreau',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+
+  // Conseil scolaire catholique du Nouvel-Ontario (French Catholic)
+  {
+    id: 'cscno-zone-4-corriveau',
+    boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
+    zoneOrArea: 'Zone 4',
+    candidateName: 'Sydney Corriveau',
+    status: 'Certified'
+  },
+  {
+    id: 'cscno-zone-4-dube',
+    boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
+    zoneOrArea: 'Zone 4',
+    candidateName: 'Louise M. Dubé',
+    status: 'Certified'
+  },
+  {
+    id: 'cscno-zone-4-essiembre',
+    boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
+    zoneOrArea: 'Zone 4',
+    candidateName: 'Louise Essiembre',
+    status: 'Certified'
+  },
+  {
+    id: 'cscno-zone-5-aubin-gagne',
+    boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
+    zoneOrArea: 'Zone 5',
+    candidateName: 'Monique Aubin-Gagné',
+    status: 'Certified'
+  },
+  {
+    id: 'cscno-zone-5-bisson',
+    boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
+    zoneOrArea: 'Zone 5',
+    candidateName: 'Josée Roxanne Bisson',
+    status: 'Certified'
+  },
+  {
+    id: 'cscno-zone-5-clement',
+    boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
+    zoneOrArea: 'Zone 5',
+    candidateName: 'Stéphane Clément',
+    status: 'Certified'
+  },
+  {
+    id: 'cscno-zone-5-joanisse',
+    boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
+    zoneOrArea: 'Zone 5',
+    candidateName: 'Raymond Joanisse',
+    status: 'Certified'
+  },
+  {
+    id: 'cscno-zone-6-legault',
+    boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
+    zoneOrArea: 'Zone 6',
+    candidateName: 'Marcel Legault',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
+  },
+  {
+    id: 'cscno-zone-6-proulx',
+    boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
+    zoneOrArea: 'Zone 6',
+    candidateName: 'Yanick Proulx',
+    status: 'Acclaimed',
+    comments: 'Acclaimed to office'
   }
 ];
 

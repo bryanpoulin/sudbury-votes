@@ -45,4 +45,13 @@ export interface WardLookupEntry {
   registeredVotersEst: number;
 }
 
-export type Election2026HubTab = 'candidates' | 'debates' | 'live-results';
+export type Election2026HubTab = 'candidates' | 'school-trustees' | 'debates' | 'live-results';
+
+export interface SchoolBoardTrustee2026 {
+  id: string;
+  boardName: string;
+  zoneOrArea: string;
+  candidateName: string;
+  status: 'Acclaimed' | 'Certified' | 'Withdrawn';
+  comments?: string;
+}
