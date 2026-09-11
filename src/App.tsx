@@ -12,8 +12,8 @@ import { ElectionHub2026 } from './components/election2026/ElectionHub2026';
 import { ChevronRight, Radio } from 'lucide-react';
 
 export default function App() {
-  const [selectedYear, setSelectedYear] = useState<number>(2022);
-  const [activeTab, setActiveTab] = useState<ViewTab>('overview');
+  const [selectedYear, setSelectedYear] = useState<number>(2026);
+  const [activeTab, setActiveTab] = useState<ViewTab>('election2026');
   const [selectedWardNumber, setSelectedWardNumber] = useState<number | null>(null);
   const [isWardModalOpen, setIsWardModalOpen] = useState<boolean>(false);
 

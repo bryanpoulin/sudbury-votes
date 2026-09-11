@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Candidate2026 } from '../../types/election2026';
 import { ExternalLinkModal } from './ExternalLinkModal';
 import { 
@@ -11,9 +11,11 @@ import {
   Briefcase, 
   CheckCircle2, 
   Award, 
-  Sparkles,
-  Globe,
-  FileText
+  Sparkles, 
+  Globe, 
+  Search, 
+  X,
+  ChevronRight
 } from 'lucide-react';
 
 interface CandidateRegistry2026Props {
@@ -26,20 +28,41 @@ export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
   const [selectedRaceFilter, setSelectedRaceFilter] = useState<string>(
     initialWardFilter ? `ward-${initialWardFilter}` : 'all'
   );
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCandidateForModal, setSelectedCandidateForModal] = useState<Candidate2026 | null>(null);
   const [pendingExternal, setPendingExternal] = useState<{ url: string; title: string; category?: string; description?: string } | null>(null);
 
-  // Filter candidates purely by race filter
-  const filteredCandidates = CANDIDATES_2026.filter((c) => {
-    if (selectedRaceFilter === 'mayoral' && c.race !== 'Mayoral') return false;
-    if (selectedRaceFilter.startsWith('ward-')) {
-      const wardNum = parseInt(selectedRaceFilter.replace('ward-', ''), 10);
-      if (c.race !== wardNum) return false;
-    }
-    return true;
-  });
+  // Filter Council candidates by race and search
+  const filteredCandidates = useMemo(() => {
+    return CANDIDATES_2026.filter((c) => {
+      // Race filter
+      if (selectedRaceFilter === 'mayoral' && c.race !== 'Mayoral') return false;
+      if (selectedRaceFilter.startsWith('ward-')) {
+        const wardNum = parseInt(selectedRaceFilter.replace('ward-', ''), 10);
+        if (c.race !== wardNum) return false;
+      }
 
-  // Group by race for structured view
+      // Search filter
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchName = c.name.toLowerCase().includes(q);
+        const matchOcc = c.occupation.toLowerCase().includes(q);
+        const matchBio = c.bio.toLowerCase().includes(q);
+        const matchPillars = c.keyPillars.some((p) => p.toLowerCase().includes(q));
+        const matchRace = c.race === 'Mayoral' 
+          ? 'mayor mayoral'.includes(q) 
+          : `ward ${c.race} w${c.race}`.includes(q);
+
+        if (!matchName && !matchOcc && !matchBio && !matchPillars && !matchRace) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [selectedRaceFilter, searchQuery]);
+
+  // Group Council candidates
   const mayoralCandidates = filteredCandidates.filter((c) => c.race === 'Mayoral');
   const wardCandidatesByNumber: Record<number, Candidate2026[]> = {};
 
@@ -50,167 +73,204 @@ export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
     }
   }
 
-  return (
-    <div className="space-y-6">
-      {/* Official City Clerk Certification Banner with Clerk PDF Link */}
-      <div className="p-4 bg-emerald-950/40 border border-emerald-500/30 rounded-3xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-emerald-200/90 shadow-xl">
-        <div className="flex items-center gap-2.5">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-          <div>
-            <span className="font-bold text-white">Clerk Certified:</span> Certified pursuant to the <em>Municipal Elections Act, 1996</em> by City Solicitor and Clerk Eric Labelle on August 24, 2026.
-          </div>
-        </div>
+  const totalCouncilCount = CANDIDATES_2026.length;
 
-        <button
-          type="button"
-          onClick={() => setPendingExternal({
-            url: 'https://www.greatersudbury.ca/sites/sudburyen/assets/List-of-Certified-Candidates.pdf',
-            title: 'City of Greater Sudbury - List of Certified Candidates',
-            category: 'Official Municipal Document',
-            description: 'You are viewing the official statutory PDF certified by the City Solicitor and Clerk under the Municipal Elections Act, 1996.'
-          })}
-          className="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 rounded-xl transition-colors flex items-center gap-1.5 font-mono text-[11px] shrink-0 font-medium self-start sm:self-auto cursor-pointer"
-        >
-          <FileText className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Certified List ↗</span>
-        </button>
+  return (
+    <div className="space-y-6 animate-in fade-in duration-200">
+      {/* Statutory City Clerk Certification Banner */}
+      <div className="p-4 bg-emerald-950/40 border border-emerald-500/30 rounded-3xl flex items-center gap-2.5 text-xs text-emerald-200/90 shadow-xl">
+        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+        <div>
+          <span className="font-bold text-white">Clerk Certified:</span> Official candidates for Mayor and City Council (Wards 1–12) certified pursuant to the <em>Municipal Elections Act, 1996</em> by City Solicitor & Clerk Eric Labelle on August 24, 2026.
+        </div>
       </div>
 
-      {/* Streamlined Race Filter Bar */}
-      <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
+      {/* Main Filter & Search Control Center */}
+      <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <h3 className="text-lg sm:text-xl font-black text-white tracking-tight flex items-center gap-2">
               <UserCheck className="w-5 h-5 text-emerald-400" />
-              Certified Candidates
+              <span>Certified Candidate Registry</span>
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Select a contest to view certified candidates and platform priorities
+            <p className="text-xs sm:text-sm text-slate-400">
+              Official certified candidates for Mayor and City Council (Wards 1–12)
             </p>
           </div>
 
-          <div className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-xs font-mono font-bold self-start sm:self-auto">
-            {CANDIDATES_2026.length} Certified Candidates
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="px-3.5 py-1.5 bg-slate-950/80 border border-slate-800 text-slate-300 rounded-2xl text-xs font-mono flex items-center gap-2">
+              <Award className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{totalCouncilCount} Certified Candidates</span>
+            </span>
           </div>
         </div>
 
-        {/* Race Selector Row */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-800/80">
-          <button
-            onClick={() => setSelectedRaceFilter('all')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-              selectedRaceFilter === 'all'
-                ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 font-bold'
-                : 'bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800'
-            }`}
-          >
-            All Races
-          </button>
+        {/* Universal Search Bar */}
+        <div className="relative">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search candidates by name, ward, occupation, or platform priority..."
+            className="w-full bg-slate-950/70 border border-slate-800 rounded-2xl pl-10 pr-9 py-2.5 text-xs sm:text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/50 transition-all font-sans"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1"
+              title="Clear search"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
 
-          <button
-            onClick={() => setSelectedRaceFilter('mayoral')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-              selectedRaceFilter === 'mayoral'
-                ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 font-bold'
-                : 'bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800'
-            }`}
-          >
-            Mayor ({CANDIDATES_2026.filter((c) => c.race === 'Mayoral').length})
-          </button>
+        {/* Contest Filter Bar */}
+        <div className="pt-2 border-t border-slate-800/80 space-y-2">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-[11px] font-mono text-slate-400 mr-1 hidden sm:inline">Select Contest:</span>
 
-          <div className="h-4 w-px bg-slate-800 mx-1 hidden sm:block"></div>
+            <button
+              onClick={() => setSelectedRaceFilter('all')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                selectedRaceFilter === 'all'
+                  ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 font-bold'
+                  : 'bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800'
+              }`}
+            >
+              All Council ({totalCouncilCount})
+            </button>
 
-          {/* Ward pills */}
-          <div className="flex flex-wrap gap-1">
-            {Array.from({ length: 12 }, (_, i) => i + 1).map((ward) => (
-              <button
-                key={ward}
-                onClick={() => setSelectedRaceFilter(`ward-${ward}`)}
-                className={`px-2.5 py-1.5 rounded-xl text-xs font-medium transition-all ${
-                  selectedRaceFilter === `ward-${ward}`
-                    ? 'bg-emerald-500 text-slate-950 font-bold shadow-sm'
-                    : 'bg-slate-800/40 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
-                }`}
-              >
-                Ward {ward}
-              </button>
-            ))}
+            <button
+              onClick={() => setSelectedRaceFilter('mayoral')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                selectedRaceFilter === 'mayoral'
+                  ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 font-bold'
+                  : 'bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800'
+              }`}
+            >
+              Mayor (5)
+            </button>
+
+            <div className="h-4 w-px bg-slate-800 mx-1 hidden sm:block"></div>
+
+            {/* Ward Pills */}
+            <div className="flex flex-wrap gap-1">
+              {Array.from({ length: 12 }, (_, i) => i + 1).map((ward) => (
+                <button
+                  key={ward}
+                  onClick={() => setSelectedRaceFilter(`ward-${ward}`)}
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-medium transition-all ${
+                    selectedRaceFilter === `ward-${ward}`
+                      ? 'bg-emerald-500 text-slate-950 font-bold shadow-sm'
+                      : 'bg-slate-800/40 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                  }`}
+                >
+                  Ward {ward}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Mayoral Contest Spotlight (if selected or 'all') */}
-      {(selectedRaceFilter === 'all' || selectedRaceFilter === 'mayoral') && mayoralCandidates.length > 0 && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <span className="p-1.5 bg-emerald-500/20 text-emerald-400 rounded-lg">
-                <Award className="w-4 h-4" />
-              </span>
-              <div>
-                <h3 className="text-base font-bold text-white">Mayoral Race</h3>
-                <p className="text-xs text-slate-400">Head of Council • 1 Seat to be Elected (City-Wide)</p>
-              </div>
-            </div>
-            <span className="px-3 py-1 bg-slate-800 text-slate-300 text-xs font-mono rounded-full border border-slate-700">
-              {mayoralCandidates.length} Certified Candidates
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {mayoralCandidates.map((cand) => (
-              <CandidateCard
-                key={cand.id}
-                candidate={cand}
-                onViewProfile={() => setSelectedCandidateForModal(cand)}
-                onOpenExternal={(info) => setPendingExternal(info)}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Ward Races Grid */}
-      {Object.keys(wardCandidatesByNumber).map((wardKey) => {
-        const wardNum = parseInt(wardKey, 10);
-        const candidates = wardCandidatesByNumber[wardNum] || [];
-        const wardInfo = WARD_LOOKUP_ENTRIES.find((w) => w.wardNumber === wardNum);
-
-        return (
-          <div key={wardNum} className="space-y-3 pt-2">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 bg-slate-900/40 border border-slate-800/80 rounded-2xl">
+      {/* ========================================================= */}
+      {/* CANDIDATES LISTING (MAYOR & CITY COUNCIL)                 */}
+      {/* ========================================================= */}
+      <div className="space-y-6">
+        {/* Mayoral Contest Spotlight */}
+        {(selectedRaceFilter === 'all' || selectedRaceFilter === 'mayoral') && mayoralCandidates.length > 0 && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <span className="w-7 h-7 bg-emerald-500/15 text-emerald-400 rounded-lg flex items-center justify-center font-bold text-xs font-mono border border-emerald-500/30">
-                  W{wardNum}
+                <span className="p-1.5 bg-emerald-500/20 text-emerald-400 rounded-lg">
+                  <Award className="w-4 h-4" />
                 </span>
                 <div>
-                  <h4 className="text-sm font-bold text-white">Ward {wardNum}: {wardInfo?.wardName}</h4>
-                  <div className="text-[11px] text-slate-400">
-                    Areas: {wardInfo?.neighborhoods.slice(0, 3).join(', ')}
-                  </div>
+                  <h3 className="text-base font-bold text-white">Mayoral Race</h3>
+                  <p className="text-xs text-slate-400">Head of Council • 1 Seat to be Elected (City-Wide)</p>
                 </div>
               </div>
-
-              <div className="flex items-center gap-3 text-xs">
-                <span className="px-2.5 py-0.5 bg-slate-800/80 text-slate-300 rounded-full text-[11px] border border-slate-700 font-mono">
-                  {candidates.length} Certified Candidates
-                </span>
-              </div>
+              <span className="px-3 py-1 bg-slate-800 text-slate-300 text-xs font-mono rounded-full border border-slate-700">
+                {mayoralCandidates.length} Certified Candidates
+              </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {candidates.map((cand) => (
+              {mayoralCandidates.map((cand) => (
                 <CandidateCard
                   key={cand.id}
                   candidate={cand}
                   onViewProfile={() => setSelectedCandidateForModal(cand)}
-                onOpenExternal={(info) => setPendingExternal(info)}
+                  onOpenExternal={(info) => setPendingExternal(info)}
                 />
               ))}
             </div>
           </div>
-        );
-      })}
+        )}
+
+        {/* 12 Ward Contests */}
+        {Array.from({ length: 12 }, (_, i) => i + 1).map((wardNum) => {
+          if (selectedRaceFilter !== 'all' && selectedRaceFilter !== `ward-${wardNum}`) {
+            return null;
+          }
+
+          const candidates = wardCandidatesByNumber[wardNum] || [];
+          if (candidates.length === 0 && searchQuery.trim()) {
+            return null;
+          }
+
+          const wardInfo = WARD_LOOKUP_ENTRIES.find((w) => w.wardNumber === wardNum);
+
+          return (
+            <div key={wardNum} className="space-y-4 pt-4 border-t border-slate-800/80">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-7 h-7 rounded-xl bg-slate-800 border border-slate-700 text-white font-mono font-bold text-xs flex items-center justify-center">
+                    {wardNum}
+                  </span>
+                  <div>
+                    <h3 className="text-base font-bold text-white flex items-center gap-2">
+                      <span>{wardInfo ? wardInfo.wardName : `Ward ${wardNum}`}</span>
+                      <span className="text-xs font-normal text-slate-400">
+                        ({wardInfo?.incumbentName ? `Incumbent: ${wardInfo.incumbentName}` : 'Open Race'})
+                      </span>
+                    </h3>
+                    <div className="text-xs text-slate-400 line-clamp-1">
+                      Areas: {wardInfo?.neighborhoods.slice(0, 3).join(', ')}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 text-xs">
+                  <span className="px-2.5 py-0.5 bg-slate-800/80 text-slate-300 rounded-full text-[11px] border border-slate-700 font-mono">
+                    {candidates.length} Certified Candidates
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {candidates.map((cand) => (
+                  <CandidateCard
+                    key={cand.id}
+                    candidate={cand}
+                    onViewProfile={() => setSelectedCandidateForModal(cand)}
+                    onOpenExternal={(info) => setPendingExternal(info)}
+                  />
+                ))}
+              </div>
+            </div>
+          );
+        })}
+
+        {filteredCandidates.length === 0 && (
+          <div className="p-8 text-center text-xs text-slate-400 font-mono bg-slate-900/40 border border-slate-800 rounded-3xl">
+            No council candidates match your current search & filter criteria.
+          </div>
+        )}
+      </div>
 
       {/* External Link Confirmation Modal */}
       {pendingExternal && (
@@ -224,7 +284,7 @@ export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
         />
       )}
 
-      {/* Candidate Detailed Modal */}
+      {/* Council Candidate Detailed Modal */}
       {selectedCandidateForModal && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-700/80 rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
@@ -306,7 +366,7 @@ export const CandidateRegistry2026: React.FC<CandidateRegistry2026Props> = ({
   );
 };
 
-// Reusable Candidate Card
+// Reusable Candidate Card for Council Candidates
 const CandidateCard: React.FC<{
   candidate: Candidate2026;
   onViewProfile: () => void;
@@ -385,4 +445,3 @@ const CandidateCard: React.FC<{
     </div>
   );
 };
-

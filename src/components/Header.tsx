@@ -71,25 +71,27 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Election Controls & Cycle Selector */}
-        <div className="flex items-center gap-2.5 overflow-x-auto">
-          {/* 2026 Hub Button (Distinct Special Access Point in Emerald Green, to the left of Cycle Container) */}
-          <button
-            onClick={() => handleYearClick(2026)}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200 flex items-center gap-2 border shadow-sm ${
-              selectedYear === 2026 || activeTab === 'election2026'
-                ? 'bg-emerald-500 text-slate-950 border-emerald-400 font-black shadow-emerald-500/25 ring-2 ring-emerald-400/40 scale-[1.02]'
-                : 'bg-slate-900/90 text-emerald-400 hover:text-emerald-300 hover:bg-slate-800/90 border-emerald-500/40 hover:border-emerald-400/70 shadow-inner'
-            }`}
-          >
-            <Radio className="w-3.5 h-3.5 animate-pulse shrink-0" />
-            <span className="tracking-wide uppercase font-black">Sudbury Votes 2026</span>
-          </button>
-
-          {/* Historical Cycle Container */}
+        <div className="flex items-center overflow-x-auto">
+          {/* Unified Cycle Container with 2026 Live Hub and Historical Cycles */}
           <div className="flex items-center gap-1.5 bg-slate-800/40 p-1 rounded-full border border-slate-700/70 shadow-inner">
             <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 pl-3 pr-1 hidden sm:inline">
               Cycle:
             </span>
+
+            {/* 2026 Button within the Cycle Group with Pulsating Icon */}
+            <button
+              onClick={() => handleYearClick(2026)}
+              className={`px-3.5 py-1 rounded-full text-xs font-bold transition-all duration-200 flex items-center gap-1.5 ${
+                selectedYear === 2026 || activeTab === 'election2026'
+                  ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/25 font-black scale-[1.02]'
+                  : 'text-emerald-400 hover:text-emerald-300 hover:bg-slate-800/60'
+              }`}
+            >
+              <Radio className="w-3.5 h-3.5 animate-pulse shrink-0" />
+              <span className="tracking-wide">2026</span>
+            </button>
+
+            {/* Historical Cycle Years */}
             {AVAILABLE_YEARS.map((year) => {
               const isSelected = selectedYear === year && activeTab !== 'election2026';
               return (

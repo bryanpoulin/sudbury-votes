@@ -1319,7 +1319,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Area 1',
     candidateName: 'Jessica Montgomery',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [1, 2]
   },
   {
     id: 'rdsb-area-2',
@@ -1327,21 +1328,24 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Area 2',
     candidateName: 'Anita Gibson',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [3, 4]
   },
   {
     id: 'rdsb-area-3-afzal',
     boardName: 'Rainbow District School Board',
     zoneOrArea: 'Area 3',
     candidateName: 'Muhammad Afzal',
-    status: 'Certified'
+    status: 'Certified',
+    wards: [5, 6]
   },
   {
     id: 'rdsb-area-3-carroll',
     boardName: 'Rainbow District School Board',
     zoneOrArea: 'Area 3',
     candidateName: 'Tina Carroll',
-    status: 'Certified'
+    status: 'Certified',
+    wards: [5, 6]
   },
   {
     id: 'rdsb-area-4',
@@ -1349,7 +1353,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Area 4',
     candidateName: 'Mohammed Islam',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [7, 8]
   },
   {
     id: 'rdsb-area-5',
@@ -1357,7 +1362,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Area 5',
     candidateName: 'David Farrow',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [9, 10]
   },
   {
     id: 'rdsb-area-6',
@@ -1365,7 +1371,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Area 6',
     candidateName: 'Judy Hunda',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [11, 12]
   },
 
   // Sudbury Catholic District School Board (English Catholic)
@@ -1375,7 +1382,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Zone 1',
     candidateName: 'Shirley McKnight',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [1, 2]
   },
   {
     id: 'scdsb-zone-2',
@@ -1383,7 +1391,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Zone 2',
     candidateName: 'Raymond Desjardins',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [3, 4]
   },
   {
     id: 'scdsb-zone-3',
@@ -1391,7 +1400,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Zone 3',
     candidateName: 'Michael Bellmore',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [5, 6]
   },
   {
     id: 'scdsb-zone-4',
@@ -1399,28 +1409,32 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Zone 4',
     candidateName: 'Shannon Gouchie',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [7, 8]
   },
   {
     id: 'scdsb-zone-5-aube',
     boardName: 'Sudbury Catholic District School Board',
     zoneOrArea: 'Zone 5',
     candidateName: 'Katherine Ann Aube',
-    status: 'Certified'
+    status: 'Certified',
+    wards: [9, 10]
   },
   {
     id: 'scdsb-zone-5-mcfarthing',
     boardName: 'Sudbury Catholic District School Board',
     zoneOrArea: 'Zone 5',
     candidateName: 'Michael McFarthing',
-    status: 'Certified'
+    status: 'Certified',
+    wards: [9, 10]
   },
   {
     id: 'scdsb-zone-5-seguin',
     boardName: 'Sudbury Catholic District School Board',
     zoneOrArea: 'Zone 5',
     candidateName: 'Carmen Seguin',
-    status: 'Certified'
+    status: 'Certified',
+    wards: [9, 10]
   },
   {
     id: 'scdsb-zone-6',
@@ -1428,7 +1442,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Zone 6',
     candidateName: 'Jody Cameron',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [11, 12]
   },
 
   // Conseil scolaire public du Grand Nord de l'Ontario (French Public)
@@ -1438,7 +1453,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Area 7',
     candidateName: 'Carole G. Anderson',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [1, 4]
   },
   {
     id: 'cspgno-area-8',
@@ -1446,7 +1462,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Area 8',
     candidateName: 'Rosine Bongnan',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [2, 3]
   },
   {
     id: 'cspgno-area-9',
@@ -1454,7 +1471,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Area 9',
     candidateName: 'Régis Desrochers',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [5, 6]
   },
   {
     id: 'cspgno-area-10',
@@ -1462,7 +1480,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Area 10',
     candidateName: 'Andréane Chénier',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [7, 8]
   },
   {
     id: 'cspgno-area-11',
@@ -1470,7 +1489,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Area 11',
     candidateName: 'Francine Vaillancourt',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [9, 10]
   },
   {
     id: 'cspgno-area-12',
@@ -1478,7 +1498,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Area 12',
     candidateName: 'François Boudreau',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [11, 12]
   },
 
   // Conseil scolaire catholique du Nouvel-Ontario (French Catholic)
@@ -1487,49 +1508,56 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
     zoneOrArea: 'Zone 4',
     candidateName: 'Sydney Corriveau',
-    status: 'Certified'
+    status: 'Certified',
+    wards: [1, 2, 3, 4]
   },
   {
     id: 'cscno-zone-4-dube',
     boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
     zoneOrArea: 'Zone 4',
     candidateName: 'Louise M. Dubé',
-    status: 'Certified'
+    status: 'Certified',
+    wards: [1, 2, 3, 4]
   },
   {
     id: 'cscno-zone-4-essiembre',
     boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
     zoneOrArea: 'Zone 4',
     candidateName: 'Louise Essiembre',
-    status: 'Certified'
+    status: 'Certified',
+    wards: [1, 2, 3, 4]
   },
   {
     id: 'cscno-zone-5-aubin-gagne',
     boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
     zoneOrArea: 'Zone 5',
     candidateName: 'Monique Aubin-Gagné',
-    status: 'Certified'
+    status: 'Certified',
+    wards: [5, 6, 7]
   },
   {
     id: 'cscno-zone-5-bisson',
     boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
     zoneOrArea: 'Zone 5',
     candidateName: 'Josée Roxanne Bisson',
-    status: 'Certified'
+    status: 'Certified',
+    wards: [5, 6, 7]
   },
   {
     id: 'cscno-zone-5-clement',
     boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
     zoneOrArea: 'Zone 5',
     candidateName: 'Stéphane Clément',
-    status: 'Certified'
+    status: 'Certified',
+    wards: [5, 6, 7]
   },
   {
     id: 'cscno-zone-5-joanisse',
     boardName: 'Conseil scolaire catholique du Nouvel-Ontario',
     zoneOrArea: 'Zone 5',
     candidateName: 'Raymond Joanisse',
-    status: 'Certified'
+    status: 'Certified',
+    wards: [5, 6, 7]
   },
   {
     id: 'cscno-zone-6-legault',
@@ -1537,7 +1565,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Zone 6',
     candidateName: 'Marcel Legault',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [8, 9, 10, 11, 12]
   },
   {
     id: 'cscno-zone-6-proulx',
@@ -1545,7 +1574,8 @@ export const SCHOOL_BOARD_TRUSTEES_2026: SchoolBoardTrustee2026[] = [
     zoneOrArea: 'Zone 6',
     candidateName: 'Yanick Proulx',
     status: 'Acclaimed',
-    comments: 'Acclaimed to office'
+    comments: 'Acclaimed to office',
+    wards: [8, 9, 10, 11, 12]
   }
 ];
 

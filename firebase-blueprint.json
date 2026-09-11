@@ -1,0 +1,77 @@
+{
+  "entities": {
+    "SentimentTopic": {
+      "title": "SentimentTopic",
+      "description": "Civic sentiment poll topic tallies and vote distributions",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "totalVotes": {
+          "type": "number"
+        },
+        "votesA": {
+          "type": "number"
+        },
+        "votesB": {
+          "type": "number"
+        },
+        "votesC": {
+          "type": "number"
+        },
+        "votesD": {
+          "type": "number"
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "totalVotes", "votesA", "votesB", "votesC", "votesD"]
+    },
+    "VoterBallot": {
+      "title": "VoterBallot",
+      "description": "Anonymized single-use voter ballot locked per topic",
+      "type": "object",
+      "properties": {
+        "topicId": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "choice": {
+          "type": "string",
+          "maxLength": 8
+        },
+        "voterToken": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "ward": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "votedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": ["topicId", "choice", "voterToken", "ward", "votedAt"]
+    }
+  },
+  "firestore": {
+    "/sentiment_topics/{topicId}": {
+      "schema": {
+        "$ref": "#/entities/SentimentTopic"
+      },
+      "description": "Public aggregated live vote counts for civic sentiment topics"
+    },
+    "/voter_ballots/{ballotId}": {
+      "schema": {
+        "$ref": "#/entities/VoterBallot"
+      },
+      "description": "Immutable single-vote registry entry keyed by topicId_voterToken"
+    }
+  }
+}

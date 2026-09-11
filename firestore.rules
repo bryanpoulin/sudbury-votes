@@ -1,0 +1,64 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global catch-all default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidTopic(data) {
+      return data.id is string && data.id.size() <= 64 &&
+             data.totalVotes is number && data.totalVotes >= 0 &&
+             data.votesA is number && data.votesA >= 0 &&
+             data.votesB is number && data.votesB >= 0 &&
+             data.votesC is number && data.votesC >= 0 &&
+             data.votesD is number && data.votesD >= 0 &&
+             data.keys().hasAll(['id', 'totalVotes', 'votesA', 'votesB', 'votesC', 'votesD']) &&
+             data.keys().size() <= 7;
+    }
+
+    function isValidBallot(data) {
+      return data.topicId is string && data.topicId.size() <= 64 &&
+             data.choice is string && data.choice.size() <= 8 &&
+             data.voterToken is string && data.voterToken.size() <= 128 &&
+             data.ward is string && data.ward.size() <= 32 &&
+             data.votedAt is string && data.votedAt.size() <= 64 &&
+             data.keys().hasAll(['topicId', 'choice', 'voterToken', 'ward', 'votedAt']) &&
+             data.keys().size() == 5;
+    }
+
+    // Public civic sentiment topic tallies
+    match /sentiment_topics/{topicId} {
+      allow read: if isValidId(topicId);
+      allow create, update: if isValidId(topicId) && isValidTopic(incoming());
+      allow delete: if false;
+    }
+
+    // Immutable single-use voter ballots (prevents ballot stuffing and duplicate voting)
+    match /voter_ballots/{ballotId} {
+      // Allow single get check for voter token validation; block list enumeration
+      allow get: if isValidId(ballotId);
+      allow list: if false;
+      // Allow one-time creation only; reject any duplicate or overwrite
+      allow create: if isValidId(ballotId) && isValidBallot(incoming()) && !exists(/databases/$(database)/documents/voter_ballots/$(ballotId));
+      // Once created, ballots are locked forever and cannot be modified or deleted
+      allow update: if false;
+      allow delete: if false;
+    }
+  }
+}

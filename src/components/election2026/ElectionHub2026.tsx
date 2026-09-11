@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Election2026HubTab } from '../../types/election2026';
 import { CandidateRegistry2026 } from './CandidateRegistry2026';
-import { SchoolBoardTrusteesView2026 } from './SchoolBoardTrusteesView2026';
 import { CandidateDebatesView2026 } from './CandidateDebatesView2026';
 import { LiveResultsView2026 } from './LiveResultsView2026';
-import { ExternalVoterGuideModal } from './ExternalVoterGuideModal';
+import { CommunitySentimentView } from '../CommunitySentimentView';
 import { 
   Users, 
   Tv,
   Radio, 
   Clock, 
-  ExternalLink,
-  Building2,
   Calendar,
   Vote,
-  GraduationCap
+  MessageSquare
 } from 'lucide-react';
 
 export const ElectionHub2026: React.FC = () => {
   const [hubTab, setHubTab] = useState<Election2026HubTab>('candidates');
-  const [isVoterGuideModalOpen, setIsVoterGuideModalOpen] = useState<boolean>(false);
 
   // Election Day check: October 26, 2026 00:00:00 EDT
   // Live results button & tab are hidden until election day arrives
@@ -142,18 +138,6 @@ export const ElectionHub2026: React.FC = () => {
         </button>
 
         <button
-          onClick={() => setHubTab('school-trustees')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-            hubTab === 'school-trustees'
-              ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/25 font-bold'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-          }`}
-        >
-          <GraduationCap className="w-4 h-4" />
-          <span>School Board Trustees</span>
-        </button>
-
-        <button
           onClick={() => setHubTab('debates')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
             hubTab === 'debates'
@@ -165,15 +149,16 @@ export const ElectionHub2026: React.FC = () => {
           <span>Debate Calendar</span>
         </button>
 
-        {/* External City Official Voter Information Trigger */}
         <button
-          onClick={() => setIsVoterGuideModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 border border-emerald-500/30 transition-all sm:ml-auto"
-          title="Opens official City of Greater Sudbury Voter Information Page"
+          onClick={() => setHubTab('sentiment')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+            hubTab === 'sentiment'
+              ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/25 font-bold'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+          }`}
         >
-          <Building2 className="w-4 h-4 text-emerald-400" />
-          <span>Official Voter Guide</span>
-          <ExternalLink className="w-3.5 h-3.5 opacity-80" />
+          <MessageSquare className="w-4 h-4" />
+          <span>Polls & Opinion</span>
         </button>
 
         {/* Live Results button: only displayed starting on Election Day (October 26, 2026) or via preview mode */}
@@ -196,21 +181,13 @@ export const ElectionHub2026: React.FC = () => {
       {hubTab === 'candidates' && (
         <CandidateRegistry2026 />
       )}
-      {hubTab === 'school-trustees' && (
-        <SchoolBoardTrusteesView2026 />
-      )}
       {hubTab === 'debates' && (
-        <CandidateDebatesView2026 
-          onOpenOfficialVoterGuide={() => setIsVoterGuideModalOpen(true)}
-        />
+        <CandidateDebatesView2026 />
+      )}
+      {hubTab === 'sentiment' && (
+        <CommunitySentimentView />
       )}
       {hubTab === 'live-results' && isElectionDayOrLater && <LiveResultsView2026 />}
-
-      {/* External City of Greater Sudbury Official Voter Guide Modal */}
-      <ExternalVoterGuideModal
-        isOpen={isVoterGuideModalOpen}
-        onClose={() => setIsVoterGuideModalOpen(false)}
-      />
     </div>
   );
 };
