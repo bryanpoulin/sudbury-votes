@@ -11,7 +11,8 @@ import {
   Calendar,
   Lock,
   ShieldCheck,
-  ArrowRight
+  ArrowRight,
+  RotateCcw
 } from 'lucide-react';
 import { 
   SentimentTopicId, 
@@ -26,7 +27,9 @@ import {
   subscribeToTopicVotes, 
   castLockedBallot, 
   checkHasVotedInCloud, 
-  getVoterToken, 
+  getVoterToken,
+  clearVoterToken,
+  resetAllTopicsToZero,
   LiveTopicVotes, 
   testFirestoreConnection 
 } from '../lib/firebase';
@@ -218,6 +221,40 @@ export const CommunitySentimentView: React.FC = () => {
     }
   };
 
+  // Reset all votes to zero across both Cloud Firestore and local storage
+  const [isResetting, setIsResetting] = useState(false);
+  const handleResetAllVotesToZero = async () => {
+    setIsResetting(true);
+    try {
+      // 1. Reset Cloud Firestore topic tallies to 0
+      await resetAllTopicsToZero();
+      
+      // 2. Clear local browser voting state & voter identification
+      clearVoterToken();
+      setUserVotes({});
+      setBallotChoice(null);
+      try {
+        localStorage.removeItem(STORAGE_VOTES_KEY);
+      } catch {}
+
+      // 3. Reset local cloud tallies state immediately
+      setCloudTallies({
+        arena: { totalVotes: 0, votesA: 0, votesB: 0, votesC: 0, votesD: 0 },
+        roads: { totalVotes: 0, votesA: 0, votesB: 0, votesC: 0, votesD: 0 },
+        housing: { totalVotes: 0, votesA: 0, votesB: 0, votesC: 0, votesD: 0 },
+        taxes: { totalVotes: 0, votesA: 0, votesB: 0, votesC: 0, votesD: 0 }
+      });
+
+      setStatusNotification("All votes have been reset to zero across all topics.");
+    } catch (err) {
+      console.error("Failed to reset votes:", err);
+      setStatusNotification("Failed to reset votes. Please try again.");
+    } finally {
+      setIsResetting(false);
+      setTimeout(() => setStatusNotification(null), 5000);
+    }
+  };
+
   // 4 Top-level Topics configuration
   const topicTabs = [
     { id: 'arena' as SentimentTopicId, label: 'Downtown Events Centre', icon: Building2 },
@@ -255,6 +292,18 @@ export const CommunitySentimentView: React.FC = () => {
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               Active Window: Wave 1
             </span>
+            <span className="text-slate-600">•</span>
+            <button
+              type="button"
+              id="reset-all-votes-btn"
+              onClick={handleResetAllVotesToZero}
+              disabled={isResetting}
+              className="text-slate-400 hover:text-amber-300 transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50"
+              title="Reset all topic tallies and ballots to zero"
+            >
+              <RotateCcw className={`w-3 h-3 ${isResetting ? 'animate-spin' : ''}`} />
+              <span>{isResetting ? 'Resetting...' : 'Reset All to 0'}</span>
+            </button>
           </div>
         </div>
 

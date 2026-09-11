@@ -86,6 +86,12 @@ export async function testFirestoreConnection(): Promise<boolean> {
 // Generate or retrieve persistent voter token
 const VOTER_TOKEN_KEY = 'sudbury_civic_voter_token_v1';
 
+export function clearVoterToken(): void {
+  try {
+    localStorage.removeItem(VOTER_TOKEN_KEY);
+  } catch {}
+}
+
 export function getVoterToken(): string {
   try {
     let token = localStorage.getItem(VOTER_TOKEN_KEY);
