@@ -178,26 +178,35 @@ export async function checkHasVotedInCloud(
   }
 }
 
-// Atomically cast ballot: Locks the ballot permanently in Firestore
-export async function castLockedBallot(
+// Atomically cast or update ballot in Firestore
+export async function castOrUpdateBallot(
   topicId: SentimentTopicId,
   choice: 'A' | 'B' | 'C' | 'D',
-  ward: string
-): Promise<{ success: boolean; message: string }> {
+  ward: string,
+  previousChoice?: 'A' | 'B' | 'C' | 'D'
+): Promise<{ success: boolean; message: string; isUpdate: boolean }> {
   const voterToken = getVoterToken();
   const ballotId = `${topicId}_${voterToken}`;
   const ballotRef = doc(db, 'voter_ballots', ballotId);
   const topicRef = doc(db, 'sentiment_topics', topicId);
 
   try {
+    let isUpdate = false;
     await runTransaction(db, async (transaction) => {
-      // 1. Verify ballot does not already exist
+      // 1. Read existing ballot
       const existingBallot = await transaction.get(ballotRef);
+      let priorChoice = previousChoice;
       if (existingBallot.exists()) {
-        throw new Error('DUPLICATE_BALLOT: You have already cast and locked your vote for this topic.');
+        isUpdate = true;
+        priorChoice = existingBallot.data().choice as 'A' | 'B' | 'C' | 'D';
       }
 
-      // 2. Read or initialize topic tally
+      // If choice hasn't changed, no update needed
+      if (isUpdate && priorChoice === choice) {
+        return;
+      }
+
+      // 2. Read topic tally
       const topicSnap = await transaction.get(topicRef);
       const base = INITIAL_SENTIMENT_TOPICS[topicId].cityWide;
 
@@ -216,8 +225,18 @@ export async function castLockedBallot(
         votesD = Number(d.votesD) || votesD;
       }
 
-      // Increment the chosen vote atomically
-      totalVotes += 1;
+      // If updating, decrement old choice
+      if (isUpdate && priorChoice) {
+        if (priorChoice === 'A' && votesA > 0) votesA -= 1;
+        else if (priorChoice === 'B' && votesB > 0) votesB -= 1;
+        else if (priorChoice === 'C' && votesC > 0) votesC -= 1;
+        else if (priorChoice === 'D' && votesD > 0) votesD -= 1;
+      } else {
+        // New ballot increment
+        totalVotes += 1;
+      }
+
+      // Increment new choice
       if (choice === 'A') votesA += 1;
       else if (choice === 'B') votesB += 1;
       else if (choice === 'C') votesC += 1;
@@ -226,15 +245,15 @@ export async function castLockedBallot(
       // 3. Write new topic totals
       transaction.set(topicRef, {
         id: topicId,
-        totalVotes,
-        votesA,
-        votesB,
-        votesC,
-        votesD,
+        totalVotes: Math.max(0, totalVotes),
+        votesA: Math.max(0, votesA),
+        votesB: Math.max(0, votesB),
+        votesC: Math.max(0, votesC),
+        votesD: Math.max(0, votesD),
         updatedAt: new Date().toISOString()
       });
 
-      // 4. Write immutable voter ballot
+      // 4. Write/update voter ballot
       transaction.set(ballotRef, {
         topicId,
         choice,
@@ -244,14 +263,20 @@ export async function castLockedBallot(
       });
     });
 
-    return { success: true, message: 'Ballot locked & registered in Cloud Firestore.' };
+    return { 
+      success: true, 
+      message: isUpdate ? 'Your ballot has been updated.' : 'Your ballot has been recorded.', 
+      isUpdate 
+    };
   } catch (error) {
-    if (error instanceof Error && error.message.includes('DUPLICATE_BALLOT')) {
-      return { success: false, message: 'Vote already cast for this topic' };
-    }
     handleFirestoreError(error, OperationType.WRITE, `voter_ballots/${ballotId}`);
+    return { success: false, message: 'Failed to record ballot in cloud.', isUpdate: false };
   }
 }
+
+// Backward-compatible alias
+export const castLockedBallot = (topicId: SentimentTopicId, choice: 'A' | 'B' | 'C' | 'D', ward: string) => 
+  castOrUpdateBallot(topicId, choice, ward);
 
 // Reset all sentiment topic records in Cloud Firestore strictly back to 0
 export async function resetAllTopicsToZero(): Promise<{ success: boolean; message: string }> {

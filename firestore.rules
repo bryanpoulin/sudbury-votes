@@ -49,15 +49,15 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // Immutable single-use voter ballots (prevents ballot stuffing and duplicate voting)
+    // Voter ballots: allow create and update for the duration of the active poll
     match /voter_ballots/{ballotId} {
       // Allow single get check for voter token validation; block list enumeration
       allow get: if isValidId(ballotId);
       allow list: if false;
-      // Allow one-time creation only; reject any duplicate or overwrite
-      allow create: if isValidId(ballotId) && isValidBallot(incoming()) && !exists(/databases/$(database)/documents/voter_ballots/$(ballotId));
-      // Once created, ballots are locked forever and cannot be modified or deleted
-      allow update: if false;
+      // Allow creation of ballot
+      allow create: if isValidId(ballotId) && isValidBallot(incoming());
+      // Allow updating existing ballot choice by voter
+      allow update: if isValidId(ballotId) && isValidBallot(incoming());
       allow delete: if false;
     }
   }

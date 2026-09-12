@@ -14,8 +14,28 @@ import {
   MessageSquare
 } from 'lucide-react';
 
-export const ElectionHub2026: React.FC = () => {
-  const [hubTab, setHubTab] = useState<Election2026HubTab>('candidates');
+interface ElectionHub2026Props {
+  initialHubTab?: Election2026HubTab;
+  onTabChange?: (tab: Election2026HubTab) => void;
+}
+
+export const ElectionHub2026: React.FC<ElectionHub2026Props> = ({
+  initialHubTab,
+  onTabChange
+}) => {
+  const [hubTab, setHubTab] = useState<Election2026HubTab>(initialHubTab || 'candidates');
+
+  // Synchronize if initialHubTab changes externally
+  useEffect(() => {
+    if (initialHubTab) {
+      setHubTab(initialHubTab);
+    }
+  }, [initialHubTab]);
+
+  const handleTabSelect = (tab: Election2026HubTab) => {
+    setHubTab(tab);
+    onTabChange?.(tab);
+  };
 
   // Election Day check: October 26, 2026 00:00:00 EDT
   // Live results button & tab are hidden until election day arrives
@@ -124,10 +144,11 @@ export const ElectionHub2026: React.FC = () => {
       </div>
 
       {/* 2026 Sub-Navigation Tabs */}
-      <div className="bg-slate-900/60 p-1.5 rounded-2xl border border-slate-800 flex flex-wrap items-center gap-1.5 shadow-xl">
+      <div className="bg-slate-900/60 p-1.5 rounded-2xl border border-slate-800 flex flex-wrap items-center gap-2 shadow-xl">
         <button
-          onClick={() => setHubTab('candidates')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+          id="hub-tab-candidates"
+          onClick={() => handleTabSelect('candidates')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
             hubTab === 'candidates'
               ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/25 font-bold'
               : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
@@ -138,34 +159,57 @@ export const ElectionHub2026: React.FC = () => {
         </button>
 
         <button
-          onClick={() => setHubTab('debates')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+          id="hub-tab-debates"
+          onClick={() => handleTabSelect('debates')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
             hubTab === 'debates'
               ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/25 font-bold'
               : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
           }`}
         >
           <Tv className="w-4 h-4" />
-          <span>Debate Calendar</span>
+          <span>Debate Schedule</span>
         </button>
 
+        {/* Elevated Polls & Opinion Tab: Idea 1 (Live Pulse Badge) + Idea 2 (Distinct Action Styling) */}
         <button
-          onClick={() => setHubTab('sentiment')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+          id="hub-tab-sentiment"
+          onClick={() => handleTabSelect('sentiment')}
+          className={`relative flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
             hubTab === 'sentiment'
-              ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/25 font-bold'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 shadow-lg shadow-emerald-500/30 scale-[1.02] ring-2 ring-emerald-400/50'
+              : 'bg-gradient-to-r from-emerald-950/70 via-slate-900 to-slate-900 text-emerald-300 hover:text-white border border-emerald-500/40 hover:border-emerald-400 hover:bg-emerald-900/40 shadow-sm shadow-emerald-950/50'
           }`}
         >
-          <MessageSquare className="w-4 h-4" />
-          <span>Polls & Opinion</span>
+          <div className="flex items-center gap-1.5">
+            <Vote className={`w-4 h-4 ${hubTab === 'sentiment' ? 'text-slate-950' : 'text-emerald-400'}`} />
+            <span className="tracking-tight">Polls & Opinions</span>
+          </div>
+
+          {/* Animated LIVE Pulse Badge */}
+          <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-mono font-black tracking-wider uppercase ${
+            hubTab === 'sentiment'
+              ? 'bg-slate-950 text-emerald-400'
+              : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+          }`}>
+            <span className="relative flex h-2 w-2">
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                hubTab === 'sentiment' ? 'bg-emerald-400' : 'bg-emerald-400'
+              }`} />
+              <span className={`relative inline-flex rounded-full h-2 w-2 ${
+                hubTab === 'sentiment' ? 'bg-emerald-400' : 'bg-emerald-400'
+              }`} />
+            </span>
+            <span>LIVE</span>
+          </span>
         </button>
 
         {/* Live Results button: only displayed starting on Election Day (October 26, 2026) or via preview mode */}
         {isElectionDayOrLater && (
           <button
-            onClick={() => setHubTab('live-results')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+            id="hub-tab-live-results"
+            onClick={() => handleTabSelect('live-results')}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               hubTab === 'live-results'
                 ? 'bg-red-500 text-white shadow-md shadow-red-500/25 font-bold'
                 : 'text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/30'

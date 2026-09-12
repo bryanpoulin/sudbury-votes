@@ -9,11 +9,14 @@ import { HistoricalTrendsView } from './components/HistoricalTrendsView';
 import { ElectionComparison } from './components/ElectionComparison';
 import { WardDetailModal } from './components/WardDetailModal';
 import { ElectionHub2026 } from './components/election2026/ElectionHub2026';
+import { CivicPollBanner } from './components/CivicPollBanner';
+import { Election2026HubTab } from './types/election2026';
 import { ChevronRight, Radio } from 'lucide-react';
 
 export default function App() {
   const [selectedYear, setSelectedYear] = useState<number>(2026);
   const [activeTab, setActiveTab] = useState<ViewTab>('election2026');
+  const [hub2026Tab, setHub2026Tab] = useState<Election2026HubTab>('candidates');
   const [selectedWardNumber, setSelectedWardNumber] = useState<number | null>(null);
   const [isWardModalOpen, setIsWardModalOpen] = useState<boolean>(false);
 
@@ -24,8 +27,22 @@ export default function App() {
     setIsWardModalOpen(true);
   };
 
+  const handleOpenPoll = () => {
+    setSelectedYear(2026);
+    setActiveTab('election2026');
+    setHub2026Tab('sentiment');
+    // Scroll smoothly to poll section if needed
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-slate-950">
+      {/* Top Civic Poll Announcement Ribbon (Idea 3) */}
+      <CivicPollBanner
+        onOpenPoll={handleOpenPoll}
+        isAlreadyOnPollTab={activeTab === 'election2026' && hub2026Tab === 'sentiment'}
+      />
+
       {/* App Navigation Header */}
       <Header
         selectedYear={selectedYear}
@@ -46,7 +63,10 @@ export default function App() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         {/* Tab 0: 2026 Live Election Hub */}
         {activeTab === 'election2026' && (
-          <ElectionHub2026 />
+          <ElectionHub2026
+            initialHubTab={hub2026Tab}
+            onTabChange={(tab) => setHub2026Tab(tab)}
+          />
         )}
 
         {/* Tab 1: Results & Ward Map (Consolidated Historical Overview) */}

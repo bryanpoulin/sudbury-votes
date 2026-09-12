@@ -43,9 +43,9 @@ const createZeroDistribution = () => ({
 export const INITIAL_SENTIMENT_TOPICS: Record<SentimentTopicId, SentimentTopic> = {
   arena: {
     id: 'arena',
-    tabLabel: 'Downtown Events Centre',
+    tabLabel: 'Downtown Event Centre',
     iconName: 'Landmark',
-    title: 'Downtown Events Centre & Cultural District Funding',
+    title: 'Downtown Event Centre & Cultural District Funding',
     context: "City Council's planned downtown replacement facility vs. refurbishment and debt financing on Elgin Street.",
     options: [
       {

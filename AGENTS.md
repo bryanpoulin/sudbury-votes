@@ -29,3 +29,6 @@ Lead Civic Data Architect & Full-Stack TypeScript/React Engineer collaborating o
      - Estimated remaining tokens and percentage available
      - Session health indicator (Safe / Moderate / Approaching Compaction)
    - Do not make any code changes or call tools when this command is triggered.
+
+## Pre-Launch & Security Checklist
+- Refer to `TODO.md` for pre-launch tasks, including Google Cloud Console API Key Restrictions (HTTP Referrer locking and Firestore API narrowing) prior to production deployment on Netlify / `sudburyvotes.info`.

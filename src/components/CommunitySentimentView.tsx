@@ -12,7 +12,11 @@ import {
   Lock,
   ShieldCheck,
   ArrowRight,
-  RotateCcw
+  ArrowLeft,
+  RotateCcw,
+  Sparkles,
+  BarChart3,
+  Edit3
 } from 'lucide-react';
 import { 
   SentimentTopicId, 
@@ -25,7 +29,7 @@ import {
 } from '../data/sentimentPollsData';
 import { 
   subscribeToTopicVotes, 
-  castLockedBallot, 
+  castOrUpdateBallot, 
   checkHasVotedInCloud, 
   getVoterToken,
   clearVoterToken,
@@ -50,8 +54,10 @@ export const CommunitySentimentView: React.FC = () => {
   // Topic selection
   const [activeTopicId, setActiveTopicId] = useState<SentimentTopicId>('arena');
   
+  // View mode: 'poll' (ballot view) or 'summary' (ballot completed review)
+  const [viewMode, setViewMode] = useState<'poll' | 'summary'>('poll');
+
   // GLOBAL VOTER RESIDENCY (Single residence rule under Ontario Municipal Elections Act)
-  // Stored once, applies across all 4 ballot topics
   const [declaredWard, setDeclaredWard] = useState<string>(''); // '' = undeclared, '1'-'12', or 'at-large'
   
   // User votes per topic: Record<SentimentTopicId, StoredVote>
@@ -71,6 +77,29 @@ export const CommunitySentimentView: React.FC = () => {
   // UI status feedback
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [statusNotification, setStatusNotification] = useState<string | null>(null);
+
+  // Administrative / Dev Mode Check:
+  // Shows "Reset All to 0" if running in local development OR if accessed with an admin query parameter (e.g. ?admin=true or ?admin=sudbury2026)
+  const isAdminMode = useMemo(() => {
+    try {
+      if (import.meta.env.DEV) return true;
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('admin') === 'true' || params.get('admin') === 'sudbury2026';
+      }
+    } catch {
+      return false;
+    }
+    return false;
+  }, []);
+
+  // 4 Top-level Topics configuration in order
+  const topicTabs = useMemo(() => [
+    { id: 'arena' as SentimentTopicId, label: 'Downtown Event Centre', shortTitle: 'Event Centre', icon: Building2 },
+    { id: 'roads' as SentimentTopicId, label: 'Roads & Infrastructure', shortTitle: 'Roads & Infrastructure', icon: Construction },
+    { id: 'housing' as SentimentTopicId, label: 'Homelessness & Addictions', shortTitle: 'Homelessness & Addictions', icon: HeartHandshake },
+    { id: 'taxes' as SentimentTopicId, label: 'Property Taxes & Services', shortTitle: 'Taxes & Services', icon: Receipt },
+  ], []);
 
   // Initialize Firestore listeners and load local storage
   useEffect(() => {
@@ -96,7 +125,9 @@ export const CommunitySentimentView: React.FC = () => {
 
       const savedVotes = localStorage.getItem(STORAGE_VOTES_KEY);
       if (savedVotes) {
-        setUserVotes(JSON.parse(savedVotes));
+        const parsed = JSON.parse(savedVotes);
+        setUserVotes(parsed);
+        // If user has already voted on all 4 topics, allow starting or reviewing summary
       }
     } catch {
       // Fallback gracefully
@@ -157,6 +188,7 @@ export const CommunitySentimentView: React.FC = () => {
   // Check if voter has recorded a vote on this specific topic
   const existingVote = userVotes[activeTopicId];
   const hasVotedOnThisTopic = Boolean(existingVote);
+  const isChoiceChanged = Boolean(existingVote && ballotChoice && ballotChoice !== existingVote.choice);
 
   // Computed tallies combining cloud Firestore tally or fallback base
   const computedTallies = useMemo(() => {
@@ -174,37 +206,86 @@ export const CommunitySentimentView: React.FC = () => {
     return { A: cw.A, B: cw.B, C: cw.C, D: cw.D, total: cw.total };
   }, [baseTopicData, activeTopicId, cloudTallies]);
 
-  // Handle ballot submission: locks ballot in Firestore and permanently disables button
+  // Topic sequence navigation logic
+  const currentTopicIndex = topicTabs.findIndex(t => t.id === activeTopicId);
+  const isLastTopic = currentTopicIndex === topicTabs.length - 1;
+  const isFirstTopic = currentTopicIndex === 0;
+  const nextTopic = !isLastTopic ? topicTabs[currentTopicIndex + 1] : null;
+  const prevTopic = !isFirstTopic ? topicTabs[currentTopicIndex - 1] : null;
+
+  // Total topics completed
+  const completedTopicsCount = topicTabs.filter(t => Boolean(userVotes[t.id])).length;
+  const allTopicsCompleted = completedTopicsCount === topicTabs.length;
+
+  // Aggregate total ballots recorded across all topics
+  const totalBallotsAcrossAllTopics = useMemo(() => {
+    return topicTabs.reduce((acc, tab) => {
+      const live = cloudTallies[tab.id];
+      return acc + (live?.totalVotes || 0);
+    }, 0);
+  }, [topicTabs, cloudTallies]);
+
+  // Handle ballot submission or update: records in Firestore and advances seamlessly
   const handleBallotSubmit = async () => {
-    if (!ballotChoice || hasVotedOnThisTopic || isSubmitting) return;
+    if (!ballotChoice || isSubmitting) return;
+
+    // If already voted and choice hasn't changed, simply advance
+    if (hasVotedOnThisTopic && !isChoiceChanged) {
+      if (nextTopic) {
+        setActiveTopicId(nextTopic.id);
+      } else {
+        setViewMode('summary');
+      }
+      return;
+    }
 
     setIsSubmitting(true);
 
     try {
-      const result = await castLockedBallot(activeTopicId, ballotChoice, declaredWard || 'general');
+      const priorChoice = existingVote?.choice;
+      const result = await castOrUpdateBallot(
+        activeTopicId, 
+        ballotChoice, 
+        declaredWard || 'general',
+        priorChoice
+      );
 
-      if (result.success) {
-        // Save record locally as well to instantly freeze UI
-        const updatedRecord: StoredVote = {
-          choice: ballotChoice,
-          ward: declaredWard || 'general',
-          timestamp: Date.now()
-        };
+      // Save record locally as well to instantly update UI
+      const updatedRecord: StoredVote = {
+        choice: ballotChoice,
+        ward: declaredWard || 'general',
+        timestamp: Date.now()
+      };
 
-        const updatedVotes = {
-          ...userVotes,
-          [activeTopicId]: updatedRecord
-        };
+      const updatedVotes = {
+        ...userVotes,
+        [activeTopicId]: updatedRecord
+      };
 
-        setUserVotes(updatedVotes);
-        try {
-          localStorage.setItem(STORAGE_VOTES_KEY, JSON.stringify(updatedVotes));
-        } catch {}
+      setUserVotes(updatedVotes);
+      try {
+        localStorage.setItem(STORAGE_VOTES_KEY, JSON.stringify(updatedVotes));
+      } catch {}
 
-        setStatusNotification("Ballot recorded securely. Live city-wide distributions have updated.");
+      if (result.isUpdate) {
+        setStatusNotification("Your vote was updated successfully.");
+      } else {
+        setStatusNotification("Vote registered!");
       }
-    } catch {
-      setStatusNotification("Ballot recorded securely. Live city-wide distributions have updated.");
+
+      // Seamlessly advance to the next topic or summary view
+      setTimeout(() => {
+        if (nextTopic) {
+          setActiveTopicId(nextTopic.id);
+        } else {
+          // Final topic completed: show ballot completion summary
+          setViewMode('summary');
+        }
+      }, 350);
+
+    } catch (err) {
+      console.error("Ballot error:", err);
+      // Fallback locally
       const updatedRecord: StoredVote = {
         choice: ballotChoice,
         ward: declaredWard || 'general',
@@ -215,9 +296,17 @@ export const CommunitySentimentView: React.FC = () => {
       try {
         localStorage.setItem(STORAGE_VOTES_KEY, JSON.stringify(updatedVotes));
       } catch {}
+
+      setTimeout(() => {
+        if (nextTopic) {
+          setActiveTopicId(nextTopic.id);
+        } else {
+          setViewMode('summary');
+        }
+      }, 350);
     } finally {
       setIsSubmitting(false);
-      setTimeout(() => setStatusNotification(null), 5000);
+      setTimeout(() => setStatusNotification(null), 4000);
     }
   };
 
@@ -233,6 +322,8 @@ export const CommunitySentimentView: React.FC = () => {
       clearVoterToken();
       setUserVotes({});
       setBallotChoice(null);
+      setActiveTopicId('arena');
+      setViewMode('poll');
       try {
         localStorage.removeItem(STORAGE_VOTES_KEY);
       } catch {}
@@ -245,7 +336,7 @@ export const CommunitySentimentView: React.FC = () => {
         taxes: { totalVotes: 0, votesA: 0, votesB: 0, votesC: 0, votesD: 0 }
       });
 
-      setStatusNotification("All votes have been reset to zero across all topics.");
+      setStatusNotification("All votes have been reset to zero. Ready for fresh test.");
     } catch (err) {
       console.error("Failed to reset votes:", err);
       setStatusNotification("Failed to reset votes. Please try again.");
@@ -255,23 +346,19 @@ export const CommunitySentimentView: React.FC = () => {
     }
   };
 
-  // 4 Top-level Topics configuration
-  const topicTabs = [
-    { id: 'arena' as SentimentTopicId, label: 'Downtown Events Centre', icon: Building2 },
-    { id: 'roads' as SentimentTopicId, label: 'Roads & Infrastructure', icon: Construction },
-    { id: 'housing' as SentimentTopicId, label: 'Homelessness & Addictions', icon: HeartHandshake },
-    { id: 'taxes' as SentimentTopicId, label: 'Property Taxes & Services', icon: Receipt },
-  ];
-
-  // Topic sequence navigation logic
-  const currentTopicIndex = topicTabs.findIndex(t => t.id === activeTopicId);
-  const nextTopic = currentTopicIndex >= 0 && currentTopicIndex < topicTabs.length - 1 
-    ? topicTabs[currentTopicIndex + 1] 
-    : null;
-  const hasVotedOnNextTopic = nextTopic ? Boolean(userVotes[nextTopic.id]) : true;
-
-  // Submit button active state: strictly enabled when a choice is picked and not yet voted on
-  const isButtonActive = Boolean(ballotChoice && !hasVotedOnThisTopic && !isSubmitting);
+  // Button state & dynamic label
+  const canSubmit = Boolean(ballotChoice && !isSubmitting);
+  const buttonLabel = useMemo(() => {
+    if (isSubmitting) return 'Recording Vote...';
+    if (!ballotChoice) return 'Select an Option Above';
+    if (isChoiceChanged) {
+      return nextTopic ? 'Update Vote & Continue →' : 'Update Vote & View Summary ✓';
+    }
+    if (hasVotedOnThisTopic) {
+      return nextTopic ? 'Continue to Next Topic →' : 'View Ballot Summary ✓';
+    }
+    return nextTopic ? 'Cast Vote & Continue to Next Topic →' : 'Cast Final Vote & Review Summary ✓';
+  }, [isSubmitting, ballotChoice, isChoiceChanged, hasVotedOnThisTopic, nextTopic]);
 
   return (
     <div id="community-sentiment-stage" className="space-y-6">
@@ -292,18 +379,22 @@ export const CommunitySentimentView: React.FC = () => {
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               Active Window: Wave 1
             </span>
-            <span className="text-slate-600">•</span>
-            <button
-              type="button"
-              id="reset-all-votes-btn"
-              onClick={handleResetAllVotesToZero}
-              disabled={isResetting}
-              className="text-slate-400 hover:text-amber-300 transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50"
-              title="Reset all topic tallies and ballots to zero"
-            >
-              <RotateCcw className={`w-3 h-3 ${isResetting ? 'animate-spin' : ''}`} />
-              <span>{isResetting ? 'Resetting...' : 'Reset All to 0'}</span>
-            </button>
+            {isAdminMode && (
+              <>
+                <span className="text-slate-600">•</span>
+                <button
+                  type="button"
+                  id="reset-all-votes-btn"
+                  onClick={handleResetAllVotesToZero}
+                  disabled={isResetting}
+                  className="text-amber-400/80 hover:text-amber-300 transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50 font-mono text-[11px] bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30"
+                  title="Admin/Dev Tool: Reset all topic tallies and ballots to zero"
+                >
+                  <RotateCcw className={`w-3 h-3 ${isResetting ? 'animate-spin' : ''}`} />
+                  <span>{isResetting ? 'Resetting...' : 'Admin: Reset All to 0'}</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
 
@@ -351,50 +442,87 @@ export const CommunitySentimentView: React.FC = () => {
         )}
       </div>
 
-      {/* Direct Horizontal Topic Navigation Strip */}
-      <div className="space-y-2">
-        <div className="text-xs font-mono uppercase text-slate-400 tracking-wider flex items-center gap-2 px-1">
-          <Vote className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Select an Issue:</span>
+      {/* GUIDED VOTING PROGRESS STEPPER */}
+      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Vote className="w-4 h-4 text-emerald-400" />
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300">
+              Civic Ballot Progress:
+            </span>
+            <span className="text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+              {completedTopicsCount} of {topicTabs.length} Topics Voted
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs font-mono">
+            {allTopicsCompleted && (
+              <button
+                type="button"
+                onClick={() => setViewMode(viewMode === 'summary' ? 'poll' : 'summary')}
+                className="px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center gap-1.5 cursor-pointer transition-colors"
+              >
+                {viewMode === 'summary' ? (
+                  <>
+                    <Vote className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Back to Ballot</span>
+                  </>
+                ) : (
+                  <>
+                    <BarChart3 className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>View Ballot Summary</span>
+                  </>
+                )}
+              </button>
+            )}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-          {topicTabs.map(tab => {
+        {/* 4-Step Visual Stepper */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {topicTabs.map((tab, idx) => {
             const Icon = tab.icon;
-            const isSelected = activeTopicId === tab.id;
+            const isCurrent = activeTopicId === tab.id && viewMode === 'poll';
             const hasVoted = Boolean(userVotes[tab.id]);
+            const voteRecord = userVotes[tab.id];
 
             return (
               <button
                 key={tab.id}
-                id={`topic-btn-${tab.id}`}
-                onClick={() => setActiveTopicId(tab.id)}
-                className={`relative flex items-center justify-between p-3.5 rounded-2xl border text-left transition-all duration-200 ${
-                  isSelected
-                    ? 'bg-slate-800/95 border-emerald-500 shadow-md shadow-emerald-500/10 text-white ring-1 ring-emerald-500/50'
-                    : 'bg-slate-900/70 border-slate-800 text-slate-300 hover:bg-slate-850 hover:border-slate-700 hover:text-white'
+                id={`stepper-step-${tab.id}`}
+                onClick={() => {
+                  setActiveTopicId(tab.id);
+                  setViewMode('poll');
+                }}
+                className={`relative flex items-center justify-between p-3.5 rounded-2xl border text-left transition-all duration-200 cursor-pointer ${
+                  isCurrent
+                    ? 'bg-slate-800/95 border-emerald-500 shadow-md shadow-emerald-500/10 text-white ring-2 ring-emerald-500/40'
+                    : hasVoted
+                    ? 'bg-slate-950/70 border-emerald-900/50 hover:border-emerald-700/60 text-slate-300'
+                    : 'bg-slate-950/50 border-slate-800/80 hover:border-slate-700 hover:bg-slate-850 text-slate-400 hover:text-slate-200'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${
-                    isSelected ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-400'
+                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-mono text-xs font-bold shrink-0 transition-colors ${
+                    isCurrent
+                      ? 'bg-emerald-500 text-slate-950 shadow-sm'
+                      : hasVoted
+                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                      : 'bg-slate-800 text-slate-400 border border-slate-700'
                   }`}>
-                    <Icon className="w-4 h-4" />
+                    {hasVoted ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : idx + 1}
                   </div>
                   <div>
-                    <div className="text-sm font-bold leading-snug">{tab.label}</div>
-                    <div className="text-[11px] text-slate-400 font-mono">
-                      {(cloudTallies[tab.id]?.totalVotes || 0) === 0 
-                        ? '0 ballots cast' 
-                        : `${(cloudTallies[tab.id]?.totalVotes || 0).toLocaleString()} returns`}
+                    <div className="text-xs font-mono text-slate-400">Step {idx + 1} of 4</div>
+                    <div className={`text-sm font-bold leading-snug ${isCurrent ? 'text-white' : 'text-slate-200'}`}>
+                      {tab.shortTitle}
                     </div>
                   </div>
                 </div>
 
                 {hasVoted && (
-                  <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[10px] font-mono font-semibold">
-                    <CheckCircle2 className="w-3 h-3" />
-                    Voted
+                  <span className="shrink-0 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[10px] font-mono font-bold">
+                    Opt {voteRecord?.choice}
                   </span>
                 )}
               </button>
@@ -419,121 +547,117 @@ export const CommunitySentimentView: React.FC = () => {
         </div>
       )}
 
-      {/* UNIFIED SINGLE-SCREEN BALLOT & LIVE RESULTS CARD */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
-        {/* Topic Context Header */}
-        <div className="border-b border-slate-800 pb-5 space-y-2">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      {/* VIEW MODE A: BALLOT SUMMARY (When all topics are completed or user clicks review) */}
+      {viewMode === 'summary' ? (
+        <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6 animate-in fade-in duration-300">
+          <div className="border-b border-slate-800 pb-5">
             <div>
               <span className="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
-                <span>Civic Policy Decision</span>
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Civic Stance Summary</span>
                 <span className="text-slate-600">•</span>
                 <span className="text-slate-400">{currentWave.shortLabel}</span>
               </span>
-              <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight mt-0.5">
-                {baseTopicData.title}
+              <h3 className="text-2xl font-black text-white tracking-tight mt-1">
+                Your 2026 Greater Sudbury Community Ballot
               </h3>
+              <p className="text-sm text-slate-400 mt-1">
+                You have recorded choices on all {topicTabs.length} civic policy priorities. You can review your stances or update any choice at any time during this polling wave.
+              </p>
             </div>
           </div>
-          <p className="text-sm text-slate-300 max-w-3xl leading-relaxed">
-            {baseTopicData.context}
-          </p>
-        </div>
 
-        {/* IN-BALLOT POLICY OPTIONS WITH EMBEDDED LIVE COMMUNITY RETURNS */}
-        <div className="space-y-3.5">
-          <div className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold flex flex-wrap items-center justify-between gap-2">
-            <span>Select Your Stance & View Live Community Distribution:</span>
-            {hasVotedOnThisTopic && (
-              <span className="text-emerald-400 font-semibold flex items-center gap-1.5 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30">
-                <Lock className="w-3.5 h-3.5 text-emerald-400" />
-                Ballot Locked: Option {existingVote?.choice}
+          {/* LIVE BALLOT COUNT & COMMUNITY STATUS (SUMMARY VIEW) */}
+          <div className="p-3.5 bg-slate-950/60 border border-slate-800 rounded-xl text-xs font-mono text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className={`w-2 h-2 rounded-full shrink-0 ${totalBallotsAcrossAllTopics > 0 ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
+              <span>
+                {totalBallotsAcrossAllTopics > 0
+                  ? 'Live Community Returns Active • Verified resident sentiment across all priorities'
+                  : 'Community Poll Is Open • Initial ballots are recording in real time'}
               </span>
-            )}
+            </div>
+            <div className="flex items-center gap-1.5 self-start sm:self-auto shrink-0">
+              <span className="text-slate-500 font-normal">Total Recorded Ballots:</span>
+              <span className={`font-bold font-mono ${totalBallotsAcrossAllTopics > 0 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                {totalBallotsAcrossAllTopics.toLocaleString()} {totalBallotsAcrossAllTopics === 1 ? 'ballot' : 'ballots'}
+              </span>
+            </div>
           </div>
 
-          {computedTallies.total === 0 && !hasVotedOnThisTopic && (
-            <div className="p-3 bg-slate-950/60 border border-slate-800 rounded-xl text-xs font-mono text-slate-400 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Poll is live in Cloud Firestore: 0 community ballots recorded. Cast your vote below to establish the returns.</span>
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-            {baseTopicData.options.map(option => {
-              const isSelectedChoice = ballotChoice === option.id;
-              const isRecordedVote = existingVote?.choice === option.id;
-              const count = computedTallies[option.id];
-              const pct = computedTallies.total > 0 ? (count / computedTallies.total) * 100 : 0;
+          {/* Grid of 4 Topics and the voter's recorded choice */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {topicTabs.map((tab, idx) => {
+              const topicData = INITIAL_SENTIMENT_TOPICS[tab.id];
+              const vote = userVotes[tab.id];
+              const chosenOption = topicData.options.find(o => o.id === vote?.choice);
+              const live = cloudTallies[tab.id];
+              const totalVotes = live?.totalVotes || 0;
+              const optionVotes = vote ? (live ? (live as any)[`votes${vote.choice}`] || 0 : 0) : 0;
+              const optionPct = totalVotes > 0 ? (optionVotes / totalVotes) * 100 : 0;
 
               return (
-                <div
-                  key={option.id}
-                  onClick={() => {
-                    // Prevent modifying choices once a ballot has already been locked in
-                    if (!hasVotedOnThisTopic && activeWaveId === 'wave1') {
-                      setBallotChoice(option.id);
-                    }
-                  }}
-                  className={`relative p-5 rounded-2xl border transition-all duration-200 flex flex-col justify-between gap-4 ${
-                    isRecordedVote
-                      ? 'bg-slate-800/95 border-emerald-500 ring-2 ring-emerald-500/30 shadow-lg text-white cursor-default'
-                      : hasVotedOnThisTopic
-                      ? 'bg-slate-950/40 border-slate-800/50 opacity-60 cursor-not-allowed text-slate-400'
-                      : isSelectedChoice
-                      ? 'bg-slate-800/80 border-emerald-500/80 text-white shadow-md cursor-pointer'
-                      : 'bg-slate-950/60 border-slate-800/90 hover:border-slate-700 hover:bg-slate-800/40 text-slate-300 cursor-pointer'
-                  }`}
+                <div 
+                  key={tab.id}
+                  className="p-5 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-4 flex flex-col justify-between"
                 >
-                  {/* Option Choice Row */}
-                  <div className="flex items-start gap-3.5">
-                    {/* Radio Indicator */}
-                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
-                      isSelectedChoice 
-                        ? 'border-emerald-500 bg-emerald-500 text-slate-950' 
-                        : 'border-slate-600 bg-slate-800'
-                    }`}>
-                      {isSelectedChoice && <div className="w-2 h-2 rounded-full bg-slate-950" />}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-mono text-slate-400 font-semibold uppercase">
+                        Question {idx + 1}: {tab.label}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTopicId(tab.id);
+                          setViewMode('poll');
+                        }}
+                        className="text-xs text-emerald-400 hover:text-emerald-300 font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                      >
+                        <Edit3 className="w-3 h-3" />
+                        <span>Change Answer</span>
+                      </button>
                     </div>
 
-                    <div className="space-y-1.5 flex-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
-                          {option.label}
-                        </span>
+                    <h4 className="text-sm font-bold text-white leading-snug">
+                      {topicData.title}
+                    </h4>
 
-                        {isRecordedVote && (
-                          <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-semibold border border-emerald-500/30 flex items-center gap-1">
-                            <Lock className="w-3 h-3 text-emerald-400" />
-                            Recorded Vote
+                    {chosenOption ? (
+                      <div className="p-3.5 rounded-xl bg-slate-900 border border-emerald-500/40 text-slate-200 text-xs space-y-1.5">
+                        <div className="flex items-center justify-between text-emerald-400 font-mono font-bold">
+                          <span>Your Stance: {chosenOption.label}</span>
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30">
+                            Recorded
                           </span>
-                        )}
+                        </div>
+                        <p className="leading-relaxed text-slate-300">
+                          {chosenOption.text}
+                        </p>
                       </div>
-
-                      <p className="text-sm font-medium leading-relaxed">
-                        {option.text}
-                      </p>
-                    </div>
+                    ) : (
+                      <div className="p-3.5 rounded-xl bg-slate-900/60 border border-amber-500/30 text-amber-300 text-xs">
+                        No vote recorded yet. Click Change Answer to cast your ballot.
+                      </div>
+                    )}
                   </div>
 
-                  {/* EMBEDDED LIVE RESULTS BAR */}
-                  <div className="pt-2 border-t border-slate-800/80 space-y-1.5">
+                  {/* Live community distribution progress bar matching the ballot */}
+                  <div className="pt-3.5 border-t border-slate-800/80 space-y-2">
                     <div className="flex items-center justify-between text-xs font-mono">
-                      <span className="text-slate-400">Community Stance</span>
+                      <span className="text-slate-400">Community Alignment</span>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-white font-bold">{pct.toFixed(1)}%</span>
-                        <span className="text-slate-500">({count.toLocaleString()} votes)</span>
+                        <span className="text-emerald-400 font-bold">{optionPct.toFixed(1)}%</span>
+                        <span className="text-slate-500 font-normal">
+                          ({optionVotes.toLocaleString()} of {totalVotes.toLocaleString()} {totalVotes === 1 ? 'vote' : 'votes'})
+                        </span>
                       </div>
                     </div>
 
                     <div className="h-2 w-full bg-slate-800/80 rounded-full overflow-hidden">
                       <div
-                        style={{ width: `${pct}%` }}
-                        className={`h-full rounded-full transition-all duration-700 ${
-                          isRecordedVote 
-                            ? 'bg-emerald-400 shadow-sm shadow-emerald-400/50' 
-                            : 'bg-slate-400'
-                        }`}
+                        style={{ width: `${optionPct}%` }}
+                        className="h-full rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50 transition-all duration-700 ease-out"
                       />
                     </div>
                   </div>
@@ -542,56 +666,196 @@ export const CommunitySentimentView: React.FC = () => {
             })}
           </div>
         </div>
+      ) : (
+        /* VIEW MODE B: ACTIVE BALLOT QUESTION */
+        <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6 animate-in fade-in duration-300">
+          {/* Topic Context Header with calibrated min-h to ensure Topics 1, 2, 3, and 4 are identical in height */}
+          <div className="border-b border-slate-800 pb-5 space-y-2 min-h-[148px] sm:min-h-[132px] flex flex-col justify-start">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span className="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
+                  <span>Question {currentTopicIndex + 1} of {topicTabs.length}</span>
+                  <span className="text-slate-600">•</span>
+                  <span className="text-slate-400">{currentWave.shortLabel}</span>
+                  {hasVotedOnThisTopic && (
+                    <>
+                      <span className="text-slate-600">•</span>
+                      <span className="text-emerald-300 flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                        Ballot Recorded (Click another option to update)
+                      </span>
+                    </>
+                  )}
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight mt-1 min-h-[32px] sm:min-h-[36px] flex items-center">
+                  {baseTopicData.title}
+                </h3>
+              </div>
+            </div>
+            <p className="text-sm text-slate-300 max-w-3xl leading-relaxed min-h-[44px] sm:min-h-[40px] flex items-start">
+              {baseTopicData.context}
+            </p>
+          </div>
 
-        {/* Bottom Actions Bar */}
-        <div className="pt-4 border-t border-slate-800 flex items-center justify-end">
-          {hasVotedOnThisTopic ? (
-            nextTopic && !hasVotedOnNextTopic ? (
+          {/* IN-BALLOT POLICY OPTIONS WITH EMBEDDED LIVE COMMUNITY RETURNS */}
+          <div className="space-y-3.5">
+            <div className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold flex flex-wrap items-center justify-between gap-2 min-h-[28px]">
+              <span>Choose Your Policy Stance:</span>
+              {hasVotedOnThisTopic && (
+                <span className="text-emerald-400 font-semibold flex items-center gap-1.5 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30">
+                  <Vote className="w-3.5 h-3.5 text-emerald-400" />
+                  Current Stance: Option {existingVote?.choice}
+                </span>
+              )}
+            </div>
+
+            {/* LIVE BALLOT COUNT & COMMUNITY STATUS */}
+            <div className="p-3 bg-slate-950/60 border border-slate-800 rounded-xl text-xs font-mono text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className={`w-2 h-2 rounded-full shrink-0 ${computedTallies.total > 0 ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
+                <span>
+                  {computedTallies.total > 0
+                    ? 'Live Community Returns Active • Verified resident sentiment updated in real time'
+                    : 'Community Poll Is Open • Cast your vote below to establish the first returns'}
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5 self-start sm:self-auto shrink-0">
+                <span className="text-slate-500 font-normal">Recorded:</span>
+                <span className={`font-bold font-mono ${computedTallies.total > 0 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                  {computedTallies.total.toLocaleString()} {computedTallies.total === 1 ? 'ballot' : 'ballots'}
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              {baseTopicData.options.map(option => {
+                const isSelectedChoice = ballotChoice === option.id;
+                const isRecordedVote = existingVote?.choice === option.id;
+                const count = computedTallies[option.id];
+                const pct = computedTallies.total > 0 ? (count / computedTallies.total) * 100 : 0;
+
+                return (
+                  <div
+                    key={option.id}
+                    onClick={() => {
+                      if (activeWaveId === 'wave1') {
+                        setBallotChoice(option.id);
+                      }
+                    }}
+                    className={`relative p-5 rounded-2xl border transition-all duration-200 flex flex-col justify-between gap-4 cursor-pointer min-h-[164px] sm:min-h-[156px] ${
+                      isSelectedChoice
+                        ? 'bg-slate-800/95 border-emerald-500 ring-2 ring-emerald-500/40 shadow-lg text-white'
+                        : isRecordedVote
+                        ? 'bg-slate-850 border-emerald-800/60 text-slate-200'
+                        : 'bg-slate-950/60 border-slate-800/90 hover:border-slate-700 hover:bg-slate-800/40 text-slate-300'
+                    }`}
+                  >
+                    {/* Option Choice Row */}
+                    <div className="flex items-start gap-3.5">
+                      {/* Radio Indicator */}
+                      <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
+                        isSelectedChoice 
+                          ? 'border-emerald-500 bg-emerald-500 text-slate-950' 
+                          : 'border-slate-600 bg-slate-800'
+                      }`}>
+                        {isSelectedChoice && <div className="w-2 h-2 rounded-full bg-slate-950" />}
+                      </div>
+
+                      <div className="space-y-1.5 flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
+                            {option.label}
+                          </span>
+
+                          {isRecordedVote && (
+                            <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-semibold border border-emerald-500/30 flex items-center gap-1">
+                              <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                              Your Recorded Stance
+                            </span>
+                          )}
+                        </div>
+
+                        <p className="text-sm font-medium leading-relaxed min-h-[52px] sm:min-h-[48px] flex items-start">
+                          {option.text}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* EMBEDDED LIVE RESULTS BAR */}
+                    <div className="pt-2 border-t border-slate-800/80 space-y-1.5">
+                      <div className="flex items-center justify-between text-xs font-mono">
+                        <span className="text-slate-400">Community Consensus</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-white font-bold">{pct.toFixed(1)}%</span>
+                          <span className="text-slate-500">({count.toLocaleString()} votes)</span>
+                        </div>
+                      </div>
+
+                      <div className="h-2 w-full bg-slate-800/80 rounded-full overflow-hidden">
+                        <div
+                          style={{ width: `${pct}%` }}
+                          className={`h-full rounded-full transition-all duration-700 ${
+                            isSelectedChoice || isRecordedVote 
+                              ? 'bg-emerald-400 shadow-sm shadow-emerald-400/50' 
+                              : 'bg-slate-400'
+                          }`}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Bottom Actions Bar with Guided Forward Momentum */}
+          <div className="pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="flex items-center gap-2 text-xs font-mono text-slate-400 order-2 sm:order-1">
+              {prevTopic && (
+                <button
+                  type="button"
+                  id="prev-topic-btn"
+                  onClick={() => {
+                    setActiveTopicId(prevTopic.id);
+                    setStatusNotification(null);
+                  }}
+                  className="px-3.5 py-2 rounded-xl bg-slate-950/60 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span>Previous Question</span>
+                </button>
+              )}
+              <span>Question {currentTopicIndex + 1} of 4</span>
+            </div>
+
+            <div className="flex items-center gap-3 w-full sm:w-auto order-1 sm:order-2">
               <button
                 type="button"
-                id="next-topic-btn"
-                onClick={() => {
-                  setActiveTopicId(nextTopic.id);
-                  setStatusNotification(null);
-                }}
-                className="px-6 py-2.5 rounded-xl font-bold text-sm font-mono flex items-center justify-center gap-2 transition-all duration-200 shadow-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20 active:scale-[0.98] cursor-pointer"
+                id="submit-ballot-btn"
+                onClick={handleBallotSubmit}
+                disabled={!canSubmit}
+                className={`w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-sm font-mono flex items-center justify-center gap-2 transition-all duration-200 shadow-md ${
+                  canSubmit
+                    ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20 active:scale-[0.98] cursor-pointer'
+                    : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
+                }`}
               >
-                <span>Next Topic</span>
-                <ArrowRight className="w-4 h-4" />
+                {isSubmitting ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                    <span>{buttonLabel}</span>
+                  </>
+                ) : (
+                  <>
+                    <Vote className="w-4 h-4" />
+                    <span>{buttonLabel}</span>
+                  </>
+                )}
               </button>
-            ) : null
-          ) : (
-            <button
-              type="button"
-              id="submit-ballot-btn"
-              onClick={handleBallotSubmit}
-              disabled={!isButtonActive}
-              className={`px-6 py-2.5 rounded-xl font-bold text-sm font-mono flex items-center justify-center gap-2 transition-all duration-200 shadow-md ${
-                isButtonActive
-                  ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20 active:scale-[0.98] cursor-pointer'
-                  : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
-              }`}
-              title={
-                !ballotChoice 
-                  ? 'Please select a policy option above' 
-                  : 'Submit your ballot'
-              }
-            >
-              {isSubmitting ? (
-                <>
-                  <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
-                  <span>Recording Vote...</span>
-                </>
-              ) : (
-                <>
-                  <Vote className="w-4 h-4" />
-                  <span>Submit</span>
-                </>
-              )}
-            </button>
-          )}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Notice & Ethics Footer */}
       <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80 text-xs text-slate-400 flex items-start gap-2.5 font-mono">
@@ -605,3 +869,4 @@ export const CommunitySentimentView: React.FC = () => {
 };
 
 export default CommunitySentimentView;
+
