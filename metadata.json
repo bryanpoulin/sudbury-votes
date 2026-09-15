@@ -1,6 +1,6 @@
 {
   "name": "Sudbury Election Results Dashboard",
-  "description": "Interactive municipal election portal and historical archive for Greater Sudbury (2003–2022 certified records) featuring the 2026 Municipal Election Hub, candidate registry, news, voter readiness tool, and live results tracker.",
+  "description": "Interactive municipal election portal featuring the 2026 Civic Stance Poll (Event Centre, roads, homelessness, taxes), 2026 Candidate Registry, and certified historical returns (2003–2022).",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

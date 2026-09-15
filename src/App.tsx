@@ -20,16 +20,18 @@ export default function App() {
   const [selectedWardNumber, setSelectedWardNumber] = useState<number | null>(null);
   const [isWardModalOpen, setIsWardModalOpen] = useState<boolean>(false);
 
-  // Deep-linking URL parameter initialization (?tab=poll, ?tab=election2026, #poll)
+  // Deep-linking URL parameter and pathname initialization (/poll, ?tab=poll, #poll)
   useEffect(() => {
     try {
       if (typeof window !== 'undefined') {
+        const pathname = window.location.pathname;
+        const isPollPath = pathname === '/poll' || pathname.startsWith('/poll/') || pathname.endsWith('/poll.html') || pathname.endsWith('/poll/index.html');
         const params = new URLSearchParams(window.location.search);
         const tabParam = params.get('tab');
         const pollParam = params.get('poll');
         const hash = window.location.hash;
 
-        if (tabParam === 'poll' || pollParam === '1' || pollParam === 'true' || hash === '#poll') {
+        if (isPollPath || tabParam === 'poll' || pollParam === '1' || pollParam === 'true' || hash === '#poll') {
           setSelectedYear(2026);
           setActiveTab('election2026');
           setHub2026Tab('sentiment');
@@ -57,11 +59,12 @@ export default function App() {
     setSelectedYear(2026);
     setActiveTab('election2026');
     setHub2026Tab('sentiment');
-    // Update URL query string without reloading page
+    // Update URL without reloading page
     try {
       if (typeof window !== 'undefined' && window.history && window.history.replaceState) {
         const url = new URL(window.location.href);
-        url.searchParams.set('tab', 'poll');
+        url.pathname = '/poll';
+        url.searchParams.delete('tab');
         window.history.replaceState({}, '', url.toString());
       }
     } catch {}

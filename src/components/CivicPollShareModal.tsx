@@ -28,12 +28,11 @@ export const CivicPollShareModal: React.FC<CivicPollShareModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Determine share URL with optional deep-link parameter and ward parameter
+  // Determine share URL with dedicated /poll entry point and optional ward parameter
   const getShareUrl = () => {
-    if (typeof window === 'undefined') return 'https://sudburyvotes.info/?tab=poll';
+    if (typeof window === 'undefined') return 'https://sudburyvotes.info/poll';
     const baseUrl = window.location.origin;
-    const url = new URL(baseUrl);
-    url.searchParams.set('tab', 'poll');
+    const url = new URL('/poll', baseUrl);
     if (includeWard && selectedWard && selectedWard !== 'all') {
       url.searchParams.set('ward', selectedWard);
     }
@@ -186,6 +185,32 @@ export const CivicPollShareModal: React.FC<CivicPollShareModalProps> = ({
             />
           </div>
         )}
+
+        {/* Visual iMessage & Social Card Preview */}
+        <div className="space-y-1.5 pt-1 border-t border-slate-800/80">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold flex items-center justify-between">
+            <span>iMessage &amp; Social Card Preview:</span>
+            <span className="text-emerald-400 font-normal">sudburyvotes.info/poll</span>
+          </div>
+          <div className="rounded-2xl border border-slate-700 bg-slate-950 overflow-hidden shadow-md">
+            <img 
+              src="/poll-og-preview.png" 
+              alt="2026 Greater Sudbury Civic Stance Poll Preview Card" 
+              className="w-full h-auto object-cover max-h-36 border-b border-slate-800"
+            />
+            <div className="p-3 bg-slate-900/90 space-y-0.5">
+              <div className="text-[11px] font-mono text-slate-400">
+                sudburyvotes.info/poll
+              </div>
+              <div className="text-xs font-bold text-white leading-snug">
+                2026 Greater Sudbury Civic Stance Poll | Voice Your Stance
+              </div>
+              <div className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                Where do you stand on the Downtown Event Centre, roads, homelessness, and municipal taxes? Cast your anonymous ballot.
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Quick Social & Community Channels */}
         <div className="space-y-2.5 pt-1 border-t border-slate-800/80">
