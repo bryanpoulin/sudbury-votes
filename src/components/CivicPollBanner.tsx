@@ -9,10 +9,10 @@ interface CivicPollBannerProps {
 const BANNER_DISMISS_KEY = 'sudbury_poll_banner_dismissed_wave1';
 const BANNER_PREV_THEME_KEY = 'sudbury_poll_banner_last_theme';
 
-export type BannerTheme = 'hybrid' | 'gold' | 'cobalt' | 'dual';
+export type BannerTheme = 'hybrid' | 'gold' | 'cobalt';
 
-// The 4 distinct high-contrast themes available for randomized selection on each visit/refresh
-const AVAILABLE_THEMES: BannerTheme[] = ['hybrid', 'gold', 'cobalt', 'dual'];
+// The 3 distinct high-contrast themes available for randomized selection on each visit/refresh
+const AVAILABLE_THEMES: BannerTheme[] = ['hybrid', 'gold', 'cobalt'];
 
 // Function to select a random theme on page load that is different from the previous one
 const pickRandomTheme = (): BannerTheme => {
@@ -90,21 +90,6 @@ const THEME_CONFIGS: Record<BannerTheme, ThemeConfig> = {
     titleSparkle: 'text-sky-300',
     summaryHighlight: 'text-sky-300 font-medium',
     button: 'bg-sky-400 hover:bg-sky-300 text-slate-950 font-bold shadow-md shadow-sky-400/25',
-  },
-  dual: {
-    id: 'dual',
-    name: 'Dual-Tone Emerald & Gold',
-    badgeDot: 'bg-amber-400',
-    container: 'bg-gradient-to-r from-emerald-950 via-slate-900 to-slate-950 border-y sm:border sm:rounded-2xl border-amber-500/40 shadow-lg shadow-emerald-950/40 text-white',
-    glowLeft: 'bg-emerald-500/15',
-    glowRight: 'bg-amber-500/10',
-    iconBox: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400',
-    iconColor: 'text-emerald-400',
-    pulseColor: 'bg-amber-400',
-    pill: 'bg-amber-500/20 border-amber-500/40 text-amber-300',
-    titleSparkle: 'text-amber-300',
-    summaryHighlight: 'text-emerald-300 font-medium',
-    button: 'bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold shadow-md shadow-amber-400/25',
   }
 };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ViewTab } from './types/election';
 import { getElectionByYear } from './data/electionData';
 import { Header } from './components/Header';
@@ -20,6 +20,32 @@ export default function App() {
   const [selectedWardNumber, setSelectedWardNumber] = useState<number | null>(null);
   const [isWardModalOpen, setIsWardModalOpen] = useState<boolean>(false);
 
+  // Deep-linking URL parameter initialization (?tab=poll, ?tab=election2026, #poll)
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        const tabParam = params.get('tab');
+        const pollParam = params.get('poll');
+        const hash = window.location.hash;
+
+        if (tabParam === 'poll' || pollParam === '1' || pollParam === 'true' || hash === '#poll') {
+          setSelectedYear(2026);
+          setActiveTab('election2026');
+          setHub2026Tab('sentiment');
+        } else if (tabParam === 'candidates' || tabParam === 'debates' || tabParam === 'results') {
+          setSelectedYear(2026);
+          setActiveTab('election2026');
+          setHub2026Tab(tabParam as Election2026HubTab);
+        } else if (tabParam === 'overview' || tabParam === 'trends' || tabParam === 'compare') {
+          setActiveTab(tabParam as ViewTab);
+        }
+      }
+    } catch {
+      // Graceful fallback
+    }
+  }, []);
+
   const currentElection = getElectionByYear(selectedYear === 2026 ? 2022 : selectedYear);
 
   const handleSelectWard = (wardNumber: number) => {
@@ -31,6 +57,14 @@ export default function App() {
     setSelectedYear(2026);
     setActiveTab('election2026');
     setHub2026Tab('sentiment');
+    // Update URL query string without reloading page
+    try {
+      if (typeof window !== 'undefined' && window.history && window.history.replaceState) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('tab', 'poll');
+        window.history.replaceState({}, '', url.toString());
+      }
+    } catch {}
     // Scroll smoothly to poll section if needed
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

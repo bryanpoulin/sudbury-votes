@@ -16,8 +16,10 @@ import {
   RotateCcw,
   Sparkles,
   BarChart3,
-  Edit3
+  Edit3,
+  Share2
 } from 'lucide-react';
+import { CivicPollShareModal } from './CivicPollShareModal';
 import { 
   SentimentTopicId, 
   PolicyOptionId, 
@@ -56,6 +58,9 @@ export const CommunitySentimentView: React.FC = () => {
   
   // View mode: 'poll' (ballot view) or 'summary' (ballot completed review)
   const [viewMode, setViewMode] = useState<'poll' | 'summary'>('poll');
+
+  // Share Modal State
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
 
   // GLOBAL VOTER RESIDENCY (Single residence rule under Ontario Municipal Elections Act)
   const [declaredWard, setDeclaredWard] = useState<string>(''); // '' = undeclared, '1'-'12', or 'at-large'
@@ -116,11 +121,23 @@ export const CommunitySentimentView: React.FC = () => {
       });
     });
 
-    // Load global declared ward and votes from localStorage
+    // Load global declared ward and votes from localStorage or URL parameter
     try {
+      // Check URL search parameter for ward first (?ward=5)
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        const wardParam = params.get('ward');
+        if (wardParam && (wardParam === 'at-large' || (!isNaN(parseInt(wardParam, 10)) && parseInt(wardParam, 10) >= 1 && parseInt(wardParam, 10) <= 12))) {
+          setDeclaredWard(wardParam);
+          try {
+            localStorage.setItem(STORAGE_WARD_KEY, wardParam);
+          } catch {}
+        }
+      }
+
       const savedWard = localStorage.getItem(STORAGE_WARD_KEY);
       if (savedWard) {
-        setDeclaredWard(savedWard);
+        setDeclaredWard(prev => prev || savedWard);
       }
 
       const savedVotes = localStorage.getItem(STORAGE_VOTES_KEY);
@@ -456,6 +473,18 @@ export const CommunitySentimentView: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2 text-xs font-mono">
+            {/* Share Poll Button */}
+            <button
+              type="button"
+              id="poll-share-btn"
+              onClick={() => setIsShareModalOpen(true)}
+              className="px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 hover:text-emerald-300 border border-emerald-500/30 hover:border-emerald-500/50 flex items-center gap-1.5 cursor-pointer transition-colors shadow-sm"
+              title="Share this poll with friends and community groups"
+            >
+              <Share2 className="w-3.5 h-3.5" />
+              <span>Share Poll</span>
+            </button>
+
             {allTopicsCompleted && (
               <button
                 type="button"
@@ -665,6 +694,32 @@ export const CommunitySentimentView: React.FC = () => {
               );
             })}
           </div>
+
+          {/* POST-VOTING CIVIC AMPLIFICATION CARD: Invite Your Neighbours */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-emerald-950/60 via-slate-900 to-slate-900 border border-emerald-500/30 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-1.5">
+                <Share2 className="w-3.5 h-3.5" />
+                <span>Help Build Greater Sudbury's Civic Dataset</span>
+              </div>
+              <h4 className="text-base font-bold text-white">
+                Invite your neighbours & community groups to cast their stance
+              </h4>
+              <p className="text-xs text-slate-400 max-w-2xl leading-relaxed">
+                The more residents who participate, the clearer our picture of community priorities across all 12 wards becomes. Share on r/Sudbury, Facebook community forums, or direct message.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              id="summary-share-btn"
+              onClick={() => setIsShareModalOpen(true)}
+              className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold font-mono text-xs flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-500/20 cursor-pointer shrink-0"
+            >
+              <Share2 className="w-4 h-4" />
+              <span>Share This Poll</span>
+            </button>
+          </div>
         </div>
       ) : (
         /* VIEW MODE B: ACTIVE BALLOT QUESTION */
@@ -864,6 +919,13 @@ export const CommunitySentimentView: React.FC = () => {
           <strong className="text-slate-300">Civic Notice:</strong> Sudbury Votes Community Sentiment Polls reflect voluntary participation by local community visitors. They provide non-scientific insights into public priorities, tracking community alignment across candidate platform releases, debates, and voting milestones throughout the 2026 Greater Sudbury Municipal Election.
         </p>
       </div>
+
+      {/* Dedicated Civic Poll Share Modal */}
+      <CivicPollShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        selectedWard={declaredWard}
+      />
     </div>
   );
 };

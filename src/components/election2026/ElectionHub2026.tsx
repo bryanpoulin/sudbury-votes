@@ -35,6 +35,17 @@ export const ElectionHub2026: React.FC<ElectionHub2026Props> = ({
   const handleTabSelect = (tab: Election2026HubTab) => {
     setHubTab(tab);
     onTabChange?.(tab);
+    try {
+      if (typeof window !== 'undefined' && window.history && window.history.replaceState) {
+        const url = new URL(window.location.href);
+        if (tab === 'sentiment') {
+          url.searchParams.set('tab', 'poll');
+        } else {
+          url.searchParams.set('tab', tab);
+        }
+        window.history.replaceState({}, '', url.toString());
+      }
+    } catch {}
   };
 
   // Election Day check: October 26, 2026 00:00:00 EDT
