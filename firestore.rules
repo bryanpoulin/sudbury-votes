@@ -21,27 +21,6 @@ service cloud.firestore {
       return resource.data;
     }
 
-    function isValidTopic(data) {
-      return data.id is string && data.id.size() <= 64 &&
-             data.totalVotes is number && data.totalVotes >= 0 &&
-             data.votesA is number && data.votesA >= 0 &&
-             data.votesB is number && data.votesB >= 0 &&
-             data.votesC is number && data.votesC >= 0 &&
-             data.votesD is number && data.votesD >= 0 &&
-             data.keys().hasAll(['id', 'totalVotes', 'votesA', 'votesB', 'votesC', 'votesD']) &&
-             data.keys().size() <= 7;
-    }
-
-    function isValidBallot(data) {
-      return data.topicId is string && data.topicId.size() <= 64 &&
-             data.choice is string && data.choice.size() <= 8 &&
-             data.voterToken is string && data.voterToken.size() <= 128 &&
-             data.ward is string && data.ward.size() <= 32 &&
-             data.votedAt is string && data.votedAt.size() <= 64 &&
-             data.keys().hasAll(['topicId', 'choice', 'voterToken', 'ward', 'votedAt']) &&
-             data.keys().size() == 5;
-    }
-
     function isValidCivicIdea(data) {
       return data.id is string && data.id.size() <= 64 &&
              data.title is string && data.title.size() >= 3 && data.title.size() <= 120 &&
@@ -71,25 +50,6 @@ service cloud.firestore {
              data.secondedAt is string && data.secondedAt.size() <= 64 &&
              data.keys().hasAll(['ideaId', 'voterToken', 'secondedAt']) &&
              data.keys().size() == 3;
-    }
-
-    // Public civic sentiment topic tallies
-    match /sentiment_topics/{topicId} {
-      allow read: if isValidId(topicId);
-      allow create, update: if isValidId(topicId) && isValidTopic(incoming());
-      allow delete: if false;
-    }
-
-    // Voter ballots: allow create and update for the duration of the active poll
-    match /voter_ballots/{ballotId} {
-      // Allow single get check for voter token validation; block list enumeration
-      allow get: if isValidId(ballotId);
-      allow list: if false;
-      // Allow creation of ballot
-      allow create: if isValidId(ballotId) && isValidBallot(incoming());
-      // Allow updating existing ballot choice by voter
-      allow update: if isValidId(ballotId) && isValidBallot(incoming());
-      allow delete: if false;
     }
 
     // Public crowdsourced civic priority proposals submitted by Sudbury residents

@@ -38,11 +38,7 @@ export const ElectionHub2026: React.FC<ElectionHub2026Props> = ({
     try {
       if (typeof window !== 'undefined' && window.history && window.history.replaceState) {
         const url = new URL(window.location.href);
-        if (tab === 'priorities' || tab === 'sentiment') {
-          url.searchParams.set('tab', 'priorities');
-        } else {
-          url.searchParams.set('tab', tab);
-        }
+        url.searchParams.set('tab', tab);
         window.history.replaceState({}, '', url.toString());
       }
     } catch {}
@@ -187,28 +183,28 @@ export const ElectionHub2026: React.FC<ElectionHub2026Props> = ({
           id="hub-tab-priorities"
           onClick={() => handleTabSelect('priorities')}
           className={`relative flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-            hubTab === 'priorities' || hubTab === 'sentiment'
+            hubTab === 'priorities'
               ? 'bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 shadow-lg shadow-emerald-500/30 scale-[1.02] ring-2 ring-emerald-400/50'
               : 'bg-gradient-to-r from-emerald-950/70 via-slate-900 to-slate-900 text-emerald-300 hover:text-white border border-emerald-500/40 hover:border-emerald-400 hover:bg-emerald-900/40 shadow-sm shadow-emerald-950/50'
           }`}
         >
           <div className="flex items-center gap-1.5">
-            <Sparkles className={`w-4 h-4 ${hubTab === 'priorities' || hubTab === 'sentiment' ? 'text-slate-950' : 'text-emerald-400'}`} />
+            <Sparkles className={`w-4 h-4 ${hubTab === 'priorities' ? 'text-slate-950' : 'text-emerald-400'}`} />
             <span className="tracking-tight">Community Priorities</span>
           </div>
 
           {/* Animated LIVE Pulse Badge */}
           <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-mono font-black tracking-wider uppercase ${
-            hubTab === 'priorities' || hubTab === 'sentiment'
+            hubTab === 'priorities'
               ? 'bg-slate-950 text-emerald-400'
               : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
           }`}>
             <span className="relative flex h-2 w-2">
               <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                hubTab === 'priorities' || hubTab === 'sentiment' ? 'bg-emerald-400' : 'bg-emerald-400'
+                hubTab === 'priorities' ? 'bg-emerald-400' : 'bg-emerald-400'
               }`} />
               <span className={`relative inline-flex rounded-full h-2 w-2 ${
-                hubTab === 'priorities' || hubTab === 'sentiment' ? 'bg-emerald-400' : 'bg-emerald-400'
+                hubTab === 'priorities' ? 'bg-emerald-400' : 'bg-emerald-400'
               }`} />
             </span>
             <span>LIVE</span>
@@ -239,7 +235,7 @@ export const ElectionHub2026: React.FC<ElectionHub2026Props> = ({
       {hubTab === 'debates' && (
         <CandidateDebatesView2026 />
       )}
-      {(hubTab === 'priorities' || hubTab === 'sentiment') && (
+      {hubTab === 'priorities' && (
         <CivicIdeaBoard />
       )}
       {hubTab === 'live-results' && isElectionDayOrLater && <LiveResultsView2026 />}

@@ -14,9 +14,8 @@ import {
   Unsubscribe 
 } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
-import { INITIAL_SENTIMENT_TOPICS } from '../data/sentimentPollsData';
 import { INITIAL_CIVIC_IDEAS } from '../data/civicIdeasData';
-import { SentimentTopicId, CivicIdea, CivicThemeId } from '../types/sentiment';
+import { CivicIdea, CivicThemeId } from '../types/civicIdeas';
 
 // Initialize Firebase
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
@@ -75,7 +74,7 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
 export async function testFirestoreConnection(): Promise<boolean> {
   try {
     // Attempt reading from test collection
-    await getDocFromServer(doc(db, 'sentiment_topics', '_connection_check'));
+    await getDocFromServer(doc(db, 'civic_ideas', '_connection_check'));
     return true;
   } catch (error) {
     if (error instanceof Error && error.message.includes('the client is offline')) {
@@ -113,196 +112,6 @@ export function getVoterToken(): string {
     return token;
   } catch {
     return 'vt_fallback_' + Math.random().toString(36).substring(2, 10);
-  }
-}
-
-export interface LiveTopicVotes {
-  totalVotes: number;
-  votesA: number;
-  votesB: number;
-  votesC: number;
-  votesD: number;
-}
-
-// Subscribe to real-time topic votes
-export function subscribeToTopicVotes(
-  topicId: SentimentTopicId,
-  onUpdate: (data: LiveTopicVotes) => void
-): Unsubscribe {
-  const topicRef = doc(db, 'sentiment_topics', topicId);
-  
-  return onSnapshot(
-    topicRef,
-    (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.data();
-        onUpdate({
-          totalVotes: Number(data.totalVotes) || 0,
-          votesA: Number(data.votesA) || 0,
-          votesB: Number(data.votesB) || 0,
-          votesC: Number(data.votesC) || 0,
-          votesD: Number(data.votesD) || 0,
-        });
-      } else {
-        // Use base seed if not yet created in cloud
-        const base = INITIAL_SENTIMENT_TOPICS[topicId].cityWide;
-        onUpdate({
-          totalVotes: base.total,
-          votesA: base.A,
-          votesB: base.B,
-          votesC: base.C,
-          votesD: base.D,
-        });
-      }
-    },
-    (error) => {
-      handleFirestoreError(error, OperationType.GET, `sentiment_topics/${topicId}`);
-    }
-  );
-}
-
-// Check if user has already cast a ballot for this topic in Cloud Firestore
-export async function checkHasVotedInCloud(
-  topicId: SentimentTopicId,
-  voterToken: string
-): Promise<{ hasVoted: boolean; choice?: string }> {
-  const ballotId = `${topicId}_${voterToken}`;
-  const ballotRef = doc(db, 'voter_ballots', ballotId);
-
-  try {
-    const snapshot = await getDoc(ballotRef);
-    if (snapshot.exists()) {
-      const data = snapshot.data();
-      return { hasVoted: true, choice: data.choice };
-    }
-    return { hasVoted: false };
-  } catch (error) {
-    console.warn('Could not check ballot in cloud, using local cache:', error);
-    return { hasVoted: false };
-  }
-}
-
-// Atomically cast or update ballot in Firestore
-export async function castOrUpdateBallot(
-  topicId: SentimentTopicId,
-  choice: 'A' | 'B' | 'C' | 'D',
-  ward: string,
-  previousChoice?: 'A' | 'B' | 'C' | 'D'
-): Promise<{ success: boolean; message: string; isUpdate: boolean }> {
-  const voterToken = getVoterToken();
-  const ballotId = `${topicId}_${voterToken}`;
-  const ballotRef = doc(db, 'voter_ballots', ballotId);
-  const topicRef = doc(db, 'sentiment_topics', topicId);
-
-  try {
-    let isUpdate = false;
-    await runTransaction(db, async (transaction) => {
-      // 1. Read existing ballot
-      const existingBallot = await transaction.get(ballotRef);
-      let priorChoice = previousChoice;
-      if (existingBallot.exists()) {
-        isUpdate = true;
-        priorChoice = existingBallot.data().choice as 'A' | 'B' | 'C' | 'D';
-      }
-
-      // If choice hasn't changed, no update needed
-      if (isUpdate && priorChoice === choice) {
-        return;
-      }
-
-      // 2. Read topic tally
-      const topicSnap = await transaction.get(topicRef);
-      const base = INITIAL_SENTIMENT_TOPICS[topicId].cityWide;
-
-      let totalVotes = base.total;
-      let votesA = base.A;
-      let votesB = base.B;
-      let votesC = base.C;
-      let votesD = base.D;
-
-      if (topicSnap.exists()) {
-        const d = topicSnap.data();
-        totalVotes = Number(d.totalVotes) || totalVotes;
-        votesA = Number(d.votesA) || votesA;
-        votesB = Number(d.votesB) || votesB;
-        votesC = Number(d.votesC) || votesC;
-        votesD = Number(d.votesD) || votesD;
-      }
-
-      // If updating, decrement old choice
-      if (isUpdate && priorChoice) {
-        if (priorChoice === 'A' && votesA > 0) votesA -= 1;
-        else if (priorChoice === 'B' && votesB > 0) votesB -= 1;
-        else if (priorChoice === 'C' && votesC > 0) votesC -= 1;
-        else if (priorChoice === 'D' && votesD > 0) votesD -= 1;
-      } else {
-        // New ballot increment
-        totalVotes += 1;
-      }
-
-      // Increment new choice
-      if (choice === 'A') votesA += 1;
-      else if (choice === 'B') votesB += 1;
-      else if (choice === 'C') votesC += 1;
-      else if (choice === 'D') votesD += 1;
-
-      // 3. Write new topic totals
-      transaction.set(topicRef, {
-        id: topicId,
-        totalVotes: Math.max(0, totalVotes),
-        votesA: Math.max(0, votesA),
-        votesB: Math.max(0, votesB),
-        votesC: Math.max(0, votesC),
-        votesD: Math.max(0, votesD),
-        updatedAt: new Date().toISOString()
-      });
-
-      // 4. Write/update voter ballot
-      transaction.set(ballotRef, {
-        topicId,
-        choice,
-        voterToken,
-        ward,
-        votedAt: new Date().toISOString()
-      });
-    });
-
-    return { 
-      success: true, 
-      message: isUpdate ? 'Your ballot has been updated.' : 'Your ballot has been recorded.', 
-      isUpdate 
-    };
-  } catch (error) {
-    handleFirestoreError(error, OperationType.WRITE, `voter_ballots/${ballotId}`);
-    return { success: false, message: 'Failed to record ballot in cloud.', isUpdate: false };
-  }
-}
-
-// Backward-compatible alias
-export const castLockedBallot = (topicId: SentimentTopicId, choice: 'A' | 'B' | 'C' | 'D', ward: string) => 
-  castOrUpdateBallot(topicId, choice, ward);
-
-// Reset all sentiment topic records in Cloud Firestore strictly back to 0
-export async function resetAllTopicsToZero(): Promise<{ success: boolean; message: string }> {
-  const topics: SentimentTopicId[] = ['arena', 'roads', 'housing', 'taxes'];
-  try {
-    const promises = topics.map(async (topicId) => {
-      const topicRef = doc(db, 'sentiment_topics', topicId);
-      await setDoc(topicRef, {
-        id: topicId,
-        totalVotes: 0,
-        votesA: 0,
-        votesB: 0,
-        votesC: 0,
-        votesD: 0,
-        updatedAt: new Date().toISOString()
-      });
-    });
-    await Promise.all(promises);
-    return { success: true, message: 'All civic sentiment poll tables and database counts successfully reset to 0.' };
-  } catch (error) {
-    console.error('Error resetting database to zero:', error);
-    return { success: false, message: 'Failed to reset cloud tables.' };
   }
 }
 

@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060911" />
+      <stop offset="45%" stop-color="#0b1329" />
+      <stop offset="100%" stop-color="#064e3b" stop-opacity="0.8" />
+    </linearGradient>
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#1e293b" stop-opacity="0.7" />
+    </linearGradient>
+    <radialGradient id="glowTopRight" cx="85%" cy="20%" r="55%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.32" />
+      <stop offset="100%" stop-color="#090d16" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="glowBottomLeft" cx="15%" cy="85%" r="50%">
+      <stop offset="0%" stop-color="#059669" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#090d16" stop-opacity="0" />
+    </radialGradient>
+    <pattern id="civicGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="1" stroke-opacity="0.5" />
+    </pattern>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="1200" height="630" fill="url(#bgGrad)" />
+  <rect width="1200" height="630" fill="url(#civicGrid)" />
+  <rect width="1200" height="630" fill="url(#glowTopRight)" />
+  <rect width="1200" height="630" fill="url(#glowBottomLeft)" />
+
+  <!-- Outer Frame -->
+  <rect x="24" y="24" width="1152" height="582" rx="28" fill="none" stroke="#334155" stroke-width="2" stroke-opacity="0.8" />
+
+  <!-- Top Badges Bar -->
+  <g transform="translate(64, 60)">
+    <!-- Pill 1: City & Action Board -->
+    <rect width="380" height="40" rx="20" fill="#10b981" fill-opacity="0.16" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.7" />
+    <circle cx="22" cy="20" r="6" fill="#34d399" />
+    <text x="40" y="25" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="800" fill="#a7f3d0" letter-spacing="1.5">2026 GREATER SUDBURY CIVIC ACTION</text>
+
+    <!-- Pill 2: Open Board & 12 Wards -->
+    <g transform="translate(680, 0)">
+      <rect width="392" height="40" rx="20" fill="#0f172a" fill-opacity="0.95" stroke="#34d399" stroke-width="1.2" stroke-opacity="0.5" />
+      <circle cx="22" cy="20" r="5" fill="#34d399" />
+      <text x="38" y="25" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700" fill="#cbd5e1" letter-spacing="1.2">OPEN RESIDENT AGENDA • ALL 12 WARDS</text>
+    </g>
+  </g>
+
+  <!-- Main Question & Title -->
+  <g transform="translate(64, 142)">
+    <text font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="24" font-weight="800" fill="#94a3b8" letter-spacing="2">
+      GREATER SUDBURY
+    </text>
+    <text y="48" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="48" font-weight="900" fill="#ffffff" letter-spacing="-1">
+      COMMUNITY PRIORITIES BOARD
+    </text>
+    <text y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="20" font-weight="500" fill="#cbd5e1" letter-spacing="-0.2">
+      Where should City Council take action? Browse resident proposals &amp; like top civic ideas.
+    </text>
+  </g>
+
+  <!-- Priority Cards Grid (4 sample citizen proposals) -->
+  <g transform="translate(64, 275)">
+    <!-- Card 1: Housing -->
+    <g transform="translate(0, 0)">
+      <rect width="516" height="110" rx="20" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5" />
+      <rect x="18" y="16" width="105" height="26" rx="8" fill="#ec4899" fill-opacity="0.15" stroke="#ec4899" stroke-width="1" stroke-opacity="0.4" />
+      <text x="28" y="33" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" fill="#f472b6">HOUSING</text>
+      <text x="135" y="33" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="600" fill="#94a3b8">City-Wide</text>
+      <text x="18" y="68" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="700" fill="#ffffff">
+        10% deeply affordable units in large developments
+      </text>
+      <text x="18" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="500" fill="#34d399">
+        +1 Support • Seconded by Local Residents
+      </text>
+    </g>
+
+    <!-- Card 2: Transit -->
+    <g transform="translate(556, 0)">
+      <rect width="516" height="110" rx="20" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5" />
+      <rect x="18" y="16" width="95" height="26" rx="8" fill="#3b82f6" fill-opacity="0.15" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.4" />
+      <text x="28" y="33" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" fill="#60a5fa">TRANSIT</text>
+      <text x="125" y="33" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="600" fill="#94a3b8">Ward 8 • New Sudbury</text>
+      <text x="18" y="68" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="700" fill="#ffffff">
+        Extend GOVA bus routes past 1:00 AM on weekends
+      </text>
+      <text x="18" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="500" fill="#34d399">
+        +1 Support • Seconded by Shift Workers &amp; Families
+      </text>
+    </g>
+
+    <!-- Card 3: Roads & Infrastructure -->
+    <g transform="translate(0, 130)">
+      <rect width="516" height="110" rx="20" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5" />
+      <rect x="18" y="16" width="150" height="26" rx="8" fill="#eab308" fill-opacity="0.15" stroke="#eab308" stroke-width="1" stroke-opacity="0.4" />
+      <text x="28" y="33" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" fill="#facc15">ROADS &amp; PAVING</text>
+      <text x="180" y="33" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="600" fill="#94a3b8">Ward 4 • Elm West</text>
+      <text x="18" y="68" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="700" fill="#ffffff">
+        Targeted asphalt resurfacing on Notre Dame &amp; Lasalle
+      </text>
+      <text x="18" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="500" fill="#34d399">
+        +1 Support • Seconded by Commuters &amp; Drivers
+      </text>
+    </g>
+
+    <!-- Card 4: Lakes & Environment -->
+    <g transform="translate(556, 130)">
+      <rect width="516" height="110" rx="20" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5" />
+      <rect x="18" y="16" width="130" height="26" rx="8" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="1" stroke-opacity="0.4" />
+      <text x="28" y="33" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" fill="#34d399">ENVIRONMENT</text>
+      <text x="160" y="33" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="600" fill="#94a3b8">Ward 11 • Minnow Lake</text>
+      <text x="18" y="68" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="700" fill="#ffffff">
+        Conservation buffer zoning for Junction Creek &amp; lakes
+      </text>
+      <text x="18" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="500" fill="#34d399">
+        +1 Support • Seconded by Trail Users &amp; Residents
+      </text>
+    </g>
+  </g>
+
+  <!-- Bottom CTA Bar -->
+  <g transform="translate(64, 545)">
+    <text font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="700" fill="#34d399" letter-spacing="1">
+      SUDBURYVOTES.INFO/PRIORITIES
+    </text>
+    <text x="480" y="0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500" fill="#94a3b8">
+      Browse all ward proposals • Submit citizen priorities • Interactive responsive embed
+    </text>
+  </g>
+</svg>

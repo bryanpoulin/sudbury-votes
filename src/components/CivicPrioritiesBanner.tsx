@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Vote, ArrowRight, X, Sparkles } from 'lucide-react';
+import { ArrowRight, X, Sparkles } from 'lucide-react';
 
-interface CivicPollBannerProps {
-  onOpenPoll: () => void;
-  isAlreadyOnPollTab?: boolean;
+interface CivicPrioritiesBannerProps {
+  onOpenPriorities: () => void;
+  isAlreadyOnPrioritiesTab?: boolean;
 }
 
-const BANNER_DISMISS_KEY = 'sudbury_poll_banner_dismissed_wave1';
-const BANNER_PREV_THEME_KEY = 'sudbury_poll_banner_last_theme';
+const BANNER_DISMISS_KEY = 'sudbury_priorities_banner_dismissed_v1';
+const BANNER_PREV_THEME_KEY = 'sudbury_priorities_banner_last_theme';
 
 export type BannerTheme = 'hybrid' | 'gold' | 'cobalt';
 
-// The 3 distinct high-contrast themes available for randomized selection on each visit/refresh
 const AVAILABLE_THEMES: BannerTheme[] = ['hybrid', 'gold', 'cobalt'];
 
-// Function to select a random theme on page load that is different from the previous one
 const pickRandomTheme = (): BannerTheme => {
   try {
     const lastTheme = localStorage.getItem(BANNER_PREV_THEME_KEY) as BannerTheme | null;
-    // Filter out the last seen theme so it always changes upon refresh
     const candidates = AVAILABLE_THEMES.filter(t => t !== lastTheme);
     const pool = candidates.length > 0 ? candidates : AVAILABLE_THEMES;
     const selected = pool[Math.floor(Math.random() * pool.length)];
@@ -58,47 +55,46 @@ const THEME_CONFIGS: Record<BannerTheme, ThemeConfig> = {
     pulseColor: 'bg-amber-400',
     pill: 'bg-amber-500/20 border-amber-500/40 text-amber-300',
     titleSparkle: 'text-amber-300',
-    summaryHighlight: 'text-amber-300 font-medium',
-    button: 'bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-bold shadow-md shadow-amber-500/25',
+    summaryHighlight: 'text-amber-200 font-semibold',
+    button: 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20 hover:shadow-amber-500/30'
   },
   gold: {
     id: 'gold',
-    name: 'Civic Gold & Amber',
-    badgeDot: 'bg-amber-400',
-    container: 'bg-gradient-to-r from-stone-950 via-slate-900 to-amber-950/40 border-y sm:border sm:rounded-2xl border-amber-500/50 shadow-lg shadow-amber-950/30 text-white',
-    glowLeft: 'bg-amber-500/15',
-    glowRight: 'bg-amber-600/15',
-    iconBox: 'bg-amber-500/20 border-amber-500/40 text-amber-300',
-    iconColor: 'text-amber-400',
-    pulseColor: 'bg-amber-400',
-    pill: 'bg-amber-500/20 border-amber-500/40 text-amber-300',
-    titleSparkle: 'text-amber-300',
-    summaryHighlight: 'text-amber-300 font-medium',
-    button: 'bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold shadow-md shadow-amber-400/25',
+    name: 'City Hall Emerald & Gold',
+    badgeDot: 'bg-emerald-400',
+    container: 'bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950/60 border-y sm:border sm:rounded-2xl border-emerald-500/40 shadow-lg shadow-emerald-950/30 text-white',
+    glowLeft: 'bg-emerald-500/15',
+    glowRight: 'bg-amber-500/10',
+    iconBox: 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300',
+    iconColor: 'text-emerald-400',
+    pulseColor: 'bg-emerald-400',
+    pill: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300',
+    titleSparkle: 'text-emerald-300',
+    summaryHighlight: 'text-emerald-300 font-semibold',
+    button: 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20 hover:shadow-emerald-500/30'
   },
   cobalt: {
     id: 'cobalt',
-    name: 'Northern Cobalt / Cyan',
+    name: 'Civic Blue & Emerald',
     badgeDot: 'bg-sky-400',
-    container: 'bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 border-y sm:border sm:rounded-2xl border-sky-500/40 shadow-lg shadow-blue-950/40 text-white',
+    container: 'bg-gradient-to-r from-slate-950 via-slate-900 to-blue-950/60 border-y sm:border sm:rounded-2xl border-sky-500/40 shadow-lg shadow-sky-950/20 text-white',
     glowLeft: 'bg-sky-500/15',
-    glowRight: 'bg-indigo-500/15',
-    iconBox: 'bg-sky-500/20 border-sky-500/40 text-sky-300',
+    glowRight: 'bg-emerald-500/10',
+    iconBox: 'bg-sky-500/15 border-sky-500/40 text-sky-300',
     iconColor: 'text-sky-400',
     pulseColor: 'bg-sky-400',
     pill: 'bg-sky-500/20 border-sky-500/40 text-sky-300',
     titleSparkle: 'text-sky-300',
-    summaryHighlight: 'text-sky-300 font-medium',
-    button: 'bg-sky-400 hover:bg-sky-300 text-slate-950 font-bold shadow-md shadow-sky-400/25',
+    summaryHighlight: 'text-sky-200 font-semibold',
+    button: 'bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-400 hover:to-sky-500 text-slate-950 font-bold shadow-md shadow-sky-500/20 hover:shadow-sky-500/30'
   }
 };
 
-export const CivicPollBanner: React.FC<CivicPollBannerProps> = ({
-  onOpenPoll,
-  isAlreadyOnPollTab = false
+export const CivicPrioritiesBanner: React.FC<CivicPrioritiesBannerProps> = ({
+  onOpenPriorities,
+  isAlreadyOnPrioritiesTab = false
 }) => {
   const [isDismissed, setIsDismissed] = useState<boolean>(true);
-  // Pick a fresh random theme on mount (different from the last visited one)
   const [currentTheme] = useState<BannerTheme>(() => pickRandomTheme());
 
   useEffect(() => {
@@ -120,8 +116,7 @@ export const CivicPollBanner: React.FC<CivicPollBannerProps> = ({
     } catch {}
   };
 
-  // If user dismissed it or is already actively in the polls view, hide the banner
-  if (isDismissed || isAlreadyOnPollTab) {
+  if (isDismissed || isAlreadyOnPrioritiesTab) {
     return null;
   }
 
@@ -129,10 +124,9 @@ export const CivicPollBanner: React.FC<CivicPollBannerProps> = ({
 
   return (
     <div
-      id="top-civic-poll-ribbon"
+      id="top-civic-priorities-ribbon"
       className={`relative z-50 ${active.container} transition-all duration-300`}
     >
-      {/* Subtle ambient accent glow (clipped to container shape) */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-inherit">
         <div className={`absolute -left-10 top-0 w-32 h-full ${active.glowLeft} blur-xl transition-colors duration-300`} />
         <div className={`absolute -right-10 top-0 w-32 h-full ${active.glowRight} blur-xl transition-colors duration-300`} />
@@ -140,7 +134,6 @@ export const CivicPollBanner: React.FC<CivicPollBannerProps> = ({
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-10">
         <div className="flex items-center gap-3">
-          {/* Pulsing Icon Badge */}
           <div className={`relative shrink-0 flex items-center justify-center w-8 h-8 rounded-xl ${active.iconBox} border transition-colors duration-300`}>
             <Sparkles className="w-4 h-4" />
             <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
@@ -168,8 +161,8 @@ export const CivicPollBanner: React.FC<CivicPollBannerProps> = ({
         <div className="flex items-center gap-2.5 self-end sm:self-center shrink-0">
           <button
             type="button"
-            id="banner-vote-now-btn"
-            onClick={onOpenPoll}
+            id="banner-explore-priorities-btn"
+            onClick={onOpenPriorities}
             className={`px-4 py-1.5 rounded-xl ${active.button} text-xs font-mono flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer`}
           >
             <span>Explore Priorities</span>
@@ -191,4 +184,3 @@ export const CivicPollBanner: React.FC<CivicPollBannerProps> = ({
     </div>
   );
 };
-

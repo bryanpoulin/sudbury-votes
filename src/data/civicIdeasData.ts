@@ -1,4 +1,4 @@
-import { CivicIdea, CivicTheme, CivicThemeId } from '../types/sentiment';
+import { CivicIdea, CivicTheme, CivicThemeId } from '../types/civicIdeas';
 
 export const CIVIC_THEMES: Record<CivicThemeId, CivicTheme> = {
   housing: {

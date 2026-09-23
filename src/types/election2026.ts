@@ -45,7 +45,7 @@ export interface WardLookupEntry {
   registeredVotersEst: number;
 }
 
-export type Election2026HubTab = 'candidates' | 'debates' | 'priorities' | 'sentiment' | 'live-results';
+export type Election2026HubTab = 'candidates' | 'debates' | 'priorities' | 'live-results';
 
 export interface SchoolBoardTrustee2026 {
   id: string;

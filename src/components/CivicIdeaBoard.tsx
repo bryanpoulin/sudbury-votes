@@ -7,7 +7,6 @@ import {
   Clock, 
   Search, 
   Share2, 
-  Code2, 
   CheckCircle2, 
   Sparkles, 
   Info, 
@@ -21,7 +20,7 @@ import {
   Send,
   X
 } from 'lucide-react';
-import { CivicIdea, CivicThemeId } from '../types/sentiment';
+import { CivicIdea, CivicThemeId } from '../types/civicIdeas';
 import { CIVIC_THEMES } from '../data/civicIdeasData';
 import { 
   subscribeToCivicIdeas, 
@@ -29,7 +28,8 @@ import {
   toggleSecondCivicIdea, 
   getLocalSecondedIdeaIds 
 } from '../lib/firebase';
-import { WARD_NEIGHBORHOOD_GUIDE } from '../data/sentimentPollsData';
+import { WARD_NEIGHBORHOOD_GUIDE } from '../data/neighborhoodData';
+import { CivicPrioritiesShareModal } from './CivicPrioritiesShareModal';
 
 interface CivicIdeaBoardProps {
   initialWard?: string;
@@ -59,11 +59,9 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
   const [formError, setFormError] = useState<string | null>(null);
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
 
-  // Embed Modal State
-  const [isEmbedModalOpen, setIsEmbedModalOpen] = useState<boolean>(false);
-  const [embedWard, setEmbedWard] = useState<string>('all');
-  const [embedTheme, setEmbedTheme] = useState<string>('all');
-  const [hasCopiedEmbed, setHasCopiedEmbed] = useState<boolean>(false);
+  // Share Modal State
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
+  const [sharingIdea, setSharingIdea] = useState<CivicIdea | null>(null);
   const [hasCopiedShareUrl, setHasCopiedShareUrl] = useState<string | null>(null);
 
   // Subscribe to real-time ideas & load local seconded state
@@ -176,33 +174,18 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
     return ideas.reduce((acc, curr) => acc + curr.secondsCount, 0);
   }, [ideas]);
 
-  // Embed iframe code generator
-  const generatedEmbedCode = useMemo(() => {
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://sudburyvotes.info';
-    const params = new URLSearchParams();
-    if (embedWard !== 'all') params.set('ward', embedWard);
-    if (embedTheme !== 'all') params.set('theme', embedTheme);
-    const queryString = params.toString() ? `?${params.toString()}` : '';
-    const embedUrl = `${baseUrl}/embed/feed${queryString}`;
-
-    return `<iframe \n  src="${embedUrl}" \n  width="100%" \n  height="750" \n  frameborder="0" \n  style="border: 1px solid #334155; border-radius: 16px; max-width: 820px; width: 100%; margin: 0 auto; display: block;" \n  title="Greater Sudbury 2026 Live Civic Priority Board" \n  loading="lazy">\n</iframe>`;
-  }, [embedWard, embedTheme]);
-
-  const handleCopyEmbedCode = () => {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(generatedEmbedCode);
-      setHasCopiedEmbed(true);
-      setTimeout(() => setHasCopiedEmbed(false), 2500);
-    }
-  };
-
   const handleCopyShareLink = (ideaId: string) => {
     if (typeof window !== 'undefined') {
-      const url = `${window.location.origin}/?tab=priorities&idea=${ideaId}`;
+      const url = `${window.location.origin}/priorities?idea=${ideaId}`;
       navigator.clipboard.writeText(url);
       setHasCopiedShareUrl(ideaId);
       setTimeout(() => setHasCopiedShareUrl(null), 2500);
     }
+  };
+
+  const handleOpenShareModal = (idea?: CivicIdea) => {
+    setSharingIdea(idea || null);
+    setIsShareModalOpen(true);
   };
 
   const getWardLabel = (wardKey: string) => {
@@ -252,13 +235,13 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
             {!isEmbedded && (
               <button
                 type="button"
-                id="open-embed-modal-btn"
-                onClick={() => setIsEmbedModalOpen(true)}
-                className="px-4 py-3 rounded-2xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-sm font-semibold flex items-center gap-2 transition-colors cursor-pointer font-mono"
-                title="Embed this live board into WordPress or external news site"
+                id="open-share-priorities-modal-btn"
+                onClick={() => handleOpenShareModal()}
+                className="px-4 py-3 rounded-2xl bg-slate-800/80 hover:bg-slate-750 text-emerald-400 hover:text-emerald-300 border border-emerald-500/30 text-sm font-semibold flex items-center gap-2 transition-colors cursor-pointer font-mono shadow-sm"
+                title="Share or embed Priorities Board"
               >
-                <Code2 className="w-4 h-4 text-emerald-400" />
-                <span>Embed</span>
+                <Share2 className="w-4 h-4 text-emerald-400" />
+                <span>Share</span>
               </button>
             )}
           </div>
@@ -592,20 +575,12 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
 
                     <button
                       type="button"
-                      onClick={() => handleCopyShareLink(idea.id)}
+                      onClick={() => handleOpenShareModal(idea)}
                       className="text-[11px] font-mono text-slate-400 hover:text-emerald-400 flex items-center gap-1 transition-colors cursor-pointer"
+                      title="Share this priority proposal"
                     >
-                      {hasCopiedShareUrl === idea.id ? (
-                        <>
-                          <Check className="w-3 h-3 text-emerald-400" />
-                          <span className="text-emerald-400">Link Copied</span>
-                        </>
-                      ) : (
-                        <>
-                          <Share2 className="w-3 h-3" />
-                          <span>Share</span>
-                        </>
-                      )}
+                      <Share2 className="w-3 h-3" />
+                      <span>Share</span>
                     </button>
                   </div>
                 </div>
@@ -615,96 +590,16 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
         )}
       </div>
 
-      {/* WordPress Embed Modal for sudbury.news */}
-      {isEmbedModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-slate-900 border border-slate-700 rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2">
-                <Code2 className="w-5 h-5 text-emerald-400" />
-                <h3 className="text-base font-bold text-white">
-                  Embed Live Civic Board
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsEmbedModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Embed this responsive, interactive priority feed directly into any Website. Readers can browse, vote, and submit priorities without leaving your site.
-            </p>
-
-            {/* Customization Options */}
-            <div className="grid grid-cols-2 gap-3 bg-slate-950 p-3.5 rounded-2xl border border-slate-800 text-xs">
-              <div className="space-y-1">
-                <label className="text-[11px] font-mono text-slate-400 uppercase">Pre-filter Ward:</label>
-                <select
-                  value={embedWard}
-                  onChange={(e) => setEmbedWard(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg p-2 text-xs"
-                >
-                  <option value="all">All Wards (City-Wide)</option>
-                  {[1,2,3,4,5,6,7,8,9,10,11,12].map(w => (
-                    <option key={w} value={w.toString()}>Ward {w} ({WARD_NEIGHBORHOOD_GUIDE[w]?.name})</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[11px] font-mono text-slate-400 uppercase">Pre-filter Theme:</label>
-                <select
-                  value={embedTheme}
-                  onChange={(e) => setEmbedTheme(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg p-2 text-xs"
-                >
-                  <option value="all">All Themes</option>
-                  {Object.values(CIVIC_THEMES).map(t => (
-                    <option key={t.id} value={t.id}>{t.label}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Embed Snippet */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-xs font-mono text-slate-400">
-                <span>Copy-Paste HTML Embed Code:</span>
-              </div>
-              <pre className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-emerald-300 text-xs font-mono overflow-x-auto selection:bg-emerald-500 selection:text-slate-950 leading-relaxed">
-                {generatedEmbedCode}
-              </pre>
-            </div>
-
-            <div className="flex items-center justify-between pt-2">
-              <span className="text-[11px] font-mono text-slate-400">
-                Auto-resizes cleanly on mobile and desktop.
-              </span>
-              <button
-                type="button"
-                onClick={handleCopyEmbedCode}
-                className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs font-mono flex items-center gap-1.5 cursor-pointer transition-colors"
-              >
-                {hasCopiedEmbed ? (
-                  <>
-                    <Check className="w-4 h-4" />
-                    <span>Copied to Clipboard!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-4 h-4" />
-                    <span>Copy Embed Code</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Dedicated Civic Priorities Share Modal (with nested Embed option) */}
+      <CivicPrioritiesShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => {
+          setIsShareModalOpen(false);
+          setSharingIdea(null);
+        }}
+        selectedWard={selectedWard}
+        selectedIdea={sharingIdea}
+      />
     </div>
   );
 };
