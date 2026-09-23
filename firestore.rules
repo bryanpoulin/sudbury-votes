@@ -42,6 +42,37 @@ service cloud.firestore {
              data.keys().size() == 5;
     }
 
+    function isValidCivicIdea(data) {
+      return data.id is string && data.id.size() <= 64 &&
+             data.title is string && data.title.size() >= 3 && data.title.size() <= 120 &&
+             data.description is string && data.description.size() >= 5 && data.description.size() <= 600 &&
+             data.ward is string && data.ward.size() <= 32 &&
+             data.theme is string && data.theme.size() <= 32 &&
+             data.secondsCount is number && data.secondsCount >= 0 &&
+             data.authorToken is string && data.authorToken.size() <= 128 &&
+             data.createdAt is string && data.createdAt.size() <= 64 &&
+             data.status is string && (data.status == 'active' || data.status == 'flagged' || data.status == 'hidden') &&
+             data.keys().hasAll(['id', 'title', 'description', 'ward', 'theme', 'secondsCount', 'authorToken', 'createdAt', 'status']) &&
+             data.keys().size() <= 10;
+    }
+
+    function isValidCivicIdeaUpdate(inc, ext) {
+      return inc.id == ext.id &&
+             inc.authorToken == ext.authorToken &&
+             inc.createdAt == ext.createdAt &&
+             inc.secondsCount is number && inc.secondsCount >= 0 &&
+             (inc.status == 'active' || inc.status == 'flagged' || inc.status == 'hidden') &&
+             isValidCivicIdea(inc);
+    }
+
+    function isValidCivicIdeaSecond(data) {
+      return data.ideaId is string && data.ideaId.size() <= 64 &&
+             data.voterToken is string && data.voterToken.size() <= 128 &&
+             data.secondedAt is string && data.secondedAt.size() <= 64 &&
+             data.keys().hasAll(['ideaId', 'voterToken', 'secondedAt']) &&
+             data.keys().size() == 3;
+    }
+
     // Public civic sentiment topic tallies
     match /sentiment_topics/{topicId} {
       allow read: if isValidId(topicId);
@@ -59,6 +90,23 @@ service cloud.firestore {
       // Allow updating existing ballot choice by voter
       allow update: if isValidId(ballotId) && isValidBallot(incoming());
       allow delete: if false;
+    }
+
+    // Public crowdsourced civic priority proposals submitted by Sudbury residents
+    match /civic_ideas/{ideaId} {
+      allow read: if isValidId(ideaId);
+      allow list: if true;
+      allow create: if isValidId(ideaId) && isValidCivicIdea(incoming());
+      allow update: if isValidId(ideaId) && isValidCivicIdeaUpdate(incoming(), existing());
+      allow delete: if false;
+    }
+
+    // Registry of citizen support seconds keyed by ideaId_voterToken
+    match /civic_idea_seconds/{secondId} {
+      allow get: if isValidId(secondId);
+      allow list: if false;
+      allow create: if isValidId(secondId) && isValidCivicIdeaSecond(incoming());
+      allow delete: if isValidId(secondId);
     }
   }
 }

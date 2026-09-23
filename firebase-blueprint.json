@@ -58,6 +58,69 @@
         }
       },
       "required": ["topicId", "choice", "voterToken", "ward", "votedAt"]
+    },
+    "CivicIdea": {
+      "title": "CivicIdea",
+      "description": "Crowdsourced citizen priorities and community ideas for Greater Sudbury 2026",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 600
+        },
+        "ward": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "theme": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "secondsCount": {
+          "type": "number"
+        },
+        "authorToken": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 16
+        }
+      },
+      "required": ["id", "title", "description", "ward", "theme", "secondsCount", "authorToken", "createdAt", "status"]
+    },
+    "CivicIdeaSecond": {
+      "title": "CivicIdeaSecond",
+      "description": "Single citizen agreement (+1 second) record per idea and voter token",
+      "type": "object",
+      "properties": {
+        "ideaId": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "voterToken": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "secondedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": ["ideaId", "voterToken", "secondedAt"]
     }
   },
   "firestore": {
@@ -72,6 +135,18 @@
         "$ref": "#/entities/VoterBallot"
       },
       "description": "Immutable single-vote registry entry keyed by topicId_voterToken"
+    },
+    "/civic_ideas/{ideaId}": {
+      "schema": {
+        "$ref": "#/entities/CivicIdea"
+      },
+      "description": "Public crowdsourced civic priority proposals submitted by Sudbury residents"
+    },
+    "/civic_idea_seconds/{secondId}": {
+      "schema": {
+        "$ref": "#/entities/CivicIdeaSecond"
+      },
+      "description": "Registry of citizen support seconds keyed by ideaId_voterToken"
     }
   }
 }

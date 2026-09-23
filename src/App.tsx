@@ -10,7 +10,9 @@ import { ElectionComparison } from './components/ElectionComparison';
 import { WardDetailModal } from './components/WardDetailModal';
 import { ElectionHub2026 } from './components/election2026/ElectionHub2026';
 import { CivicPollBanner } from './components/CivicPollBanner';
+import { CivicIdeaBoard } from './components/CivicIdeaBoard';
 import { Election2026HubTab } from './types/election2026';
+import { CivicThemeId } from './types/sentiment';
 import { ChevronRight, Radio } from 'lucide-react';
 
 export default function App() {
@@ -20,21 +22,35 @@ export default function App() {
   const [selectedWardNumber, setSelectedWardNumber] = useState<number | null>(null);
   const [isWardModalOpen, setIsWardModalOpen] = useState<boolean>(false);
 
-  // Deep-linking URL parameter and pathname initialization (/poll, ?tab=poll, #poll)
+  // Check if loaded in embed mode for external news site (sudbury.news / WordPress iframe)
+  const isEmbedMode = typeof window !== 'undefined' && (
+    window.location.pathname.startsWith('/embed') || 
+    new URLSearchParams(window.location.search).get('embed') === 'feed' ||
+    new URLSearchParams(window.location.search).get('embed') === 'true'
+  );
+
+  const embedWard = typeof window !== 'undefined' 
+    ? new URLSearchParams(window.location.search).get('ward') || 'all' 
+    : 'all';
+  const embedTheme = typeof window !== 'undefined'
+    ? (new URLSearchParams(window.location.search).get('theme') as CivicThemeId) || 'all'
+    : 'all';
+
+  // Deep-linking URL parameter and pathname initialization (/priorities, /poll, ?tab=priorities, ?tab=poll)
   useEffect(() => {
     try {
       if (typeof window !== 'undefined') {
         const pathname = window.location.pathname;
-        const isPollPath = pathname === '/poll' || pathname.startsWith('/poll/') || pathname.endsWith('/poll.html') || pathname.endsWith('/poll/index.html');
+        const isPrioritiesPath = pathname === '/priorities' || pathname.startsWith('/priorities/') || pathname === '/board' || pathname === '/poll' || pathname.startsWith('/poll/');
         const params = new URLSearchParams(window.location.search);
         const tabParam = params.get('tab');
         const pollParam = params.get('poll');
         const hash = window.location.hash;
 
-        if (isPollPath || tabParam === 'poll' || pollParam === '1' || pollParam === 'true' || hash === '#poll') {
+        if (isPrioritiesPath || tabParam === 'priorities' || tabParam === 'board' || tabParam === 'poll' || tabParam === 'sentiment' || pollParam === '1' || pollParam === 'true' || hash === '#priorities' || hash === '#poll') {
           setSelectedYear(2026);
           setActiveTab('election2026');
-          setHub2026Tab('sentiment');
+          setHub2026Tab('priorities');
         } else if (tabParam === 'candidates' || tabParam === 'debates' || tabParam === 'results') {
           setSelectedYear(2026);
           setActiveTab('election2026');
@@ -55,29 +71,36 @@ export default function App() {
     setIsWardModalOpen(true);
   };
 
-  const handleOpenPoll = () => {
+  const handleOpenPriorities = () => {
     setSelectedYear(2026);
     setActiveTab('election2026');
-    setHub2026Tab('sentiment');
+    setHub2026Tab('priorities');
     // Update URL without reloading page
     try {
       if (typeof window !== 'undefined' && window.history && window.history.replaceState) {
         const url = new URL(window.location.href);
-        url.pathname = '/poll';
-        url.searchParams.delete('tab');
+        url.searchParams.set('tab', 'priorities');
         window.history.replaceState({}, '', url.toString());
       }
     } catch {}
-    // Scroll smoothly to poll section if needed
+    // Scroll smoothly to board section if needed
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  if (isEmbedMode) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-100 p-2 sm:p-4 font-sans selection:bg-emerald-500 selection:text-slate-950">
+        <CivicIdeaBoard isEmbedded={true} initialWard={embedWard} initialTheme={embedTheme} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-slate-950">
-      {/* Top Civic Poll Announcement Ribbon (Idea 3) */}
+      {/* Top Civic Community Priorities Announcement Ribbon */}
       <CivicPollBanner
-        onOpenPoll={handleOpenPoll}
-        isAlreadyOnPollTab={activeTab === 'election2026' && hub2026Tab === 'sentiment'}
+        onOpenPoll={handleOpenPriorities}
+        isAlreadyOnPollTab={activeTab === 'election2026' && (hub2026Tab === 'priorities' || hub2026Tab === 'sentiment')}
       />
 
       {/* App Navigation Header */}

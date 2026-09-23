@@ -223,13 +223,13 @@ export const CANDIDATES_2026: Candidate2026[] = [
     race: 2,
     status: 'Incumbent',
     nominationStatus: 'Certified',
-    occupation: 'City Councillor (Ward 2, 2022–Present) / Engineering Technologist',
+    occupation: 'City Councillor (Appointed 2024–Present) / Engineering Technologist',
     keyPillars: [
       'Walden Community Centre & Leisure Facilities',
       'Rural Road Resurfacing & Ditching Programs',
       'Volunteer Fire Hall & Paramedic Resourcing'
     ],
-    bio: 'Elected in 2022 following service as engineering technologist. Filed May 4, 2026. Focuses on rural road equity, municipal water protection, and active constituent communication.',
+    bio: 'Appointed to represent Ward 2 by City Council in March 2024 following the passing of Michael Vagnini; finished second in the 2022 election (1,814 votes / 39.1%). Engineering technologist focusing on rural road equity, municipal water protection, and active constituent communication.',
     liveVotes: 2540,
     liveVotePct: 48.4,
     isProjectedWinner: true

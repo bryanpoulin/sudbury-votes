@@ -142,7 +142,7 @@ export const CivicPollBanner: React.FC<CivicPollBannerProps> = ({
         <div className="flex items-center gap-3">
           {/* Pulsing Icon Badge */}
           <div className={`relative shrink-0 flex items-center justify-center w-8 h-8 rounded-xl ${active.iconBox} border transition-colors duration-300`}>
-            <Vote className="w-4 h-4" />
+            <Sparkles className="w-4 h-4" />
             <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
               <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${active.pulseColor} opacity-75`} />
               <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${active.pulseColor}`} />
@@ -152,15 +152,15 @@ export const CivicPollBanner: React.FC<CivicPollBannerProps> = ({
           <div className="space-y-0.5">
             <div className="flex items-center gap-2 flex-wrap">
               <span className={`text-[10px] font-mono font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${active.pill} border transition-colors duration-300`}>
-                Wave 1 Open
+                Citizen Agenda
               </span>
               <span className="text-xs font-bold text-white tracking-tight flex items-center gap-1.5">
-                <span>2026 Greater Sudbury Civic Stance Poll</span>
+                <span>Community Priorities &amp; Action Board</span>
                 <Sparkles className={`w-3.5 h-3.5 ${active.titleSparkle}`} />
               </span>
             </div>
             <p className="text-xs text-slate-300 leading-snug">
-              Cast your ballot on 4 key council decisions: <span className={active.summaryHighlight}>Events Centre, Roads, Homelessness & Taxes</span>.
+              Neighborhood priorities across all 12 wards: <span className={active.summaryHighlight}>Housing, Transit, Greenspaces, Roads &amp; Core Services</span>. Like top ideas or put your own on the table.
             </p>
           </div>
         </div>
@@ -172,7 +172,7 @@ export const CivicPollBanner: React.FC<CivicPollBannerProps> = ({
             onClick={onOpenPoll}
             className={`px-4 py-1.5 rounded-xl ${active.button} text-xs font-mono flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer`}
           >
-            <span>Cast Ballot Now</span>
+            <span>Explore Priorities</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
 

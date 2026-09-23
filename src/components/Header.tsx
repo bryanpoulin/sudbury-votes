@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ViewTab } from '../types/election';
 import { AVAILABLE_YEARS } from '../data/electionData';
 import { 
@@ -21,6 +21,39 @@ export const Header: React.FC<HeaderProps> = ({
   activeTab,
   onSelectTab
 }) => {
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+
+          // Always visible at the very top of the page
+          if (currentScrollY <= 50) {
+            setIsVisible(true);
+          } else if (currentScrollY > lastScrollY.current + 8) {
+            // Scrolling down past threshold: hide header
+            setIsVisible(false);
+          } else if (currentScrollY < lastScrollY.current - 8) {
+            // Scrolling up: reveal header
+            setIsVisible(true);
+          }
+
+          lastScrollY.current = Math.max(0, currentScrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const navItems: { id: ViewTab; label: string; icon: React.ReactNode }[] = [
     { id: 'overview', label: 'Results & Ward Map', icon: <Map className="w-4 h-4" /> },
     { id: 'trends', label: 'Historical Trends', icon: <TrendingUp className="w-4 h-4" /> },
@@ -46,7 +79,13 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="bg-slate-900/60 backdrop-blur-md border-b border-slate-800 text-white sticky top-0 z-40 shadow-xl">
+    <header 
+      className={`bg-slate-900/60 backdrop-blur-md border-b border-slate-800 text-white sticky top-0 z-40 shadow-xl transition-all duration-300 ease-in-out transform ${
+        isVisible 
+          ? 'translate-y-0 opacity-100' 
+          : '-translate-y-full opacity-0 pointer-events-none'
+      }`}
+    >
       {/* Top Banner */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         {/* Brand & Identity */}

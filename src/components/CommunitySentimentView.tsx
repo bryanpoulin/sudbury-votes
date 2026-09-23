@@ -20,6 +20,7 @@ import {
   Share2
 } from 'lucide-react';
 import { CivicPollShareModal } from './CivicPollShareModal';
+import { CivicIdeaBoard } from './CivicIdeaBoard';
 import { 
   SentimentTopicId, 
   PolicyOptionId, 
@@ -50,6 +51,15 @@ interface StoredVote {
 }
 
 export const CommunitySentimentView: React.FC = () => {
+  // Top-level Poll View: 'board' (Citizen Priorities & Idea Wall) or 'ballot' (4-Question Council Ballot)
+  const [pollSection, setPollSection] = useState<'board' | 'ballot'>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('section') === 'ballot' || params.get('tab') === 'ballot') return 'ballot';
+    }
+    return 'board';
+  });
+
   // Campaign wave selection (Default: Wave 1 - Active Window)
   const [activeWaveId, setActiveWaveId] = useState<PollingWaveId>('wave1');
   
@@ -379,8 +389,49 @@ export const CommunitySentimentView: React.FC = () => {
 
   return (
     <div id="community-sentiment-stage" className="space-y-6">
-      {/* Wave / Campaign Period Navigation Strip */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl space-y-3">
+      {/* Poll Section Toggle: Idea Board vs. 4-Question Council Ballot */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/90 border border-slate-800 p-2 sm:p-2.5 rounded-2xl shadow-lg">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            id="tab-priorities-board"
+            onClick={() => setPollSection('board')}
+            className={`flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-bold font-mono flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              pollSection === 'board'
+                ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+            }`}
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>Civic Priorities Board (Open Ideas)</span>
+          </button>
+
+          <button
+            type="button"
+            id="tab-council-ballot"
+            onClick={() => setPollSection('ballot')}
+            className={`flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-bold font-mono flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              pollSection === 'ballot'
+                ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+            }`}
+          >
+            <Vote className="w-4 h-4" />
+            <span>Key Council Stances (4 Decisions)</span>
+          </button>
+        </div>
+
+        <div className="text-[11px] font-mono text-slate-400 px-2 hidden lg:block">
+          {pollSection === 'board' ? 'Crowdsourced citizen proposals & live seconds' : 'Certified fiscal policy voting'}
+        </div>
+      </div>
+
+      {pollSection === 'board' ? (
+        <CivicIdeaBoard initialWard={declaredWard || 'all'} />
+      ) : (
+        <>
+          {/* Wave / Campaign Period Navigation Strip */}
+          <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl space-y-3">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-3">
           <div className="flex items-center gap-2.5">
             <Calendar className="w-4 h-4 text-emerald-400" />
@@ -911,6 +962,8 @@ export const CommunitySentimentView: React.FC = () => {
           </div>
         </div>
       )}
+      </>
+    )}
 
       {/* Notice & Ethics Footer */}
       <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80 text-xs text-slate-400 flex items-start gap-2.5 font-mono">

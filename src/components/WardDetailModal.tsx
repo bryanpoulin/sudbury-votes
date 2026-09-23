@@ -27,6 +27,36 @@ interface WardDetailModalProps {
   onSelectYear: (year: number) => void;
 }
 
+const WARD_SITTING_COUNCILLORS: Record<number, {
+  name: string;
+  statusBadge: string;
+  subtext: string;
+  midTermNote?: string;
+}> = {
+  1: { name: 'Mark Signoretti', statusBadge: 'Elected 2022', subtext: 'Elected with 50.3%' },
+  2: { 
+    name: 'Eric Benoit', 
+    statusBadge: 'Appointed Mar 2024', 
+    subtext: 'Appointed Mar 2024 (Runner-up 2022)',
+    midTermNote: 'Appointed by City Council on March 19, 2024 to fill the Ward 2 seat following the tragic passing of Michael Vagnini (who was elected in October 2022 with 60.9%).'
+  },
+  3: { 
+    name: 'Michel Brabant', 
+    statusBadge: 'Appointed Mar 2024', 
+    subtext: 'Appointed Mar 2024 (Runner-up 2022)',
+    midTermNote: 'Appointed by City Council on March 19, 2024 to fill the Ward 3 seat following the tragic passing of Gerry Montpellier (who was elected in October 2022 with 63.4%).'
+  },
+  4: { name: 'Pauline Fortin', statusBadge: 'Elected 2022', subtext: 'Elected with 51.5%' },
+  5: { name: 'Mike Parent', statusBadge: 'Elected 2022', subtext: 'Elected with 51.2%' },
+  6: { name: 'René Lapierre', statusBadge: 'Elected 2022', subtext: 'Elected with 54.4%' },
+  7: { name: 'Natalie Labbée', statusBadge: 'Elected 2022', subtext: 'Elected with 48.4%' },
+  8: { name: 'Al Sizer', statusBadge: 'Elected 2022', subtext: 'Elected with 42.5%' },
+  9: { name: 'Deb McIntosh', statusBadge: 'Elected 2022', subtext: 'Elected with 60.6%' },
+  10: { name: 'Fern Cormier', statusBadge: 'Elected 2022', subtext: 'Elected with 44.6%' },
+  11: { name: 'Bill Leduc', statusBadge: 'Elected 2022', subtext: 'Elected with 45.3%' },
+  12: { name: 'Joscelyne Landry-Altmann', statusBadge: 'Elected 2022', subtext: 'Elected with 44.4%' }
+};
+
 export const WardDetailModal: React.FC<WardDetailModalProps> = ({
   wardNumber,
   onClose,
@@ -36,6 +66,7 @@ export const WardDetailModal: React.FC<WardDetailModalProps> = ({
 
   const geo = WARD_GEOMETRIES.find((g) => g.wardNumber === wardNumber);
   const history = getWardHistoricalProgression(wardNumber);
+  const sitting = WARD_SITTING_COUNCILLORS[wardNumber];
 
   // Calculate average turnout for this ward
   const avgTurnout = (
@@ -97,15 +128,27 @@ export const WardDetailModal: React.FC<WardDetailModalProps> = ({
             </div>
 
             <div className="bg-slate-800/40 border border-slate-700/60 p-4 rounded-2xl">
-              <div className="text-[10px] text-slate-400 font-bold uppercase font-mono">Current Councillor (2022)</div>
+              <div className="text-[10px] text-slate-400 font-bold uppercase font-mono">Sitting Councillor</div>
               <div className="text-lg font-bold text-white mt-0.5 truncate">
-                {history[history.length - 1]?.winnerName}
+                {sitting?.name || history[history.length - 1]?.winnerName}
               </div>
               <div className="text-[10px] text-emerald-400 font-mono">
-                Elected with {history[history.length - 1]?.winnerPct.toFixed(1)}%
+                {sitting?.subtext || `Elected with ${history[history.length - 1]?.winnerPct.toFixed(1)}%`}
               </div>
             </div>
           </div>
+
+          {/* Mid-term Appointment Notice if applicable */}
+          {sitting?.midTermNote && (
+            <div className="bg-slate-800/60 border border-amber-500/30 rounded-2xl p-3.5 flex items-start gap-2.5 text-xs">
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-[10px] font-bold shrink-0 mt-0.5">
+                Mid-Term Appointment
+              </span>
+              <p className="text-slate-300 leading-relaxed text-xs">
+                {sitting.midTermNote}
+              </p>
+            </div>
+          )}
 
           {/* Turnout Chart for this Ward */}
           <div className="bg-slate-950/80 border border-slate-800 p-5 rounded-2xl space-y-3">
@@ -193,6 +236,13 @@ export const WardDetailModal: React.FC<WardDetailModalProps> = ({
                       <span>•</span>
                       <span className="text-slate-400">Runner-up: {item.runnerUpName} ({item.runnerUpVotes.toLocaleString()} votes)</span>
                     </div>
+
+                    {item.year === 2022 && sitting?.midTermNote && (
+                      <div className="text-[11px] text-amber-300/90 font-mono mt-1.5 bg-amber-500/10 border border-amber-500/20 rounded-lg px-2.5 py-1 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                        <span>Mid-term: Runner-up {sitting.name} appointed to Council on March 19, 2024 following the passing of Councillor {item.winnerName}.</span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="text-right shrink-0 border-t sm:border-t-0 sm:border-l border-slate-700/60 pt-2 sm:pt-0 sm:pl-4">
