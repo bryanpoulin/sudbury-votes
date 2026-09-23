@@ -84,11 +84,11 @@ export const CivicPrioritiesShareModal: React.FC<CivicPrioritiesShareModalProps>
 
   const shareUrl = getShareUrl();
   const shareTitle = selectedIdea 
-    ? `Community Priority: "${selectedIdea.title}" | Sudbury Votes`
-    : 'Greater Sudbury Community Priorities & Action Board | Sudbury Votes';
+    ? `Your Ward. Your Voice. Your Priorities. | "${selectedIdea.title}"`
+    : 'Your Ward. Your Voice. Your Priorities. | Greater Sudbury 2026';
   const shareText = selectedIdea
-    ? `Voice your support for this Greater Sudbury community proposal: "${selectedIdea.title}". Browse all citizen priorities across 12 wards:`
-    : 'Explore crowdsourced community priorities across all 12 wards in Greater Sudbury. Second top proposals or submit your own:';
+    ? `Your Ward. Your Voice. Your Priorities. Support this priority: "${selectedIdea.title}". Have your say & second ideas for Ward ${selectedIdea.ward}:`
+    : "Your Ward. Your Voice. Your Priorities. What does your neighborhood need? Have your say & second top ideas on Greater Sudbury's live citizen action board:";
 
   const handleCopyLink = async () => {
     try {
@@ -142,25 +142,25 @@ export const CivicPrioritiesShareModal: React.FC<CivicPrioritiesShareModalProps>
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200"
       onClick={onClose}
     >
       <div 
-        className="bg-slate-900 border border-emerald-500/40 rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto"
+        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-emerald-500/40 rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-start justify-between gap-3 border-b border-slate-800 pb-3">
+        <div className="flex items-start justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+            <div className="p-2.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400">
               <Share2 className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[11px] font-mono uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-1.5">
+              <div className="text-[11px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1.5">
                 <Sparkles className="w-3 h-3" />
                 <span>Community Priorities • Social Share</span>
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-white">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
                 Share Priorities Board
               </h3>
             </div>
@@ -169,7 +169,7 @@ export const CivicPrioritiesShareModal: React.FC<CivicPrioritiesShareModalProps>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
             aria-label="Close share dialog"
           >
             <X className="w-5 h-5" />
@@ -178,19 +178,19 @@ export const CivicPrioritiesShareModal: React.FC<CivicPrioritiesShareModalProps>
 
         {/* Selected Idea / Ward Note */}
         {selectedIdea ? (
-          <div className="bg-slate-950/70 border border-emerald-500/20 rounded-2xl p-3 space-y-1">
-            <div className="text-[10px] font-mono uppercase text-emerald-400 font-bold">Sharing Specific Priority:</div>
-            <div className="text-xs font-bold text-white line-clamp-2">{selectedIdea.title}</div>
+          <div className="bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-emerald-500/20 rounded-2xl p-3 space-y-1">
+            <div className="text-[10px] font-mono uppercase text-emerald-600 dark:text-emerald-400 font-bold">Sharing Specific Priority:</div>
+            <div className="text-xs font-bold text-slate-900 dark:text-white line-clamp-2">{selectedIdea.title}</div>
           </div>
         ) : (
-          <p className="text-xs text-slate-300 leading-relaxed">
+          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
             Invite neighbors, community associations, and voters to like top proposals or put their priorities on the board.
           </p>
         )}
 
         {/* Share Link Input Box */}
         <div className="space-y-1.5">
-          <label className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold">
+          <label className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">
             Direct Shareable URL:
           </label>
           <div className="flex items-center gap-2">
@@ -198,7 +198,7 @@ export const CivicPrioritiesShareModal: React.FC<CivicPrioritiesShareModalProps>
               type="text"
               readOnly
               value={shareUrl}
-              className="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-emerald-400 select-all focus:outline-none focus:border-emerald-500"
+              className="flex-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-emerald-700 dark:text-emerald-400 select-all focus:outline-none focus:border-emerald-500"
             />
             <button
               type="button"
@@ -221,34 +221,34 @@ export const CivicPrioritiesShareModal: React.FC<CivicPrioritiesShareModalProps>
         </div>
 
         {/* Visual iMessage & Social Card Preview */}
-        <div className="space-y-1.5 pt-1 border-t border-slate-800/80">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold flex items-center justify-between">
+        <div className="space-y-1.5 pt-1 border-t border-slate-200 dark:border-slate-800/80">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center justify-between">
             <span>iMessage &amp; Social Card Preview:</span>
-            <span className="text-emerald-400 font-normal">sudburyvotes.info/priorities</span>
+            <span className="text-emerald-600 dark:text-emerald-400 font-normal">sudburyvotes.info/priorities</span>
           </div>
-          <div className="rounded-2xl border border-emerald-500/30 bg-slate-950 overflow-hidden shadow-md">
+          <div className="rounded-2xl border border-slate-200 dark:border-emerald-500/30 bg-slate-100 dark:bg-slate-950 overflow-hidden shadow-md">
             <img 
               src="/priorities-og-preview.png" 
               alt="Greater Sudbury Community Priorities & Action Board Social Card" 
-              className="w-full h-auto object-cover max-h-36 border-b border-slate-800"
+              className="w-full h-auto object-cover max-h-36 border-b border-slate-200 dark:border-slate-800"
             />
-            <div className="p-3 bg-slate-900/90 space-y-0.5">
-              <div className="text-[11px] font-mono text-slate-400">
+            <div className="p-3 bg-white dark:bg-slate-900/90 space-y-0.5">
+              <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
                 sudburyvotes.info/priorities
               </div>
-              <div className="text-xs font-bold text-white leading-snug">
-                Greater Sudbury Community Priorities &amp; Action Board
+              <div className="text-xs font-bold text-slate-900 dark:text-white leading-snug">
+                Your Ward. Your Voice. Your Priorities. | Greater Sudbury 2026
               </div>
-              <div className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
-                Where should Council take action? Browse neighborhood priorities across all 12 wards and second top community proposals.
+              <div className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                What does your neighborhood need? Have your say, propose local priorities, and second top ideas across all 12 wards on Greater Sudbury's live citizen action board.
               </div>
             </div>
           </div>
         </div>
 
         {/* Quick Social & Community Channels */}
-        <div className="space-y-2.5 pt-1 border-t border-slate-800/80">
-          <div className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold">
+        <div className="space-y-2.5 pt-1 border-t border-slate-200 dark:border-slate-800/80">
+          <div className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">
             Post Directly to Community Channels:
           </div>
 
@@ -257,9 +257,9 @@ export const CivicPrioritiesShareModal: React.FC<CivicPrioritiesShareModalProps>
               href={redditUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-xl bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 text-orange-300 hover:text-orange-200 text-xs font-mono flex flex-col items-center justify-center gap-1 transition-colors text-center"
+              className="p-2.5 rounded-xl bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 text-orange-700 dark:text-orange-300 hover:text-orange-900 dark:hover:text-orange-200 text-xs font-mono flex flex-col items-center justify-center gap-1 transition-colors text-center cursor-pointer"
             >
-              <MessageSquare className="w-4 h-4 text-orange-400" />
+              <MessageSquare className="w-4 h-4 text-orange-600 dark:text-orange-400" />
               <span className="font-bold">r/Sudbury</span>
             </a>
 
@@ -267,9 +267,9 @@ export const CivicPrioritiesShareModal: React.FC<CivicPrioritiesShareModalProps>
               href={facebookUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-xl bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/30 text-blue-300 hover:text-blue-200 text-xs font-mono flex flex-col items-center justify-center gap-1 transition-colors text-center"
+              className="p-2.5 rounded-xl bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/30 text-blue-700 dark:text-blue-300 hover:text-blue-900 dark:hover:text-blue-200 text-xs font-mono flex flex-col items-center justify-center gap-1 transition-colors text-center cursor-pointer"
             >
-              <ExternalLink className="w-4 h-4 text-blue-400" />
+              <ExternalLink className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span className="font-bold">Facebook</span>
             </a>
 
@@ -277,17 +277,17 @@ export const CivicPrioritiesShareModal: React.FC<CivicPrioritiesShareModalProps>
               href={twitterUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-xl bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/30 text-sky-300 hover:text-sky-200 text-xs font-mono flex flex-col items-center justify-center gap-1 transition-colors text-center"
+              className="p-2.5 rounded-xl bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/30 text-sky-700 dark:text-sky-300 hover:text-sky-900 dark:hover:text-sky-200 text-xs font-mono flex flex-col items-center justify-center gap-1 transition-colors text-center cursor-pointer"
             >
-              <ExternalLink className="w-4 h-4 text-sky-400" />
+              <ExternalLink className="w-4 h-4 text-sky-600 dark:text-sky-400" />
               <span className="font-bold">X</span>
             </a>
 
             <a
               href={emailUrl}
-              className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-mono flex flex-col items-center justify-center gap-1 transition-colors text-center"
+              className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-xs font-mono flex flex-col items-center justify-center gap-1 transition-colors text-center cursor-pointer"
             >
-              <Mail className="w-4 h-4 text-slate-300" />
+              <Mail className="w-4 h-4 text-slate-500 dark:text-slate-300" />
               <span className="font-bold">Email</span>
             </a>
           </div>
@@ -296,48 +296,48 @@ export const CivicPrioritiesShareModal: React.FC<CivicPrioritiesShareModalProps>
             <button
               type="button"
               onClick={handleNativeShare}
-              className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-700 text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
-              <Share2 className="w-4 h-4 text-emerald-400" />
+              <Share2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>Open Device Share Menu</span>
             </button>
           )}
 
           {/* Embed Option */}
-          <div className="pt-2 border-t border-slate-800/80 space-y-3">
+          <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 space-y-3">
             <button
               type="button"
               id="share-modal-embed-btn"
               onClick={() => setShowEmbed(!showEmbed)}
               className={`w-full py-2.5 px-4 rounded-xl border text-xs font-mono font-bold flex items-center justify-between transition-all cursor-pointer ${
                 showEmbed 
-                  ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300' 
-                  : 'bg-slate-800/90 hover:bg-slate-750 border-slate-700 text-slate-200 hover:text-white'
+                  ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-700 dark:text-emerald-300' 
+                  : 'bg-slate-100 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-750 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <div className="flex items-center gap-2">
-                <Code2 className="w-4 h-4 text-emerald-400" />
+                <Code2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>Embed</span>
               </div>
-              <span className="text-[11px] text-slate-400 font-normal">
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-normal">
                 {showEmbed ? 'Hide Options ▲' : 'Get HTML Code ▼'}
               </span>
             </button>
 
             {showEmbed && (
-              <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3 animate-in fade-in duration-150">
-                <p className="text-xs text-slate-300 leading-relaxed">
+              <div className="bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3 animate-in fade-in duration-150">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                   Embed this interactive priority feed directly into any web page. Visitors can browse, second, and submit proposals directly.
                 </p>
 
                 {/* Customization Options */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white dark:bg-slate-900/80 p-3 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Pre-filter Ward:</label>
+                    <label className="text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pre-filter Ward:</label>
                     <select
                       value={embedWard}
                       onChange={(e) => setEmbedWard(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:outline-none focus:border-emerald-500"
                     >
                       <option value="all">All Wards (City-Wide)</option>
                       {[1,2,3,4,5,6,7,8,9,10,11,12].map(w => (
@@ -347,11 +347,11 @@ export const CivicPrioritiesShareModal: React.FC<CivicPrioritiesShareModalProps>
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Pre-filter Theme:</label>
+                    <label className="text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pre-filter Theme:</label>
                     <select
                       value={embedTheme}
                       onChange={(e) => setEmbedTheme(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:outline-none focus:border-emerald-500"
                     >
                       <option value="all">All Themes</option>
                       {Object.values(CIVIC_THEMES).map(t => (
@@ -363,16 +363,16 @@ export const CivicPrioritiesShareModal: React.FC<CivicPrioritiesShareModalProps>
 
                 {/* Embed Snippet */}
                 <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400">
                     <span>HTML Embed Code:</span>
                   </div>
-                  <pre className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-emerald-300 text-[11px] font-mono overflow-x-auto selection:bg-emerald-500 selection:text-slate-950 leading-relaxed max-h-28">
+                  <pre className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-emerald-700 dark:text-emerald-300 text-[11px] font-mono overflow-x-auto selection:bg-emerald-500 selection:text-slate-950 leading-relaxed max-h-28">
                     {generatedEmbedCode}
                   </pre>
                 </div>
 
                 <div className="flex items-center justify-between pt-1">
-                  <span className="text-[10px] font-mono text-slate-400">
+                  <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
                     Responsive iframe (auto-resizes on mobile)
                   </span>
                   <button

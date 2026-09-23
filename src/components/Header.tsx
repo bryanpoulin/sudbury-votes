@@ -7,6 +7,7 @@ import {
   GitCompare, 
   Radio
 } from 'lucide-react';
+import { ThemeToggle } from './ThemeToggle';
 
 interface HeaderProps {
   selectedYear: number;
@@ -80,7 +81,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header 
-      className={`bg-slate-900/60 backdrop-blur-md border-b border-slate-800 text-white sticky top-0 z-40 shadow-xl transition-all duration-300 ease-in-out transform ${
+      className={`bg-white/85 dark:bg-slate-900/60 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white sticky top-0 z-40 shadow-sm dark:shadow-xl transition-all duration-300 ease-in-out transform ${
         isVisible 
           ? 'translate-y-0 opacity-100' 
           : '-translate-y-full opacity-0 pointer-events-none'
@@ -99,20 +100,20 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-lg sm:text-xl font-black tracking-tight text-white uppercase">
+              <h1 className="text-lg sm:text-xl font-black tracking-tight text-slate-900 dark:text-white uppercase">
                 SUDBURY <span className="text-[#00d68f]">HISTORICAL</span> VOTES
               </h1>
             </div>
-            <p className="text-[10px] sm:text-[11px] text-slate-400 font-mono tracking-[0.2em] uppercase">
+            <p className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-mono tracking-[0.2em] uppercase">
               MUNICIPAL ARCHIVE | 2003 — 2022
             </p>
           </div>
         </div>
 
-        {/* Election Controls & Cycle Selector */}
-        <div className="flex items-center overflow-x-auto">
+        {/* Election Controls, Cycle Selector & Theme Toggle */}
+        <div className="flex items-center gap-3 overflow-x-auto">
           {/* Unified Cycle Container with 2026 Live Hub and Historical Cycles */}
-          <div className="flex items-center gap-1.5 bg-slate-800/40 p-1 rounded-full border border-slate-700/70 shadow-inner">
+          <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/40 p-1 rounded-full border border-slate-200 dark:border-slate-700/70 shadow-inner">
             <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 pl-3 pr-1 hidden sm:inline">
               Cycle:
             </span>
@@ -120,10 +121,10 @@ export const Header: React.FC<HeaderProps> = ({
             {/* 2026 Button within the Cycle Group with Pulsating Icon */}
             <button
               onClick={() => handleYearClick(2026)}
-              className={`px-3.5 py-1 rounded-full text-xs font-bold transition-all duration-200 flex items-center gap-1.5 ${
+              className={`px-3.5 py-1 rounded-full text-xs font-bold transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
                 selectedYear === 2026 || activeTab === 'election2026'
                   ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/25 font-black scale-[1.02]'
-                  : 'text-emerald-400 hover:text-emerald-300 hover:bg-slate-800/60'
+                  : 'text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
               }`}
             >
               <Radio className="w-3.5 h-3.5 animate-pulse shrink-0" />
@@ -137,10 +138,10 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   key={year}
                   onClick={() => handleYearClick(year)}
-                  className={`px-3.5 py-1 rounded-full text-xs font-semibold transition-all duration-200 ${
+                  className={`px-3.5 py-1 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
                     isSelected
                       ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/25 font-bold scale-[1.02]'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
                   }`}
                 >
                   {year}
@@ -148,12 +149,15 @@ export const Header: React.FC<HeaderProps> = ({
               );
             })}
           </div>
+
+          {/* Theme Toggle Button */}
+          <ThemeToggle />
         </div>
       </div>
 
       {/* Historical Navigation Tabs Bar - Hidden when viewing 2026 Election Hub */}
       {activeTab !== 'election2026' && (
-        <div className="border-t border-slate-800/80 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
+        <div className="border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/90 dark:bg-slate-950/70 backdrop-blur-md animate-fadeIn">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav className="flex space-x-1.5 overflow-x-auto py-2 scrollbar-none" aria-label="Historical Tabs">
               {navItems.map((item) => {
@@ -162,13 +166,13 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     key={item.id}
                     onClick={() => handleTabClick(item.id)}
-                    className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-xl whitespace-nowrap transition-all duration-200 ${
+                    className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-xl whitespace-nowrap transition-all duration-200 cursor-pointer ${
                       isActive
-                        ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-sm shadow-emerald-500/10 font-semibold'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 border border-transparent'
+                        ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 shadow-sm shadow-emerald-500/10 font-semibold'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-900/60 border border-transparent'
                     }`}
                   >
-                    <span className={isActive ? 'text-emerald-400' : 'text-slate-400'}>
+                    <span className={isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}>
                       {item.icon}
                     </span>
                     <span>{item.label}</span>

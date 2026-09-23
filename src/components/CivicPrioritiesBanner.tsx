@@ -47,7 +47,7 @@ const THEME_CONFIGS: Record<BannerTheme, ThemeConfig> = {
     id: 'hybrid',
     name: 'Combined Hybrid',
     badgeDot: 'bg-amber-400',
-    container: 'bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950/60 border-y sm:border sm:rounded-2xl border-amber-500/50 shadow-lg shadow-amber-950/20 text-white',
+    container: 'bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950/60 border-b border-amber-500/50 shadow-lg shadow-amber-950/20 text-white rounded-none',
     glowLeft: 'bg-amber-500/10',
     glowRight: 'bg-sky-500/10',
     iconBox: 'bg-amber-500/15 border-amber-500/40 text-amber-300',
@@ -62,7 +62,7 @@ const THEME_CONFIGS: Record<BannerTheme, ThemeConfig> = {
     id: 'gold',
     name: 'City Hall Emerald & Gold',
     badgeDot: 'bg-emerald-400',
-    container: 'bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950/60 border-y sm:border sm:rounded-2xl border-emerald-500/40 shadow-lg shadow-emerald-950/30 text-white',
+    container: 'bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950/60 border-b border-emerald-500/40 shadow-lg shadow-emerald-950/30 text-white rounded-none',
     glowLeft: 'bg-emerald-500/15',
     glowRight: 'bg-amber-500/10',
     iconBox: 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300',
@@ -77,7 +77,7 @@ const THEME_CONFIGS: Record<BannerTheme, ThemeConfig> = {
     id: 'cobalt',
     name: 'Civic Blue & Emerald',
     badgeDot: 'bg-sky-400',
-    container: 'bg-gradient-to-r from-slate-950 via-slate-900 to-blue-950/60 border-y sm:border sm:rounded-2xl border-sky-500/40 shadow-lg shadow-sky-950/20 text-white',
+    container: 'bg-gradient-to-r from-slate-950 via-slate-900 to-blue-950/60 border-b border-sky-500/40 shadow-lg shadow-sky-950/20 text-white rounded-none',
     glowLeft: 'bg-sky-500/15',
     glowRight: 'bg-emerald-500/10',
     iconBox: 'bg-sky-500/15 border-sky-500/40 text-sky-300',
@@ -125,7 +125,7 @@ export const CivicPrioritiesBanner: React.FC<CivicPrioritiesBannerProps> = ({
   return (
     <div
       id="top-civic-priorities-ribbon"
-      className={`relative z-50 ${active.container} transition-all duration-300`}
+      className={`relative z-50 rounded-none ${active.container} transition-all duration-300`}
     >
       <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-inherit">
         <div className={`absolute -left-10 top-0 w-32 h-full ${active.glowLeft} blur-xl transition-colors duration-300`} />

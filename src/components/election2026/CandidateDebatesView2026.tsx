@@ -37,35 +37,35 @@ export const CandidateDebatesView2026: React.FC = () => {
         {DEBATES_2026.map((event) => (
           <div
             key={event.id}
-            className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-4 shadow-xl hover:border-slate-700 transition-all flex flex-col justify-between"
+            className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-4 shadow-sm dark:shadow-xl hover:border-slate-300 dark:hover:border-slate-700 transition-all flex flex-col justify-between"
           >
             <div className="space-y-3">
               <div className="flex items-center justify-start">
                 {event.isLivestreamed ? (
-                  <span className="flex items-center gap-1.5 text-[10px] font-mono text-red-400 bg-red-500/10 px-2.5 py-0.5 rounded-full border border-red-500/30 font-semibold">
+                  <span className="flex items-center gap-1.5 text-[10px] font-mono text-red-600 dark:text-red-400 bg-red-500/10 px-2.5 py-0.5 rounded-full border border-red-500/30 font-semibold">
                     <Radio className="w-3 h-3 animate-pulse" /> Live Broadcast
                   </span>
                 ) : (
-                  <span className="flex items-center gap-1 text-[10px] font-mono text-slate-400 bg-slate-800/60 px-2 py-0.5 rounded-full border border-slate-700/60">
+                  <span className="flex items-center gap-1 text-[10px] font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/60 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700/60">
                     In-Person Only
                   </span>
                 )}
               </div>
 
               <div>
-                <h4 className="text-base font-bold text-white leading-snug">{event.title}</h4>
-                <p className="text-xs text-slate-400 mt-1">Organized by: <span className="text-slate-300 font-medium">{event.organizer}</span></p>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white leading-snug">{event.title}</h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Organized by: <span className="text-slate-700 dark:text-slate-300 font-medium">{event.organizer}</span></p>
               </div>
 
-              <p className="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800/80">
+              <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800/80">
                 {event.description}
               </p>
             </div>
 
-            <div className="pt-3 border-t border-slate-800/80 space-y-2 text-xs text-slate-400">
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 space-y-2 text-xs text-slate-500 dark:text-slate-400">
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="font-semibold text-slate-200">{event.date} • {event.time}</span>
+                <Clock className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span className="font-semibold text-slate-900 dark:text-slate-200">{event.date} • {event.time}</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-slate-400 shrink-0" />

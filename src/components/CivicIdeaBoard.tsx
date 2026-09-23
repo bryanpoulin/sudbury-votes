@@ -196,26 +196,26 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
   };
 
   return (
-    <div className={`space-y-6 ${isEmbedded ? 'p-3 sm:p-5 bg-slate-950 text-slate-100 min-h-screen' : ''}`}>
+    <div className={`space-y-6 ${isEmbedded ? 'p-3 sm:p-5 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen' : ''}`}>
       {/* Header Banner & Call-to-Action */}
-      <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/40 border border-emerald-500/30 rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
+      <div className="bg-gradient-to-br from-emerald-50/70 via-white to-slate-50 border border-emerald-500/20 rounded-3xl p-5 sm:p-6 shadow-sm dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-900 dark:to-emerald-950/40 dark:border-emerald-500/30 dark:shadow-xl relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
           <div className="space-y-2 max-w-2xl">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-800 dark:bg-emerald-500/10 dark:border-emerald-500/30 dark:text-emerald-400 text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse" />
                 Live Citizen Agenda 2026
               </span>
-              <span className="text-xs font-mono text-slate-400">
+              <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
                 {ideas.length} Priorities • {totalCivicSeconds.toLocaleString()} Likes
               </span>
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
               Community Priorities &amp; Action Board
             </h2>
 
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               Real neighborhood proposals submitted by Greater Sudbury residents and community organizations. Like the priorities you want the 2026–2030 Council to deliver, or put your own proposal on the table.
             </p>
           </div>
@@ -237,10 +237,10 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
                 type="button"
                 id="open-share-priorities-modal-btn"
                 onClick={() => handleOpenShareModal()}
-                className="px-4 py-3 rounded-2xl bg-slate-800/80 hover:bg-slate-750 text-emerald-400 hover:text-emerald-300 border border-emerald-500/30 text-sm font-semibold flex items-center gap-2 transition-colors cursor-pointer font-mono shadow-sm"
+                className="px-4 py-3 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-slate-200 shadow-sm dark:bg-slate-800/80 dark:hover:bg-slate-750 dark:text-emerald-400 dark:hover:text-emerald-300 dark:border-emerald-500/30 text-sm font-semibold flex items-center gap-2 transition-colors cursor-pointer font-mono"
                 title="Share or embed Priorities Board"
               >
-                <Share2 className="w-4 h-4 text-emerald-400" />
+                <Share2 className="w-4 h-4 text-slate-600 dark:text-emerald-400" />
                 <span>Share</span>
               </button>
             )}
@@ -252,33 +252,33 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
       {isFormOpen && (
         <form 
           onSubmit={handleFormSubmit}
-          className="bg-slate-900/90 border border-emerald-500/40 rounded-3xl p-5 sm:p-7 shadow-2xl space-y-5 animate-in fade-in slide-in-from-top-4 duration-200"
+          className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-emerald-500/40 rounded-3xl p-5 sm:p-7 shadow-2xl space-y-5 animate-in fade-in slide-in-from-top-4 duration-200"
         >
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-emerald-400" />
-              <h3 className="text-base sm:text-lg font-bold text-white">
+              <Sparkles className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
                 Submit an Open Priority to Council
               </h3>
             </div>
             <button
               type="button"
               onClick={() => setIsFormOpen(false)}
-              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+              className="p-1 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {formError && (
-            <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-mono">
+            <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 text-xs font-mono">
               {formError}
             </div>
           )}
 
           {formSuccess && (
-            <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-mono flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
               <span>{formSuccess}</span>
             </div>
           )}
@@ -286,13 +286,13 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Ward Scope Selection */}
             <div className="space-y-1.5">
-              <label className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
+              <label className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                 Geographic Scope / Ward
               </label>
               <select
                 value={formWard}
                 onChange={(e) => setFormWard(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:border-emerald-500 focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:border-emerald-500 focus:outline-none"
               >
                 <option value="all">City-Wide (All Greater Sudbury)</option>
                 {[1,2,3,4,5,6,7,8,9,10,11,12].map(num => (
@@ -305,13 +305,13 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
 
             {/* Civic Theme Selection */}
             <div className="space-y-1.5">
-              <label className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
+              <label className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                 Priority Theme
               </label>
               <select
                 value={formTheme}
                 onChange={(e) => setFormTheme(e.target.value as CivicThemeId)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:border-emerald-500 focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:border-emerald-500 focus:outline-none"
               >
                 {Object.values(CIVIC_THEMES).map(t => (
                   <option key={t.id} value={t.id}>
@@ -325,10 +325,10 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
           {/* Action Title */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
+              <label className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                 Clear Proposal Headline (Max 120 chars)
               </label>
-              <span className={`text-[11px] font-mono ${formTitle.length > 100 ? 'text-amber-400' : 'text-slate-500'}`}>
+              <span className={`text-[11px] font-mono ${formTitle.length > 100 ? 'text-amber-500 dark:text-amber-400' : 'text-slate-400 dark:text-slate-500'}`}>
                 {formTitle.length}/120
               </span>
             </div>
@@ -338,17 +338,17 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
               placeholder="e.g. Add protected bicycle lanes on Lasalle Blvd between Falconbridge and Notre Dame"
               value={formTitle}
               onChange={(e) => setFormTitle(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:border-emerald-500 focus:outline-none placeholder:text-slate-600"
+              className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:border-emerald-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-600"
             />
           </div>
 
           {/* Detailed Justification */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
+              <label className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                 Why does this matter? What specific action should Council take?
               </label>
-              <span className={`text-[11px] font-mono ${formDescription.length > 500 ? 'text-amber-400' : 'text-slate-500'}`}>
+              <span className={`text-[11px] font-mono ${formDescription.length > 500 ? 'text-amber-500 dark:text-amber-400' : 'text-slate-400 dark:text-slate-500'}`}>
                 {formDescription.length}/600
               </span>
             </div>
@@ -358,12 +358,12 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
               placeholder="Explain the community benefit, safety impact, or policy change you want candidates to commit to..."
               value={formDescription}
               onChange={(e) => setFormDescription(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:border-emerald-500 focus:outline-none placeholder:text-slate-600 resize-none"
+              className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:border-emerald-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-600 resize-none"
             />
           </div>
 
           <div className="flex items-center justify-between pt-2">
-            <span className="text-[11px] font-mono text-slate-400">
+            <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
               100% Anonymous. Moderated for respect and community standards.
             </span>
             <button
@@ -385,7 +385,7 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
       )}
 
       {/* Filter & Search Bar */}
-      <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-3 sm:p-4 space-y-3">
+      <div className="bg-white dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 sm:p-4 space-y-3 shadow-sm dark:shadow-md">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           {/* Search Input */}
           <div className="relative flex-1">
@@ -395,23 +395,23 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
               placeholder="Search community priorities (e.g. transit, housing, roads, warming hub)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs placeholder:text-slate-500 focus:border-emerald-500 focus:outline-none"
+              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white text-xs placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-emerald-500 focus:outline-none"
             />
           </div>
 
           {/* Controls: Ward, Sort */}
           <div className="flex flex-wrap items-center gap-2">
             {/* Ward Selector */}
-            <div className="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1.5 rounded-xl border border-slate-800">
-              <MapPin className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-950 px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800">
+              <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <select
                 value={selectedWard}
                 onChange={(e) => setSelectedWard(e.target.value)}
-                className="bg-transparent text-xs text-white focus:outline-none font-mono cursor-pointer"
+                className="bg-transparent text-xs text-slate-800 dark:text-white focus:outline-none font-mono cursor-pointer"
               >
-                <option value="all" className="bg-slate-900 text-white">All Wards (City-Wide)</option>
+                <option value="all" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">All Wards (City-Wide)</option>
                 {[1,2,3,4,5,6,7,8,9,10,11,12].map(w => (
-                  <option key={w} value={w.toString()} className="bg-slate-900 text-white">
+                  <option key={w} value={w.toString()} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
                     Ward {w} ({WARD_NEIGHBORHOOD_GUIDE[w]?.name})
                   </option>
                 ))}
@@ -419,12 +419,12 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
             </div>
 
             {/* Sort Toggle */}
-            <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-mono">
+            <div className="flex items-center bg-slate-100 dark:bg-slate-950 p-1 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono">
               <button
                 type="button"
                 onClick={() => setSortMode('supported')}
                 className={`px-3 py-1 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer ${
-                  sortMode === 'supported' ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                  sortMode === 'supported' ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
                 <Flame className="w-3.5 h-3.5" />
@@ -434,7 +434,7 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
                 type="button"
                 onClick={() => setSortMode('newest')}
                 className={`px-3 py-1 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer ${
-                  sortMode === 'newest' ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                  sortMode === 'newest' ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
                 <Clock className="w-3.5 h-3.5" />
@@ -451,8 +451,8 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
             onClick={() => setSelectedTheme('all')}
             className={`px-3 py-1.5 rounded-xl font-medium shrink-0 transition-colors cursor-pointer ${
               selectedTheme === 'all' 
-                ? 'bg-slate-100 text-slate-950 font-bold' 
-                : 'bg-slate-950/60 text-slate-400 hover:text-white border border-slate-800'
+                ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-950 font-bold' 
+                : 'bg-slate-100 dark:bg-slate-950/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800'
             }`}
           >
             All Themes ({ideas.length})
@@ -469,7 +469,7 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
                 className={`px-3 py-1.5 rounded-xl font-medium shrink-0 flex items-center gap-1.5 transition-colors cursor-pointer ${
                   isSelected
                     ? `${t.badgeBg} ${t.badgeText} ${t.badgeBorder} border font-bold ring-1 ring-emerald-500/40`
-                    : 'bg-slate-950/60 text-slate-400 hover:text-white border border-slate-800'
+                    : 'bg-slate-100 dark:bg-slate-950/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800'
                 }`}
               >
                 <span>{t.label}</span>
@@ -483,10 +483,10 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
       {/* Ideas Card Feed */}
       <div className="space-y-3.5">
         {filteredIdeas.length === 0 ? (
-          <div className="text-center py-12 bg-slate-900/40 border border-slate-800 rounded-3xl p-6 space-y-3">
-            <Info className="w-8 h-8 text-slate-500 mx-auto" />
-            <div className="text-base font-bold text-white">No priorities match your active filters</div>
-            <p className="text-xs text-slate-400 max-w-md mx-auto">
+          <div className="text-center py-12 bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-3">
+            <Info className="w-8 h-8 text-slate-400 dark:text-slate-500 mx-auto" />
+            <div className="text-base font-bold text-slate-900 dark:text-white">No priorities match your active filters</div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto">
               Be the first to submit a priority proposal for this ward or category using the button above!
             </p>
             <button
@@ -496,7 +496,7 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
                 setSelectedTheme('all');
                 setSearchQuery('');
               }}
-              className="text-xs font-mono text-emerald-400 hover:underline cursor-pointer"
+              className="text-xs font-mono text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
             >
               Reset all filters
             </button>
@@ -509,10 +509,10 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
             return (
               <div
                 key={idea.id}
-                className={`bg-slate-900/80 border rounded-2xl p-4 sm:p-5 transition-all duration-200 hover:border-slate-700 shadow-md ${
+                className={`bg-white dark:bg-slate-900/80 border rounded-2xl p-4 sm:p-5 transition-all duration-200 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm dark:shadow-md ${
                   isSeconded 
-                    ? 'border-emerald-500/40 ring-1 ring-emerald-500/20 bg-slate-900/95' 
-                    : 'border-slate-800'
+                    ? 'border-emerald-500/40 ring-1 ring-emerald-500/20 bg-emerald-50/30 dark:bg-slate-900/95' 
+                    : 'border-slate-200 dark:border-slate-800'
                 }`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -526,33 +526,33 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
                       </span>
 
                       {/* Ward Badge */}
-                      <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono text-slate-300 bg-slate-950 border border-slate-800 flex items-center gap-1">
-                        <MapPin className="w-3 h-3 text-emerald-400" />
+                      <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center gap-1">
+                        <MapPin className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                         {getWardLabel(idea.ward)}
                       </span>
 
                       {/* Benchmark / Coalition Badge if applicable */}
                       {idea.isBenchmark && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono text-amber-300 bg-amber-500/10 border border-amber-500/30 flex items-center gap-1">
-                          <Sparkles className="w-2.5 h-2.5 text-amber-400" />
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono text-amber-700 dark:text-amber-300 bg-amber-500/10 border border-amber-500/30 flex items-center gap-1">
+                          <Sparkles className="w-2.5 h-2.5 text-amber-500 dark:text-amber-400" />
                           Coalition Priority
                         </span>
                       )}
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-base sm:text-lg font-bold text-white leading-snug">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-snug">
                       {idea.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                       {idea.description}
                     </p>
                   </div>
 
                   {/* Right Action: I Second This Button */}
-                  <div className="flex sm:flex-col items-center justify-between sm:justify-center gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800/80">
+                  <div className="flex sm:flex-col items-center justify-between sm:justify-center gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800/80">
                     <button
                       type="button"
                       id={`second-btn-${idea.id}`}
@@ -560,14 +560,14 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
                       className={`px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl flex items-center gap-2.5 font-mono text-xs sm:text-sm transition-all duration-200 cursor-pointer shadow-sm ${
                         isSeconded
                           ? 'bg-emerald-500 text-slate-950 font-black shadow-emerald-500/30 scale-[1.02]'
-                          : 'bg-slate-950 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700'
+                          : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-950 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
                       }`}
                       title={isSeconded ? 'Click to remove like' : 'Click to like this priority'}
                     >
-                      <ThumbsUp className={`w-4 h-4 ${isSeconded ? 'fill-slate-950' : 'text-emerald-400'}`} />
+                      <ThumbsUp className={`w-4 h-4 ${isSeconded ? 'fill-slate-950' : 'text-emerald-600 dark:text-emerald-400'}`} />
                       <div className="flex items-center gap-1.5">
                         <span>{isSeconded ? 'Liked' : 'Like'}</span>
-                        <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${isSeconded ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-emerald-400'}`}>
+                        <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${isSeconded ? 'bg-slate-950/20 text-slate-950' : 'bg-white dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 border border-slate-200/60 dark:border-transparent'}`}>
                           {idea.secondsCount}
                         </span>
                       </div>
@@ -576,7 +576,7 @@ export const CivicIdeaBoard: React.FC<CivicIdeaBoardProps> = ({
                     <button
                       type="button"
                       onClick={() => handleOpenShareModal(idea)}
-                      className="text-[11px] font-mono text-slate-400 hover:text-emerald-400 flex items-center gap-1 transition-colors cursor-pointer"
+                      className="text-[11px] font-mono text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 flex items-center gap-1 transition-colors cursor-pointer"
                       title="Share this priority proposal"
                     >
                       <Share2 className="w-3 h-3" />

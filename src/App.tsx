@@ -88,14 +88,14 @@ export default function App() {
 
   if (isEmbedMode) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 p-2 sm:p-4 font-sans selection:bg-emerald-500 selection:text-slate-950">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-2 sm:p-4 font-sans selection:bg-emerald-500 selection:text-slate-950 transition-colors duration-200">
         <CivicIdeaBoard isEmbedded={true} initialWard={embedWard} initialTheme={embedTheme} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-slate-950">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-slate-950 transition-colors duration-200">
       {/* Top Civic Community Priorities Announcement Ribbon */}
       <CivicPrioritiesBanner
         onOpenPriorities={handleOpenPriorities}
@@ -212,14 +212,14 @@ export default function App() {
       )}
 
       {/* Sleek Footer */}
-      <footer className="border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-md mt-12 py-6 text-slate-400 text-xs">
+      <footer className="border-t border-slate-200 dark:border-slate-800/80 bg-white/70 dark:bg-slate-950/80 backdrop-blur-md mt-12 py-6 text-slate-500 dark:text-slate-400 text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
-            <span className="font-semibold text-slate-200">City of Greater Sudbury Municipal Elections Archive</span>
-            <span className="text-slate-500 font-mono">• 2003–2022 Official Records</span>
+            <span className="font-semibold text-slate-800 dark:text-slate-200">City of Greater Sudbury Municipal Elections Archive</span>
+            <span className="text-slate-400 dark:text-slate-500 font-mono">• 2003–2022 Official Records</span>
           </div>
-          <div className="text-slate-400 font-mono text-[11px]">
+          <div className="text-slate-500 dark:text-slate-400 font-mono text-[11px]">
             Sleek Interface Edition • Interactive Ward Visualizer & Electoral Analytics
           </div>
         </div>

@@ -74,30 +74,30 @@ export const WardDetailModal: React.FC<WardDetailModalProps> = ({
   ).toFixed(1);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       <div 
-        className="bg-slate-900/95 border border-slate-700/80 w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden text-slate-200 relative"
+        className="bg-white dark:bg-slate-900/95 border border-slate-200 dark:border-slate-700/80 w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden text-slate-800 dark:text-slate-200 relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Radial glow */}
         <div className="absolute top-0 right-0 w-96 h-96 opacity-10 pointer-events-none bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-emerald-500 via-transparent to-transparent" />
 
         {/* Modal Header */}
-        <div className="bg-slate-950/90 px-6 py-4.5 border-b border-slate-800 flex items-center justify-between relative z-10">
+        <div className="bg-slate-50 dark:bg-slate-950/90 px-6 py-4.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between relative z-10">
           <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-black text-base font-mono shadow-md">
+            <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-black text-base font-mono shadow-xs">
               W{wardNumber}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-lg font-bold text-white">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                   {geo?.wardName || `Ward ${wardNumber}`}
                 </h3>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 font-mono">
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-400 border border-slate-300 dark:border-slate-700 font-mono">
                   {geo?.areaKm2} km²
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
                 {geo?.description}
               </p>
             </div>
@@ -105,7 +105,7 @@ export const WardDetailModal: React.FC<WardDetailModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -115,24 +115,24 @@ export const WardDetailModal: React.FC<WardDetailModalProps> = ({
         <div className="p-6 overflow-y-auto space-y-6 relative z-10">
           {/* Quick Metrics */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-slate-800/40 border border-slate-700/60 p-4 rounded-2xl">
-              <div className="text-[10px] text-slate-400 font-bold uppercase font-mono">Historical Turnout Average</div>
-              <div className="text-2xl font-black text-emerald-400 mt-0.5 font-mono">{avgTurnout}%</div>
+            <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 p-4 rounded-2xl">
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase font-mono">Historical Turnout Average</div>
+              <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5 font-mono">{avgTurnout}%</div>
               <div className="text-[10px] text-slate-500">Across 6 municipal election cycles</div>
             </div>
 
-            <div className="bg-slate-800/40 border border-slate-700/60 p-4 rounded-2xl">
-              <div className="text-[10px] text-slate-400 font-bold uppercase font-mono">Elections Tracked</div>
-              <div className="text-2xl font-black text-white mt-0.5 font-mono">{history.length} Cycles</div>
+            <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 p-4 rounded-2xl">
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase font-mono">Elections Tracked</div>
+              <div className="text-2xl font-black text-slate-900 dark:text-white mt-0.5 font-mono">{history.length} Cycles</div>
               <div className="text-[10px] text-slate-500">2003 through 2022</div>
             </div>
 
-            <div className="bg-slate-800/40 border border-slate-700/60 p-4 rounded-2xl">
-              <div className="text-[10px] text-slate-400 font-bold uppercase font-mono">Sitting Councillor</div>
-              <div className="text-lg font-bold text-white mt-0.5 truncate">
+            <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 p-4 rounded-2xl">
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase font-mono">Sitting Councillor</div>
+              <div className="text-lg font-bold text-slate-900 dark:text-white mt-0.5 truncate">
                 {sitting?.name || history[history.length - 1]?.winnerName}
               </div>
-              <div className="text-[10px] text-emerald-400 font-mono">
+              <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">
                 {sitting?.subtext || `Elected with ${history[history.length - 1]?.winnerPct.toFixed(1)}%`}
               </div>
             </div>
@@ -140,21 +140,21 @@ export const WardDetailModal: React.FC<WardDetailModalProps> = ({
 
           {/* Mid-term Appointment Notice if applicable */}
           {sitting?.midTermNote && (
-            <div className="bg-slate-800/60 border border-amber-500/30 rounded-2xl p-3.5 flex items-start gap-2.5 text-xs">
-              <span className="px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-[10px] font-bold shrink-0 mt-0.5">
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3.5 flex items-start gap-2.5 text-xs text-amber-900 dark:text-amber-200">
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-800 dark:text-amber-300 font-mono text-[10px] font-bold shrink-0 mt-0.5">
                 Mid-Term Appointment
               </span>
-              <p className="text-slate-300 leading-relaxed text-xs">
+              <p className="leading-relaxed text-xs">
                 {sitting.midTermNote}
               </p>
             </div>
           )}
 
           {/* Turnout Chart for this Ward */}
-          <div className="bg-slate-950/80 border border-slate-800 p-5 rounded-2xl space-y-3">
+          <div className="bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5 font-mono">
-                <TrendingUp className="w-4 h-4 text-emerald-400" />
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5 font-mono">
+                <TrendingUp className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                 Ward {wardNumber} Turnout History (2003 – 2022)
               </h4>
             </div>
@@ -162,7 +162,7 @@ export const WardDetailModal: React.FC<WardDetailModalProps> = ({
             <div className="h-44 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={history} margin={{ top: 5, right: 20, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#94a3b8" opacity={0.25} />
                   <XAxis dataKey="year" stroke="#94a3b8" fontSize={11} />
                   <YAxis domain={[30, 65]} unit="%" stroke="#94a3b8" fontSize={11} />
                   <Tooltip
@@ -170,10 +170,10 @@ export const WardDetailModal: React.FC<WardDetailModalProps> = ({
                       if (active && payload && payload.length) {
                         const d = payload[0].payload;
                         return (
-                          <div className="bg-slate-900 border border-slate-700 p-3 rounded-2xl shadow-xl text-xs space-y-1">
-                            <div className="font-bold text-white">{d.year} Ward {wardNumber}</div>
-                            <div className="text-emerald-400 font-bold">Turnout: {d.turnoutPct.toFixed(1)}%</div>
-                            <div className="text-slate-300">Winner: {d.winnerName} ({d.winnerPct.toFixed(1)}%)</div>
+                          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-3 rounded-2xl shadow-xl text-xs space-y-1 text-slate-900 dark:text-white">
+                            <div className="font-bold text-slate-900 dark:text-white">{d.year} Ward {wardNumber}</div>
+                            <div className="text-emerald-600 dark:text-emerald-400 font-bold">Turnout: {d.turnoutPct.toFixed(1)}%</div>
+                            <div className="text-slate-600 dark:text-slate-300">Winner: {d.winnerName} ({d.winnerPct.toFixed(1)}%)</div>
                           </div>
                         );
                       }
@@ -195,8 +195,8 @@ export const WardDetailModal: React.FC<WardDetailModalProps> = ({
 
           {/* Historical Election-by-Election Chronicle */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5 font-mono">
-              <Calendar className="w-4 h-4 text-emerald-400" />
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5 font-mono">
+              <Calendar className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
               Historical Election Chronicle (2003–2022)
             </h4>
 
@@ -204,7 +204,7 @@ export const WardDetailModal: React.FC<WardDetailModalProps> = ({
               {[...history].reverse().map((item) => (
                 <div
                   key={item.year}
-                  className="bg-slate-800/40 border border-slate-700/60 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-600 transition-colors"
+                  className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-300 dark:hover:border-slate-600 transition-colors shadow-xs"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
@@ -213,40 +213,40 @@ export const WardDetailModal: React.FC<WardDetailModalProps> = ({
                           onSelectYear(item.year);
                           onClose();
                         }}
-                        className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500 text-slate-950 font-mono hover:bg-emerald-400 transition-colors"
+                        className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500 text-slate-950 font-mono hover:bg-emerald-400 transition-colors cursor-pointer"
                       >
                         {item.year}
                       </button>
-                      <span className="text-sm font-bold text-white">
+                      <span className="text-sm font-bold text-slate-900 dark:text-white">
                         {item.winnerName}
                       </span>
                       {item.isIncumbentRetained ? (
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-bold font-mono">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold font-mono">
                           Incumbent Held
                         </span>
                       ) : (
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-bold font-mono">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-700 dark:text-purple-300 font-bold font-mono">
                           New Councillor
                         </span>
                       )}
                     </div>
 
-                    <div className="text-xs text-slate-300 flex items-center gap-3 font-mono">
-                      <span>Winner: <strong className="text-emerald-400 font-bold">{item.winnerPct.toFixed(1)}%</strong> ({item.winnerVotes.toLocaleString()} votes)</span>
+                    <div className="text-xs text-slate-600 dark:text-slate-300 flex items-center gap-3 font-mono">
+                      <span>Winner: <strong className="text-emerald-600 dark:text-emerald-400 font-bold">{item.winnerPct.toFixed(1)}%</strong> ({item.winnerVotes.toLocaleString()} votes)</span>
                       <span>•</span>
-                      <span className="text-slate-400">Runner-up: {item.runnerUpName} ({item.runnerUpVotes.toLocaleString()} votes)</span>
+                      <span className="text-slate-500 dark:text-slate-400">Runner-up: {item.runnerUpName} ({item.runnerUpVotes.toLocaleString()} votes)</span>
                     </div>
 
                     {item.year === 2022 && sitting?.midTermNote && (
-                      <div className="text-[11px] text-amber-300/90 font-mono mt-1.5 bg-amber-500/10 border border-amber-500/20 rounded-lg px-2.5 py-1 flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                      <div className="text-[11px] text-amber-800 dark:text-amber-300/90 font-mono mt-1.5 bg-amber-500/10 border border-amber-500/20 rounded-lg px-2.5 py-1 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
                         <span>Mid-term: Runner-up {sitting.name} appointed to Council on March 19, 2024 following the passing of Councillor {item.winnerName}.</span>
                       </div>
                     )}
                   </div>
 
-                  <div className="text-right shrink-0 border-t sm:border-t-0 sm:border-l border-slate-700/60 pt-2 sm:pt-0 sm:pl-4">
-                    <div className="text-base font-bold text-emerald-400 font-mono">
+                  <div className="text-right shrink-0 border-t sm:border-t-0 sm:border-l border-slate-200 dark:border-slate-700/60 pt-2 sm:pt-0 sm:pl-4">
+                    <div className="text-base font-bold text-emerald-600 dark:text-emerald-400 font-mono">
                       {item.turnoutPct.toFixed(1)}%
                     </div>
                     <div className="text-[10px] text-slate-500 font-mono">
@@ -260,10 +260,10 @@ export const WardDetailModal: React.FC<WardDetailModalProps> = ({
         </div>
 
         {/* Modal Footer */}
-        <div className="bg-slate-950 px-6 py-4 border-t border-slate-800 flex justify-end relative z-10">
+        <div className="bg-slate-50 dark:bg-slate-950 px-6 py-4 border-t border-slate-200 dark:border-slate-800 flex justify-end relative z-10">
           <button
             onClick={onClose}
-            className="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-full text-xs font-semibold transition-colors"
+            className="px-5 py-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded-full text-xs font-semibold transition-colors cursor-pointer"
           >
             Close Ward Profile
           </button>

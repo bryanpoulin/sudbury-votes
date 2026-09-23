@@ -54,30 +54,30 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
   };
 
   return (
-    <div className="bg-slate-900/60 backdrop-blur-md border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-5">
+    <div className="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-sm dark:shadow-xl space-y-5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <Compass className="w-5 h-5 text-emerald-400" />
-            <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">
+            <Compass className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
+            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
               Interactive Greater Sudbury Ward Map ({election.year})
             </h2>
             {is2003 && (
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-xs font-mono">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 text-xs font-mono">
                 6 Dual-Member Wards
               </span>
             )}
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
             {is2003 
               ? "Click on any of the 6 post-amalgamation wards to inspect the elected councillors and returns"
               : "Click on any of the 12 municipal wards to view councillor returns, victory margins, and turnout"}
           </p>
         </div>
 
-        <div className="text-xs text-slate-400 font-mono flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <div className="text-xs text-slate-500 dark:text-slate-400 font-mono flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400"></span>
           <span>Click any ward to inspect</span>
         </div>
       </div>
@@ -85,27 +85,27 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
       {/* Main Map View & Ward Inspector Side Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* SVG Map Canvas (8 cols) */}
-        <div className="lg:col-span-8 bg-slate-950/80 border border-slate-800 rounded-2xl relative overflow-hidden flex flex-col items-center justify-center min-h-[460px] shadow-inner">
+        <div className="lg:col-span-8 bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-2xl relative overflow-hidden flex flex-col items-center justify-center min-h-[460px] shadow-inner">
           
           {/* Zoom and Reset Overlay Controls */}
-          <div className="absolute top-3 right-3 z-10 flex flex-col gap-1.5 bg-slate-900/90 backdrop-blur p-1 rounded-2xl border border-slate-800 shadow-md">
+          <div className="absolute top-3 right-3 z-10 flex flex-col gap-1.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur p-1 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md">
             <button
               onClick={() => handleZoom(0.2)}
-              className="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition-colors"
+              className="p-2 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
               title="Zoom In"
             >
               <ZoomIn className="w-4 h-4" />
             </button>
             <button
               onClick={() => handleZoom(-0.2)}
-              className="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition-colors"
+              className="p-2 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
               title="Zoom Out"
             >
               <ZoomOut className="w-4 h-4" />
             </button>
             <button
               onClick={handleResetView}
-              className="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition-colors"
+              className="p-2 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
               title="Reset View"
             >
               <RotateCcw className="w-4 h-4" />
@@ -113,12 +113,12 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
           </div>
 
           {/* Geographic Extent Tag */}
-          <div className="absolute top-3 left-3 z-10 bg-slate-900/90 backdrop-blur px-3 py-1.5 rounded-xl border border-slate-800 text-[11px] text-slate-300 shadow">
-            <div className="font-bold text-white flex items-center gap-1.5">
+          <div className="absolute top-3 left-3 z-10 bg-white/95 dark:bg-slate-900/90 backdrop-blur px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 text-[11px] text-slate-700 dark:text-slate-300 shadow">
+            <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-              <span>{is2003 ? "Sudbury Geographic District" : "Sudbury Geographic District"}</span>
+              <span>Sudbury Geographic District</span>
             </div>
-            <div className="text-[10px] font-mono text-slate-400">
+            <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
               {is2003 ? "6 Dual-Member Wards • Scale: 3,228 km² Geographic Extent" : "Scale: 3,228 km² Geographic Extent"}
             </div>
           </div>
@@ -247,36 +247,37 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
           </div>
 
           {/* Clean Map Legend Footer */}
-          <div className="w-full bg-slate-900/80 backdrop-blur border-t border-slate-800/80 p-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300 rounded-b-2xl">
-            <div className="flex items-center gap-2 text-slate-400 text-xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+          {/* Map Status Bar */}
+          <div className="w-full bg-white/90 dark:bg-slate-900/80 backdrop-blur border-t border-slate-200 dark:border-slate-800/80 p-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-700 dark:text-slate-300 rounded-b-2xl">
+            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400"></span>
               <span>{is2003 ? "Color-coded across 6 dual-member wards (12 councillors total)." : "Color-coded across Greater Sudbury's 12 council wards."}</span>
             </div>
 
-            <div className="text-[11px] font-mono text-slate-400 ml-auto">
-              Active: <strong className="text-emerald-400">Ward {activeWardNumber}</strong>
+            <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 ml-auto">
+              Active: <strong className="text-emerald-600 dark:text-emerald-400">Ward {activeWardNumber}</strong>
             </div>
           </div>
         </div>
 
         {/* Selected / Hovered Ward Information Card (4 cols) */}
-        <div className="lg:col-span-4 bg-slate-900/60 backdrop-blur-md border border-slate-800 rounded-2xl p-5 space-y-4 shadow-lg">
+        <div className="lg:col-span-4 bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-sm dark:shadow-lg">
           {activeWardData && activeWardGeo ? (
             <div className="space-y-4">
               {/* Ward Header */}
-              <div className="border-b border-slate-800 pb-3">
+              <div className="border-b border-slate-200 dark:border-slate-800 pb-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20 font-mono">
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold border border-emerald-500/20 font-mono">
                     Ward {activeWardData.wardNumber} {activeWardData.isDualMemberWard ? '(Dual-Member)' : ''}
                   </span>
                   <span className="text-xs text-slate-500 font-mono">
                     {activeWardGeo.areaKm2} km²
                   </span>
                 </div>
-                <h3 className="text-base font-bold text-white mt-2">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white mt-2">
                   {activeWardData.wardName}
                 </h3>
-                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
                   {activeWardGeo.description}
                 </p>
               </div>
@@ -284,23 +285,23 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
               {/* Winner Showcase: Dual-Member Support */}
               {activeWardData.isDualMemberWard && activeWardData.councillors ? (
                 <div className="space-y-2">
-                  <div className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
-                    <Award className="w-4 h-4 text-emerald-400" />
+                  <div className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <Award className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                     Elected Councillors (2 Seats)
                   </div>
                   <div className="grid grid-cols-1 gap-2">
                     {activeWardData.councillors.map((c, idx) => (
-                      <div key={idx} className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-3 space-y-1">
+                      <div key={idx} className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 rounded-xl p-3 space-y-1">
                         <div className="flex items-center justify-between">
-                          <span className="text-sm font-bold text-white flex items-center gap-1.5">
-                            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
                             {c.name}
                           </span>
-                          <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-300 text-[10px] font-mono">
+                          <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-[10px] font-mono">
                             {c.notes || `Seat ${idx === 0 ? 'A' : 'B'}`}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between text-xs text-emerald-400 font-mono">
+                        <div className="flex items-center justify-between text-xs text-emerald-600 dark:text-emerald-400 font-mono">
                           <span>{c.votes.toLocaleString()} votes</span>
                           <span>{c.votePercentage.toFixed(1)}%</span>
                         </div>
@@ -309,33 +310,33 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
                   </div>
                 </div>
               ) : (
-                <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 space-y-2.5">
-                  <div className="flex items-center justify-between text-xs text-slate-400">
-                    <span className="font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                      <Award className="w-4 h-4 text-emerald-400" />
+                <div className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 rounded-2xl p-4 space-y-2.5">
+                  <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                    <span className="font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                      <Award className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                       Elected Councillor
                     </span>
-                    <span className="px-2 py-0.5 rounded-md bg-slate-900/80 text-slate-300 text-[10px] font-mono">
+                    <span className="px-2 py-0.5 rounded-md bg-white dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 text-[10px] font-mono">
                       {activeWardData.isIncumbentRetained ? 'Incumbent Re-elected' : 'New Representative'}
                     </span>
                   </div>
 
                   <div>
-                    <div className="text-lg font-bold text-white">
+                    <div className="text-lg font-bold text-slate-900 dark:text-white">
                       {activeWardData.winner.name}
                     </div>
                     <div className="flex items-center justify-between mt-1 text-xs">
-                      <span className="text-emerald-400 font-bold">
+                      <span className="text-emerald-600 dark:text-emerald-400 font-bold">
                         {activeWardData.winner.votes.toLocaleString()} votes ({activeWardData.winner.votePercentage.toFixed(1)}%)
                       </span>
-                      <span className="text-slate-400">
+                      <span className="text-slate-500 dark:text-slate-400">
                         Margin: +{activeWardData.marginOfVictoryPct.toFixed(1)}%
                       </span>
                     </div>
                   </div>
 
                   {/* Progress Bar */}
-                  <div className="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden mt-1">
+                  <div className="w-full bg-slate-200 dark:bg-slate-900 rounded-full h-1.5 overflow-hidden mt-1">
                     <div 
                       className="bg-emerald-500 h-full rounded-full shadow-[0_0_8px_rgba(16,185,129,0.4)]" 
                       style={{ width: `${Math.min(activeWardData.winner.votePercentage, 100)}%` }}
@@ -346,7 +347,7 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
 
               {/* Full Candidate Breakdown */}
               <div className="space-y-1.5">
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">
+                <div className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">
                   Full Candidate Breakdown
                 </div>
                 <div className="space-y-1">
@@ -355,24 +356,24 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
                       key={cand.id}
                       className={`py-1.5 px-2.5 rounded-xl text-xs flex items-center justify-between transition-colors ${
                         cand.isWinner 
-                          ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 font-semibold' 
-                          : 'bg-slate-800/40 border border-slate-700/40 text-slate-300'
+                          ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-800 dark:text-emerald-200 font-semibold' 
+                          : 'bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/40 text-slate-700 dark:text-slate-300'
                       }`}
                     >
                       <div className="flex items-center gap-1.5 truncate">
-                        <span className="text-slate-500 font-mono text-[10px] w-4">
+                        <span className="text-slate-400 font-mono text-[10px] w-4">
                           #{idx + 1}
                         </span>
                         <span className="truncate font-medium">{cand.name}</span>
                         {cand.notes && (
-                          <span className="text-[9px] text-slate-400 font-mono hidden sm:inline">({cand.notes})</span>
+                          <span className="text-[9px] text-slate-500 dark:text-slate-400 font-mono hidden sm:inline">({cand.notes})</span>
                         )}
                       </div>
                       <div className="flex items-center gap-2 shrink-0 ml-2 font-mono">
-                        <span className="text-[11px] text-slate-400">
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400">
                           {cand.votes.toLocaleString()}
                         </span>
-                        <span className="font-bold text-white text-xs min-w-[42px] text-right">
+                        <span className="font-bold text-slate-900 dark:text-white text-xs min-w-[42px] text-right">
                           {cand.votePercentage.toFixed(1)}%
                         </span>
                       </div>
@@ -382,10 +383,10 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
               </div>
 
               {/* Turnout & Electors */}
-              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800 text-xs">
-                <div className="bg-slate-800/40 p-2.5 rounded-xl border border-slate-700/40">
-                  <div className="text-slate-400 text-[10px] uppercase font-bold font-mono">Ward Turnout</div>
-                  <div className="text-base font-bold text-white mt-0.5 font-mono">
+              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200 dark:border-slate-800 text-xs">
+                <div className="bg-slate-50 dark:bg-slate-800/40 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/40">
+                  <div className="text-slate-500 dark:text-slate-400 text-[10px] uppercase font-bold font-mono">Ward Turnout</div>
+                  <div className="text-base font-bold text-slate-900 dark:text-white mt-0.5 font-mono">
                     {activeWardData.turnoutPercentage.toFixed(1)}%
                   </div>
                   <div className="text-[10px] text-slate-500 font-mono">
@@ -393,9 +394,9 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
                   </div>
                 </div>
 
-                <div className="bg-slate-800/40 p-2.5 rounded-xl border border-slate-700/40">
-                  <div className="text-slate-400 text-[10px] uppercase font-bold font-mono">Electors</div>
-                  <div className="text-base font-bold text-white mt-0.5 font-mono">
+                <div className="bg-slate-50 dark:bg-slate-800/40 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/40">
+                  <div className="text-slate-500 dark:text-slate-400 text-[10px] uppercase font-bold font-mono">Electors</div>
+                  <div className="text-base font-bold text-slate-900 dark:text-white mt-0.5 font-mono">
                     {activeWardData.registeredVoters.toLocaleString()}
                   </div>
                   <div className="text-[10px] text-slate-500 font-mono">
@@ -407,19 +408,19 @@ export const InteractiveWardMap: React.FC<InteractiveWardMapProps> = ({
               {/* Drilldown button */}
               <button
                 onClick={() => onSelectWard(activeWardData.wardNumber)}
-                className="w-full py-2.5 px-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-md shadow-emerald-500/20"
+                className="w-full py-2.5 px-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-md shadow-emerald-500/20 cursor-pointer"
               >
                 <span>View Historical Ward {activeWardData.wardNumber} Archive</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-12 text-center text-slate-400 space-y-2">
+            <div className="flex flex-col items-center justify-center py-12 text-center text-slate-500 dark:text-slate-400 space-y-2">
               <MapPin className="w-8 h-8 text-emerald-500/60 animate-pulse" />
-              <div className="text-sm font-bold text-white">
+              <div className="text-sm font-bold text-slate-900 dark:text-white">
                 Select a Ward on the Map
               </div>
-              <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-400 max-w-xs leading-relaxed">
                 {is2003 
                   ? "Hover or click any of the 6 post-amalgamation wards to inspect the two elected councillors, vote margins, candidate totals, and turnout."
                   : "Hover or click any ward geometry (Wards 1 through 12) to inspect local returns, vote margins, candidate totals, and historical profiles."}
